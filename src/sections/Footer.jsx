@@ -45,19 +45,13 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="col-span-2">
-            <Link to="/" className="flex items-center gap-3 mb-5 group">
-              <div className="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2C8 2 5 5 5 9c0 2.5 1.2 4.7 3 6.1V20a1 1 0 001 1h6a1 1 0 001-1v-4.9c1.8-1.4 3-3.6 3-6.1 0-4-3-7-7-7z"
-                    stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M9 13.5V16M12 13V16M15 13.5V16M9 9h6M12 7v4"
-                    stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <div>
-                <div className="font-serif font-bold text-white text-lg leading-none">Espinhal</div>
-                <div className="text-brand-400 text-[10px] font-bold tracking-[0.12em] uppercase mt-0.5">D.O.R</div>
-              </div>
+            <Link to="/" className="block mb-5 group">
+              <img
+                src="/img/espinhal.png"
+                alt="D.O.R. Clínica Espinhal"
+                className="h-11 w-auto"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
             </Link>
             <p className="text-sm leading-relaxed mb-6 max-w-xs">
               Referência em tratamentos para coluna e dor. Tecnologia, precisão e cuidado especializado para sua qualidade de vida.

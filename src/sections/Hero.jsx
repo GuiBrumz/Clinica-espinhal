@@ -42,10 +42,22 @@ export default function Hero() {
     <section
       id="hero"
       className="relative min-h-screen flex flex-col justify-center overflow-hidden"
-      style={{
-        background: 'linear-gradient(150deg, #001a5c 0%, #0040cc 40%, #0057FF 70%, #002fa0 100%)',
-      }}
     >
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&h=1080&fit=crop"
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover object-center"
+          loading="eager"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(150deg, rgba(0,26,92,0.94) 0%, rgba(0,64,204,0.88) 40%, rgba(0,87,255,0.82) 65%, rgba(0,47,160,0.93) 100%)' }}
+        />
+      </div>
+
       {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div

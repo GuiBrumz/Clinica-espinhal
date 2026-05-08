@@ -70,9 +70,9 @@ export default function Header() {
   const navInactive = onDark ? 'text-neutral-500 hover:text-neutral-800 font-medium' : 'text-white/60 hover:text-white font-medium'
   const pillBg      = onDark ? 'bg-neutral-100' : 'bg-white/[0.12]'
 
-  // ── Logo text ────────────────────────────────────────────────────────────
-  const logoTitle    = onDark ? 'text-neutral-900' : 'text-white'
-  const logoSubtitle = onDark ? 'text-brand-600'   : 'text-blue-300'
+  // ── Logo filter ──────────────────────────────────────────────────────────
+  // onDark → header sobre fundo escuro → logo precisa ser branca
+  const logoFilter = onDark ? 'brightness(0)' : 'brightness(0) invert(1)'
 
   // ── Phone color ──────────────────────────────────────────────────────────
   const phoneClass = onDark
@@ -103,21 +103,13 @@ export default function Header() {
             <div className="relative flex items-center justify-between h-[58px]">
 
               {/* ── Logo ───────────────────────────────────────────────── */}
-              <Link to="/" className="flex items-center gap-2.5 shrink-0 z-10">
-                <div className="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center shadow-sm">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 2C8 2 5 5 5 9c0 2.5 1.2 4.7 3 6.1V20a1 1 0 001 1h6a1 1 0 001-1v-4.9c1.8-1.4 3-3.6 3-6.1 0-4-3-7-7-7z"
-                      stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
-                    />
-                    <path d="M9 13.5V16M12 13V16M15 13.5V16"
-                      stroke="white" strokeWidth="1.6" strokeLinecap="round" />
-                  </svg>
-                </div>
-                <div className="leading-none">
-                  <span className={`font-serif font-bold text-[15px] block transition-colors duration-500 ${logoTitle}`}>Espinhal</span>
-                  <span className={`text-[9px] font-bold tracking-[0.14em] uppercase block transition-colors duration-500 ${logoSubtitle}`}>D.O.R</span>
-                </div>
+              <Link to="/" className="shrink-0 z-10">
+                <img
+                  src="/img/espinhal.png"
+                  alt="D.O.R. Clínica Espinhal"
+                  className="h-9 w-auto transition-[filter] duration-500"
+                  style={{ filter: logoFilter }}
+                />
               </Link>
 
               {/* ── Nav — absolutamente centralizada ───────────────────── */}
