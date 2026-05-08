@@ -211,12 +211,12 @@ export const DIFFERENTIALS = [
 
 // ─── Values ──────────────────────────────────────────────────────────────────
 export const VALUES = [
-  { icon: '🎯', title: 'Precisão',     desc: 'Cada diagnóstico e tratamento é executado com o máximo de rigor científico e técnico.' },
-  { icon: '❤️', title: 'Humanidade',   desc: 'Tratamos pessoas, não apenas patologias. O cuidado começa na escuta.' },
-  { icon: '🔬', title: 'Inovação',     desc: 'Atualizamos constantemente nossos protocolos com base nas evidências mais recentes.' },
-  { icon: '🛡️', title: 'Integridade',  desc: 'Transparência total na comunicação, diagnóstico e conduta terapêutica.' },
-  { icon: '🤝', title: 'Parceria',     desc: 'Construímos uma relação de confiança e colaboração com cada paciente.' },
-  { icon: '⭐', title: 'Excelência',   desc: 'O padrão premium não é um diferencial — é o nosso mínimo aceitável.' },
+  { icon: 'crosshair', title: 'Precisão',    desc: 'Cada diagnóstico e tratamento é conduzido com rigor científico e técnico irredutível.' },
+  { icon: 'heart',     title: 'Humanidade',  desc: 'Tratamos pessoas, não apenas patologias. O cuidado começa na escuta.' },
+  { icon: 'microscope',title: 'Inovação',    desc: 'Protocolos continuamente atualizados com base nas evidências científicas mais recentes.' },
+  { icon: 'shield',    title: 'Integridade', desc: 'Transparência absoluta na comunicação, no diagnóstico e na conduta terapêutica.' },
+  { icon: 'users',     title: 'Parceria',    desc: 'Uma relação de confiança e colaboração genuína com cada paciente.' },
+  { icon: 'award',     title: 'Excelência',  desc: 'O padrão elevado não é diferencial — é requisito mínimo em tudo o que fazemos.' },
 ]
 
 // ─── Testimonials ────────────────────────────────────────────────────────────

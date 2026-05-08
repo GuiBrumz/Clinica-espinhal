@@ -11,6 +11,7 @@ export default function BottomCTA({
   const { ref, inView } = useScrollAnimation({ threshold: 0.2 })
   return (
     <section
+      data-header-theme="dark"
       className="py-20 relative overflow-hidden"
       style={{ background: 'linear-gradient(150deg, #001040 0%, #0040cc 50%, #0057FF 100%)' }}
     >

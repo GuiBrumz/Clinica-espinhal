@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, Target, Eye, Compass, Crosshair, Heart, Microscope, Shield, Users, Award } from 'lucide-react'
 import PageTransition from '../components/PageTransition'
 import PageHero from '../components/PageHero'
 import BottomCTA from '../components/BottomCTA'
@@ -10,17 +10,26 @@ import { VALUES } from '../data/content'
 const MILESTONES = [
   { year:'2009', title:'Fundação',        desc:'Abertura da Espinhal D.O.R com foco exclusivo em coluna vertebral, com 1 consultório e 2 profissionais.' },
   { year:'2011', title:'Crescimento',     desc:'Expansão para 3 consultórios e incorporação do diagnóstico por imagem in-house.' },
-  { year:'2014', title:'Reconhecimento',  desc:'Certificação pela Sociedade Brasileira de Coluna e primeiros protocolos minimamente invasivos.' },
-  { year:'2017', title:'Internacionalização', desc:'Parcerias com centros de referência nos EUA e Europa, validando nossos protocolos internacionalmente.' },
+  { year:'2014', title:'Reconhecimento',  desc:'Certificação pela Sociedade Brasileira de Coluna e implementação dos primeiros protocolos minimamente invasivos.' },
+  { year:'2017', title:'Internacionalização', desc:'Parcerias com centros de referência nos EUA e Europa, com validação internacional dos nossos protocolos.' },
   { year:'2021', title:'Inovação',        desc:'Implementação de fluoroscopia in-house e expansão da equipe multidisciplinar.' },
-  { year:'2024', title:'Nova Sede',       desc:'Mudança para espaço premium na Av. Paulista com 8 salas, sala cirúrgica e área de reabilitação.' },
+  { year:'2024', title:'Nova Sede',       desc:'Instalação na Av. Paulista com 8 salas, sala cirúrgica e área dedicada de reabilitação.' },
 ]
 
 const PILLARS = [
-  { emoji:'🎯', title:'Missão',    text:'Oferecer o mais alto nível de medicina espinhal, com diagnóstico preciso, tratamento individualizado e acompanhamento humanizado.' },
-  { emoji:'🔭', title:'Visão',     text:'Ser a referência nacional em tratamentos para coluna, reconhecida pela excelência técnica e pelo cuidado genuíno com cada paciente.' },
-  { emoji:'⭐', title:'Propósito', text:'Devolver qualidade de vida e movimento para pessoas que sofrem com dores na coluna, transformando limitação em liberdade.' },
+  { icon: Target,  title: 'Missão',    text: 'Oferecer o mais alto nível de medicina espinhal, com diagnóstico preciso, tratamento individualizado e acompanhamento humanizado.' },
+  { icon: Eye,     title: 'Visão',     text: 'Ser a referência nacional em tratamentos para coluna, reconhecida pela excelência técnica e pelo cuidado genuíno com cada paciente.' },
+  { icon: Compass, title: 'Propósito', text: 'Devolver qualidade de vida e mobilidade a pessoas com dores na coluna, transformando limitação em capacidade funcional.' },
 ]
+
+const VALUE_ICONS = {
+  crosshair: Crosshair,
+  heart:     Heart,
+  microscope:Microscope,
+  shield:    Shield,
+  users:     Users,
+  award:     Award,
+}
 
 export default function Sobre() {
   const { ref: s1, inView: v1 } = useScrollAnimation()
@@ -44,10 +53,12 @@ export default function Sobre() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div ref={s1} variants={staggerContainer} initial="hidden" animate={v1?'visible':'hidden'}
             className="grid md:grid-cols-3 gap-6">
-            {PILLARS.map((p,i)=>(
+            {PILLARS.map((p, i) => (
               <motion.div key={i} variants={scaleIn}
                 className="bg-gradient-to-br from-white to-brand-50 border border-brand-100 rounded-2xl p-8 group card-hover">
-                <div className="text-3xl mb-4">{p.emoji}</div>
+                <div className="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center mb-5">
+                  <p.icon size={18} className="text-white" />
+                </div>
                 <h3 className="font-serif font-bold text-neutral-900 text-xl mb-3">{p.title}</h3>
                 <p className="text-neutral-600 text-sm leading-relaxed">{p.text}</p>
               </motion.div>
@@ -81,16 +92,16 @@ export default function Sobre() {
               <span className="section-label">Nossa História</span>
               <h2 className="font-serif font-bold text-neutral-900 leading-tight tracking-[-0.025em] text-balance"
                 style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
-                Excelência em medicina espinhal com abordagem humana
+                Medicina espinhal de alto nível com cuidado genuinamente humano
               </h2>
               <p className="text-neutral-600 leading-relaxed">
-                A Espinhal D.O.R nasceu em 2009 com uma proposta clara: oferecer o que existe de mais avançado em diagnóstico e tratamento de patologias da coluna vertebral, com o calor humano que cada paciente merece.
+                A Espinhal D.O.R nasceu em 2009 com uma proposta clara: oferecer o que existe de mais avançado em diagnóstico e tratamento de patologias da coluna vertebral, com o rigor e a atenção que cada paciente merece.
               </p>
               <p className="text-neutral-600 leading-relaxed">
-                Ao longo de 15 anos, construímos uma estrutura de alto padrão, reunimos uma equipe especializada e desenvolvemos protocolos exclusivos que combinam medicina baseada em evidências com cuidado individualizado.
+                Ao longo de 15 anos, construímos uma estrutura de alto padrão, reunimos uma equipe especializada e desenvolvemos protocolos que combinam medicina baseada em evidências com acompanhamento individualizado.
               </p>
               <div className="space-y-3 pt-2">
-                {['Equipe multidisciplinar altamente qualificada','Tecnologia de diagnóstico de última geração','Tratamentos conservadores e minimamente invasivos','Protocolos personalizados baseados em evidências'].map((item,i)=>(
+                {['Equipe multidisciplinar altamente qualificada','Tecnologia de diagnóstico de última geração','Tratamentos conservadores e minimamente invasivos','Protocolos personalizados baseados em evidências'].map((item, i) => (
                   <motion.div key={i} initial={{ opacity:0, x:20 }} animate={v2?{ opacity:1, x:0 }:{}} transition={{ delay:0.3+i*0.1 }}
                     className="flex items-start gap-3">
                     <CheckCircle size={16} className="text-brand-600 shrink-0 mt-0.5"/>
@@ -115,14 +126,21 @@ export default function Sobre() {
           </motion.div>
           <motion.div variants={staggerContainer} initial="hidden" animate={v3?'visible':'hidden'}
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {VALUES.map((v,i)=>(
-              <motion.div key={i} variants={fadeUp}
-                className="group bg-white border border-neutral-100 rounded-2xl p-6 shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all duration-300">
-                <div className="text-3xl mb-4">{v.icon}</div>
-                <h4 className="font-serif font-semibold text-neutral-900 mb-2">{v.title}</h4>
-                <p className="text-neutral-500 text-sm leading-relaxed">{v.desc}</p>
-              </motion.div>
-            ))}
+            {VALUES.map((v, i) => {
+              const Icon = VALUE_ICONS[v.icon]
+              return (
+                <motion.div key={i} variants={fadeUp}
+                  className="group bg-white border border-neutral-100 rounded-2xl p-6 shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all duration-300">
+                  {Icon && (
+                    <div className="w-9 h-9 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:border-brand-600 transition-all duration-300">
+                      <Icon size={16} className="text-brand-600 group-hover:text-white transition-colors duration-300" />
+                    </div>
+                  )}
+                  <h4 className="font-serif font-semibold text-neutral-900 mb-2">{v.title}</h4>
+                  <p className="text-neutral-500 text-sm leading-relaxed">{v.desc}</p>
+                </motion.div>
+              )
+            })}
           </motion.div>
         </div>
       </section>
@@ -140,7 +158,7 @@ export default function Sobre() {
           <div className="relative">
             <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-600 to-brand-100 -translate-x-1/2 hidden md:block"/>
             <div className="space-y-8">
-              {MILESTONES.map((m,i)=>(
+              {MILESTONES.map((m, i) => (
                 <motion.div key={i} initial={{ opacity:0, x: i%2===0?-30:30 }} whileInView={{ opacity:1, x:0 }}
                   viewport={{ once:true, amount:0.4 }} transition={{ duration:0.6, delay:0.1 }}
                   className={`flex items-center gap-6 ${i%2===0?'md:flex-row':'md:flex-row-reverse'}`}>
@@ -171,7 +189,10 @@ export default function Sobre() {
         </div>
       </section>
 
-      <BottomCTA title="Pronto para começar sua jornada de recuperação?" subtitle="Conheça nossa equipe e descubra como podemos ajudar você a viver sem dor." />
+      <BottomCTA
+        title="Agende sua avaliação inicial"
+        subtitle="Nossa equipe está disponível para compreender seu caso e apresentar as melhores opções de tratamento."
+      />
     </PageTransition>
   )
 }

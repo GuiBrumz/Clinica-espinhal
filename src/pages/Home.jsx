@@ -51,6 +51,7 @@ function HomeHero() {
   return (
     <section
       ref={heroRef}
+      data-header-theme="dark"
       className="hero-section relative min-h-screen flex flex-col justify-center overflow-hidden"
       style={{ background: 'linear-gradient(160deg, #00082e 0%, #001254 30%, #001f8a 60%, #002db5 100%)' }}
     >
@@ -165,7 +166,7 @@ function HomeHero() {
 function TrustStrip() {
   const { ref, inView } = useScrollAnimation({ threshold: 0.3 })
   return (
-    <section className="py-20 bg-white">
+    <section data-header-theme="light" className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div ref={ref} variants={staggerContainer} initial="hidden" animate={inView ? 'visible' : 'hidden'}
           className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-neutral-100 rounded-3xl overflow-hidden shadow-card">
@@ -200,7 +201,7 @@ function TreatmentsPreview() {
   ]
 
   return (
-    <section ref={sectionRef} className="py-24 lg:py-32 bg-neutral-50 relative overflow-hidden">
+    <section ref={sectionRef} data-header-theme="light" className="py-24 lg:py-32 bg-neutral-50 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle at 80% 20%, rgba(0,87,255,0.035) 0%, transparent 65%)' }} />
 
@@ -268,7 +269,7 @@ function WhySection() {
   ]
 
   return (
-    <section className="py-24 lg:py-36 bg-white overflow-hidden">
+    <section data-header-theme="light" className="py-24 lg:py-36 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
@@ -335,7 +336,7 @@ function TestimonialsPreview() {
   const swiperRef  = useReveal({ y: 24, duration: 0.7, delay: 0.1, start: 'top 88%' })
 
   return (
-    <section className="py-24 lg:py-32 bg-neutral-50 overflow-hidden">
+    <section data-header-theme="light" className="py-24 lg:py-32 bg-neutral-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         <div ref={headRef} className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-14 opacity-0">
@@ -396,7 +397,7 @@ function EnvironmentPreview() {
   const sectionRef = useScrollReveal('[data-reveal]', { y: 20, stagger: 0.08, start: 'top 85%' })
 
   return (
-    <section ref={sectionRef} className="py-24 lg:py-32 bg-white overflow-hidden">
+    <section ref={sectionRef} data-header-theme="light" className="py-24 lg:py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         <div data-reveal className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-14">
@@ -450,7 +451,7 @@ function DoctorPreview() {
   const cardRef = useReveal({ y: 20, duration: 0.7, start: 'top 88%' })
 
   return (
-    <section className="py-20 lg:py-24 bg-neutral-50">
+    <section data-header-theme="light" className="py-20 lg:py-24 bg-neutral-50">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div ref={cardRef}
           className="bg-white rounded-3xl p-8 lg:p-12 border border-neutral-100 shadow-card flex flex-col lg:flex-row items-start gap-8 opacity-0">
