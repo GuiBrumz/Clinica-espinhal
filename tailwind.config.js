@@ -69,11 +69,13 @@ export default {
         'hero-gradient': 'linear-gradient(135deg, #001f6e 0%, #0057FF 50%, #003db3 100%)',
       },
       boxShadow: {
-        'glow':    '0 0 40px rgba(0,87,255,0.25)',
-        'glow-lg': '0 0 80px rgba(0,87,255,0.35)',
-        'glass':   '0 8px 32px rgba(0,0,0,0.12)',
-        'card':    '0 4px 24px rgba(0,0,0,0.08)',
-        'card-hover': '0 16px 48px rgba(0,87,255,0.2)',
+        'glow':      '0 0 40px rgba(0,87,255,0.25)',
+        'glow-lg':   '0 0 80px rgba(0,87,255,0.35)',
+        'glass':     '0 8px 32px rgba(0,0,0,0.12)',
+        'card':      '0 4px 24px rgba(0,0,0,0.06)',
+        'card-hover':'0 16px 48px rgba(0,87,255,0.18)',
+        'bento':     '0 2px 12px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.04)',
+        'premium':   '0 24px 64px rgba(0,0,0,0.12), 0 4px 16px rgba(0,87,255,0.08)',
       },
       animation: {
         'float':       'float 6s ease-in-out infinite',
