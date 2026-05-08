@@ -11,6 +11,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import PageTransition from '../components/PageTransition'
 import BottomCTA from '../components/BottomCTA'
+import SpineInteractive from '../sections/SpineInteractive'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { useScrollReveal, useReveal } from '../hooks/useScrollReveal'
 import { staggerContainer, fadeUp, scaleIn } from '../animations/variants'
@@ -491,6 +492,7 @@ export default function Home() {
     <PageTransition>
       <HomeHero />
       <TrustStrip />
+      <SpineInteractive />
       <TreatmentsPreview />
       <WhySection />
       <TestimonialsPreview />

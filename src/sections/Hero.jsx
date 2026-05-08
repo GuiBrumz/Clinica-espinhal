@@ -46,7 +46,7 @@ export default function Hero() {
       {/* Background image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&h=1080&fit=crop"
+          src="https://images.unsplash.com/photo-1714929818437-889f2c93a94a?w=1920&h=1200&fit=crop"
           alt=""
           aria-hidden="true"
           className="w-full h-full object-cover object-center"
@@ -54,7 +54,7 @@ export default function Hero() {
         />
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(150deg, rgba(0,26,92,0.94) 0%, rgba(0,64,204,0.88) 40%, rgba(0,87,255,0.82) 65%, rgba(0,47,160,0.93) 100%)' }}
+          style={{ background: 'linear-gradient(150deg, rgba(0,20,80,0.55) 0%, rgba(0,55,180,0.48) 45%, rgba(0,87,255,0.45) 65%, rgba(0,35,130,0.55) 100%)' }}
         />
       </div>
 

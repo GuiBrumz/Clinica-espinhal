@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:images.unsplash.com)",
+      "WebFetch(domain:unsplash.com)",
+      "PowerShell(Invoke-WebRequest -Uri \"https://images.unsplash.com/photo-1593612605566-fc2e271cb68f?fm=jpg&q=80&w=1200&fit=crop\" -OutFile \"C:\\\\Users\\\\Dev RK\\\\Desktop\\\\clinica-espinhal\\\\img_preview_4.jpg\")",
+      "PowerShell(Invoke-WebRequest -Uri \"https://images.unsplash.com/photo-1743767587874-b6887c888ea1?fm=jpg&q=80&w=1200&fit=crop\" -OutFile \"C:\\\\Users\\\\Dev RK\\\\Desktop\\\\clinica-espinhal\\\\img_preview_5.jpg\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Dev RK\\Desktop\\clinica-espinhal"
+    ]
+  }
+}
