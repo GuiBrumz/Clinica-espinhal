@@ -12,6 +12,9 @@ export default defineConfig({
           'vendor-gsap':   ['gsap'],
           'vendor-swiper': ['swiper'],
           'vendor-react':  ['react', 'react-dom', 'react-router-dom'],
+          // 3D spine — loaded separately so it doesn't block initial render
+          'vendor-three':  ['three'],
+          'vendor-r3f':    ['@react-three/fiber', '@react-three/drei'],
         },
       },
     },

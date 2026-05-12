@@ -1,6 +1,9 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef, Suspense, Component } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { useGLTF, OrbitControls, Center } from '@react-three/drei'
+import * as THREE from 'three'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronRight, MousePointer2 } from 'lucide-react'
+import { X, ChevronRight, MousePointer2, RotateCcw } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 // ─── Region data ──────────────────────────────────────────────────────────────
@@ -55,201 +58,179 @@ const REGIONS = [
   },
 ]
 
-// ─── Build vertebrae list ─────────────────────────────────────────────────────
-const CX = 100  // center X of the SVG (viewBox width = 200)
+const REGION_COLORS = {
+  cervical: new THREE.Color('#3b82f6'),
+  thoracic: new THREE.Color('#8b5cf6'),
+  lumbar:   new THREE.Color('#10b981'),
+  sacral:   new THREE.Color('#f59e0b'),
+}
+const BASE_COLOR = new THREE.Color('#b8cce0')
+const BLACK      = new THREE.Color(0, 0, 0)
 
-function buildVertebrae() {
-  const list = []
-  let y = 24
+// ─── 3D Spine Model ───────────────────────────────────────────────────────────
+function SpineModel({ selected, hovered, onSelect, onHover }) {
+  const { scene } = useGLTF('/assets/spine.glb')
 
-  // Cervical C1–C7 — smaller vertebrae
-  for (let i = 0; i < 7; i++) {
-    const bw = 38 + i * 2.2
-    const bh = 12
-    const dh = 7
-    list.push({ region: 'cervical', y, bw, bh, dh, ww: 16 + i, wh: 8 })
-    y += bh + dh
-  }
+  const clonedScene = useMemo(() => {
+    const clone = scene.clone(true)
 
-  // Thoracic T1–T12 — medium
-  for (let i = 0; i < 12; i++) {
-    const bw = 54 + i * 0.4
-    const bh = 13
-    const dh = 7
-    list.push({ region: 'thoracic', y, bw, bh, dh, ww: 20, wh: 9 })
-    y += bh + dh
-  }
+    // Scale to fit a ~3-unit tall bounding box
+    clone.updateMatrixWorld(true)
+    const rawBox = new THREE.Box3().setFromObject(clone)
+    const rawSize = rawBox.getSize(new THREE.Vector3())
+    const maxDim = Math.max(rawSize.x, rawSize.y, rawSize.z)
+    if (maxDim > 0) clone.scale.setScalar(3.0 / maxDim)
 
-  // Lumbar L1–L5 — larger
-  for (let i = 0; i < 5; i++) {
-    const bw = 65 + i * 2.5
-    const bh = 16
-    const dh = 10
-    list.push({ region: 'lumbar', y, bw, bh, dh, ww: 22, wh: 12 })
-    y += bh + dh
-  }
+    // Recompute bounds after scale and assign regions by relative Y
+    clone.updateMatrixWorld(true)
+    const box = new THREE.Box3().setFromObject(clone)
+    const h   = box.max.y - box.min.y
+    const minY = box.min.y
 
-  const sacralY = y
-  return { list, sacralY, totalH: sacralY + 75 }
+    clone.traverse(child => {
+      if (!child.isMesh) return
+
+      // Clone material so each mesh can be coloured independently
+      if (Array.isArray(child.material)) {
+        child.material = child.material.map(m => m.clone())
+      } else {
+        child.material = child.material.clone()
+      }
+
+      const mb   = new THREE.Box3().setFromObject(child)
+      const cy   = (mb.min.y + mb.max.y) / 2
+      const relY = (cy - minY) / h   // 0 = bottom (sacral), 1 = top (cervical)
+
+      if      (relY >= 0.78) child.userData.region = 'cervical'
+      else if (relY >= 0.45) child.userData.region = 'thoracic'
+      else if (relY >= 0.18) child.userData.region = 'lumbar'
+      else                   child.userData.region = 'sacral'
+    })
+
+    return clone
+  }, [scene])
+
+  // Update mesh colours whenever selected/hovered changes
+  useEffect(() => {
+    clonedScene.traverse(child => {
+      if (!child.isMesh) return
+      const r        = child.userData.region
+      const isActive = selected === r || hovered === r
+      const isDimmed = (selected || hovered) && !isActive
+      const mats     = Array.isArray(child.material) ? child.material : [child.material]
+
+      mats.forEach(mat => {
+        mat.color.copy(isActive ? REGION_COLORS[r] : BASE_COLOR)
+        mat.emissive.copy(isActive ? REGION_COLORS[r] : BLACK)
+        mat.emissiveIntensity = isActive ? 0.25 : 0
+        mat.transparent       = isDimmed
+        mat.opacity           = isDimmed ? 0.18 : 1
+        mat.needsUpdate       = true
+      })
+    })
+  }, [selected, hovered, clonedScene])
+
+  const getRegion = (e) => e.object?.userData?.region ?? null
+
+  return (
+    <Center>
+      <primitive
+        object={clonedScene}
+        onClick={(e) => {
+          e.stopPropagation()
+          const r = getRegion(e)
+          if (r) onSelect(r)
+        }}
+        onPointerMove={(e) => {
+          e.stopPropagation()
+          document.body.style.cursor = 'pointer'
+          const r = getRegion(e)
+          if (r) onHover(r)
+        }}
+        onPointerLeave={() => {
+          document.body.style.cursor = 'auto'
+          onHover(null)
+        }}
+      />
+    </Center>
+  )
 }
 
-const { list: VERTEBRAE, sacralY: SACRAL_Y, totalH: SVG_H } = buildVertebrae()
+useGLTF.preload('/assets/spine.glb')
 
-// Region Y-bounds for label positioning
-const REGION_BOUNDS = REGIONS.reduce((acc, r) => {
-  const verts = VERTEBRAE.filter(v => v.region === r.id)
-  if (verts.length) {
-    acc[r.id] = {
-      y1: verts[0].y,
-      y2: verts.at(-1).y + verts.at(-1).bh + verts.at(-1).dh,
+// ─── Error boundary ────────────────────────────────────────────────────────────
+class SpineErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: false } }
+  static getDerivedStateFromError() { return { error: true } }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full gap-3 text-neutral-400">
+          <MousePointer2 size={28} className="opacity-40" />
+          <p className="text-sm">Modelo 3D indisponível neste dispositivo</p>
+        </div>
+      )
     }
-  } else {
-    // sacral
-    acc[r.id] = { y1: SACRAL_Y, y2: SACRAL_Y + 68 }
+    return this.props.children
   }
-  return acc
-}, {})
+}
 
-// ─── Spine SVG ────────────────────────────────────────────────────────────────
-function SpineSVG({ selected, hovered, onSelect, onHover }) {
+// ─── Loading placeholder (inside Canvas) ─────────────────────────────────────
+function SpineLoading() {
   return (
-    <svg
-      viewBox={`0 0 200 ${SVG_H}`}
-      style={{ height: SVG_H, width: 'auto' }}
-      className="flex-shrink-0"
-      aria-label="Diagrama interativo da coluna vertebral"
-    >
-      <defs>
-        {REGIONS.map(r => (
-          <filter key={r.id} id={`glow-${r.id}`} x="-30%" y="-10%" width="160%" height="120%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        ))}
-      </defs>
+    <mesh>
+      <boxGeometry args={[0.6, 3, 0.4]} />
+      <meshStandardMaterial color="#e2e8f0" opacity={0.5} transparent />
+    </mesh>
+  )
+}
 
-      {/* Spinal cord dashed line */}
-      <line
-        x1={CX} y1={20} x2={CX} y2={SVG_H - 20}
-        stroke="rgba(148,163,184,0.25)" strokeWidth={1.5} strokeDasharray="4 6"
-      />
+// ─── 3D Canvas wrapper ────────────────────────────────────────────────────────
+function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
+  const controlsRef = useRef()
 
-      {/* Vertebrae */}
-      {VERTEBRAE.map((v, i) => {
-        const region = REGIONS.find(r => r.id === v.region)
-        const isActive = selected === v.region || hovered === v.region
-        const isDimmed = (selected || hovered) && !isActive
-        const col = isActive ? region.color : '#94a3b8'
-        const discCol = isActive ? region.color + '55' : '#e2e8f0'
-        const op = isDimmed ? 0.18 : 1
+  return (
+    <SpineErrorBoundary>
+    <div className="relative w-full h-full">
+      <Canvas
+        camera={{ position: [0, 0, 4.5], fov: 38 }}
+        style={{ background: 'transparent' }}
+        gl={{ alpha: true, antialias: true }}
+      >
+        <ambientLight intensity={0.7} />
+        <directionalLight position={[2, 5, 4]}  intensity={1.1} />
+        <directionalLight position={[-3, 2, -2]} intensity={0.35} />
+        <pointLight position={[0, -3, 2]} intensity={0.3} color="#c8d6f0" />
 
-        return (
-          <g
-            key={i}
-            onClick={() => onSelect(v.region)}
-            onMouseEnter={() => onHover(v.region)}
-            onMouseLeave={() => onHover(null)}
-            className="cursor-pointer"
-            style={{ opacity: op, transition: 'opacity 0.25s' }}
-            filter={isActive ? `url(#glow-${v.region})` : undefined}
-          >
-            {/* Left transverse process */}
-            <ellipse
-              cx={CX - v.bw / 2 - v.ww * 0.45}
-              cy={v.y + v.bh / 2}
-              rx={v.ww * 0.55}
-              ry={v.wh / 2}
-              fill={col}
-              opacity={0.70}
-              style={{ transition: 'fill 0.25s' }}
-            />
-            {/* Right transverse process */}
-            <ellipse
-              cx={CX + v.bw / 2 + v.ww * 0.45}
-              cy={v.y + v.bh / 2}
-              rx={v.ww * 0.55}
-              ry={v.wh / 2}
-              fill={col}
-              opacity={0.70}
-              style={{ transition: 'fill 0.25s' }}
-            />
-            {/* Spinous process (nub above body) */}
-            <rect
-              x={CX - 3.5} y={v.y - 4}
-              width={7} height={5}
-              rx={2}
-              fill={col}
-              opacity={0.5}
-              style={{ transition: 'fill 0.25s' }}
-            />
-            {/* Vertebral body */}
-            <rect
-              x={CX - v.bw / 2} y={v.y}
-              width={v.bw} height={v.bh}
-              rx={3.5}
-              fill={col}
-              style={{ transition: 'fill 0.25s' }}
-            />
-            {/* Pedicle openings (foramina hint) */}
-            <ellipse cx={CX - v.bw * 0.28} cy={v.y + v.bh / 2} rx={v.bw * 0.07} ry={v.bh * 0.25}
-              fill="rgba(255,255,255,0.22)" />
-            <ellipse cx={CX + v.bw * 0.28} cy={v.y + v.bh / 2} rx={v.bw * 0.07} ry={v.bh * 0.25}
-              fill="rgba(255,255,255,0.22)" />
-            {/* Intervertebral disc */}
-            {v.dh > 0 && (
-              <rect
-                x={CX - v.bw * 0.42} y={v.y + v.bh}
-                width={v.bw * 0.84} height={v.dh}
-                rx={2}
-                fill={discCol}
-                style={{ transition: 'fill 0.25s' }}
-              />
-            )}
-          </g>
-        )
-      })}
+        <Suspense fallback={<SpineLoading />}>
+          <SpineModel
+            selected={selected}
+            hovered={hovered}
+            onSelect={onSelect}
+            onHover={onHover}
+          />
+        </Suspense>
 
-      {/* Sacrum */}
-      {(() => {
-        const r = REGIONS.find(r => r.id === 'sacral')
-        const isActive = selected === 'sacral' || hovered === 'sacral'
-        const isDimmed = (selected || hovered) && !isActive
-        const col = isActive ? r.color : '#94a3b8'
-        const tw = 74, bw2 = 46, h = 58
-        return (
-          <g
-            onClick={() => onSelect('sacral')}
-            onMouseEnter={() => onHover('sacral')}
-            onMouseLeave={() => onHover(null)}
-            className="cursor-pointer"
-            style={{ opacity: isDimmed ? 0.18 : 1, transition: 'opacity 0.25s' }}
-            filter={isActive ? `url(#glow-sacral)` : undefined}
-          >
-            <path
-              d={`M ${CX - tw / 2} ${SACRAL_Y} L ${CX + tw / 2} ${SACRAL_Y} L ${CX + bw2 / 2} ${SACRAL_Y + h} L ${CX - bw2 / 2} ${SACRAL_Y + h} Z`}
-              fill={col}
-              style={{ transition: 'fill 0.25s' }}
-            />
-            {/* Foramina */}
-            {[0.28, 0.52, 0.76].map((t, j) => (
-              <g key={j}>
-                <ellipse cx={CX - 11} cy={SACRAL_Y + h * t} rx={4.5} ry={2.8} fill="rgba(255,255,255,0.25)" />
-                <ellipse cx={CX + 11} cy={SACRAL_Y + h * t} rx={4.5} ry={2.8} fill="rgba(255,255,255,0.25)" />
-              </g>
-            ))}
-            {/* Coccyx */}
-            <path
-              d={`M ${CX - 12} ${SACRAL_Y + h} Q ${CX - 6} ${SACRAL_Y + h + 14} ${CX} ${SACRAL_Y + h + 12} Q ${CX + 6} ${SACRAL_Y + h + 14} ${CX + 12} ${SACRAL_Y + h}`}
-              fill="none" stroke={col} strokeWidth={8} strokeLinecap="round"
-              style={{ transition: 'stroke 0.25s' }}
-            />
-          </g>
-        )
-      })()}
-    </svg>
+        <OrbitControls
+          ref={controlsRef}
+          enablePan={false}
+          enableZoom={false}
+          minPolarAngle={Math.PI * 0.12}
+          maxPolarAngle={Math.PI * 0.88}
+          autoRotate={!selected && !hovered}
+          autoRotateSpeed={1.8}
+        />
+      </Canvas>
+
+      {/* Hint badge */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-100/80 backdrop-blur-sm text-[11px] text-neutral-400 pointer-events-none select-none">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
+        </svg>
+        Arraste para girar · Clique para explorar
+      </div>
+    </div>
+    </SpineErrorBoundary>
   )
 }
 
@@ -266,7 +247,6 @@ function InfoCard({ region, onClose }) {
       className="rounded-3xl border p-7 lg:p-8 w-full"
       style={{ borderColor: region.border, background: region.bg }}
     >
-      {/* Header */}
       <div className="flex items-start justify-between mb-5">
         <div>
           <span className="text-[10px] font-bold uppercase tracking-[0.16em]" style={{ color: region.color }}>
@@ -287,7 +267,6 @@ function InfoCard({ region, onClose }) {
       <p className="text-neutral-600 text-sm leading-relaxed mb-6">{region.desc}</p>
 
       <div className="grid sm:grid-cols-2 gap-6 mb-7">
-        {/* Symptoms */}
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400 mb-3">Sintomas</p>
           <ul className="space-y-2">
@@ -299,7 +278,6 @@ function InfoCard({ region, onClose }) {
             ))}
           </ul>
         </div>
-        {/* Treatments */}
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400 mb-3">Tratamentos</p>
           <ul className="space-y-2">
@@ -328,17 +306,17 @@ function InfoCard({ region, onClose }) {
 // ─── Section ─────────────────────────────────────────────────────────────────
 export default function SpineInteractive() {
   const [selected, setSelected] = useState(null)
-  const [hovered, setHovered]   = useState(null)
+  const [hovered,  setHovered]  = useState(null)
 
   const activeRegion = REGIONS.find(r => r.id === selected)
-
   const handleSelect = (id) => setSelected(prev => prev === id ? null : id)
 
   return (
     <section data-header-theme="light" className="py-24 lg:py-32 bg-white relative overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] opacity-[0.025] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #0057FF, transparent 70%)' }} />
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] opacity-[0.025] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, #0057FF, transparent 70%)' }}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -348,8 +326,10 @@ export default function SpineInteractive() {
             <MousePointer2 size={11} />
             Anatomia Interativa
           </span>
-          <h2 className="font-serif font-bold text-neutral-900 tracking-[-0.03em] leading-[1.08] mb-4"
-            style={{ fontSize: 'clamp(1.875rem, 3.5vw + 0.25rem, 2.875rem)' }}>
+          <h2
+            className="font-serif font-bold text-neutral-900 tracking-[-0.03em] leading-[1.08] mb-4"
+            style={{ fontSize: 'clamp(1.875rem, 3.5vw + 0.25rem, 2.875rem)' }}
+          >
             Explore a{' '}
             <span className="text-gradient-blue">Coluna Vertebral</span>
           </h2>
@@ -359,13 +339,11 @@ export default function SpineInteractive() {
         </div>
 
         {/* ── Desktop layout ─────────────────────────────────────────── */}
-        <div className="hidden lg:flex items-start justify-center gap-10 xl:gap-16">
+        <div className="hidden lg:grid lg:grid-cols-[200px_1fr_360px] xl:grid-cols-[220px_1fr_400px] gap-8 xl:gap-12 items-start">
 
-          {/* Left: region labels */}
-          <div className="relative shrink-0" style={{ height: SVG_H }}>
+          {/* Left: region list */}
+          <div className="flex flex-col gap-2 pt-16">
             {REGIONS.map(r => {
-              const b = REGION_BOUNDS[r.id]
-              const midPct = ((b.y1 + b.y2) / 2 / SVG_H) * 100
               const isActive = selected === r.id || hovered === r.id
               return (
                 <button
@@ -373,36 +351,54 @@ export default function SpineInteractive() {
                   onClick={() => handleSelect(r.id)}
                   onMouseEnter={() => setHovered(r.id)}
                   onMouseLeave={() => setHovered(null)}
-                  className="absolute right-0 flex items-center gap-3 group"
-                  style={{ top: `${midPct}%`, transform: 'translateY(-50%)' }}
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl border text-left transition-all duration-200 hover:-translate-y-px"
+                  style={{
+                    borderColor: isActive ? r.color : 'rgba(226,232,240,1)',
+                    background:  isActive ? r.bg    : 'transparent',
+                    boxShadow:   isActive ? `0 0 0 1px ${r.color}55` : 'none',
+                  }}
                 >
-                  <div className="text-right">
+                  <span
+                    className="w-2.5 h-2.5 rounded-full shrink-0 transition-all duration-200"
+                    style={{
+                      backgroundColor: isActive ? r.color : '#cbd5e1',
+                      transform: isActive ? 'scale(1.3)' : 'scale(1)',
+                    }}
+                  />
+                  <div>
                     <p className="text-sm font-semibold transition-colors duration-200"
-                      style={{ color: isActive ? r.color : '#94a3b8' }}>
+                      style={{ color: isActive ? r.color : '#475569' }}>
                       {r.label}
                     </p>
                     <p className="text-[11px] text-neutral-400">{r.sub}</p>
                   </div>
-                  {/* Connector dot */}
-                  <div
-                    className="w-2 h-2 rounded-full transition-all duration-200 shrink-0"
-                    style={{ backgroundColor: isActive ? r.color : '#cbd5e1', transform: isActive ? 'scale(1.4)' : 'scale(1)' }}
-                  />
                 </button>
               )
             })}
+
+            {selected && (
+              <button
+                onClick={() => setSelected(null)}
+                className="mt-2 flex items-center gap-1.5 text-xs text-neutral-400 hover:text-neutral-600 transition-colors px-4"
+              >
+                <RotateCcw size={11} />
+                Limpar seleção
+              </button>
+            )}
           </div>
 
-          {/* Center: SVG spine */}
-          <SpineSVG
-            selected={selected}
-            hovered={hovered}
-            onSelect={handleSelect}
-            onHover={setHovered}
-          />
+          {/* Center: 3D spine */}
+          <div className="rounded-3xl overflow-hidden bg-gradient-to-b from-slate-50 to-white border border-slate-100 shadow-sm" style={{ height: 560 }}>
+            <Spine3DViewer
+              selected={selected}
+              hovered={hovered}
+              onSelect={handleSelect}
+              onHover={setHovered}
+            />
+          </div>
 
           {/* Right: info card or placeholder */}
-          <div className="flex-1 max-w-sm xl:max-w-md pt-8">
+          <div className="pt-8">
             <AnimatePresence mode="wait">
               {activeRegion ? (
                 <InfoCard key={activeRegion.id} region={activeRegion} onClose={() => setSelected(null)} />
@@ -421,20 +417,6 @@ export default function SpineInteractive() {
                     <p className="font-semibold text-neutral-700 mb-1">Selecione uma região</p>
                     <p className="text-neutral-400 text-sm">Clique em qualquer segmento da coluna para ver detalhes</p>
                   </div>
-                  <div className="flex flex-col gap-2 w-full mt-2">
-                    {REGIONS.map(r => (
-                      <button
-                        key={r.id}
-                        onClick={() => handleSelect(r.id)}
-                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all hover:-translate-y-px text-left"
-                        style={{ borderColor: r.border, color: r.color, background: r.bg }}
-                      >
-                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: r.color }} />
-                        {r.label}
-                        <span className="ml-auto text-[11px] text-neutral-400">{r.sub}</span>
-                      </button>
-                    ))}
-                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -442,7 +424,7 @@ export default function SpineInteractive() {
         </div>
 
         {/* ── Mobile layout ──────────────────────────────────────────── */}
-        <div className="lg:hidden flex flex-col items-center gap-8">
+        <div className="lg:hidden flex flex-col items-center gap-6">
           {/* Region buttons */}
           <div className="flex flex-wrap gap-2 justify-center">
             {REGIONS.map(r => (
@@ -452,9 +434,9 @@ export default function SpineInteractive() {
                 className="px-4 py-2 rounded-xl border text-sm font-semibold transition-all"
                 style={{
                   borderColor: selected === r.id ? r.color : r.border,
-                  color: r.color,
-                  background: selected === r.id ? r.bg : 'transparent',
-                  boxShadow: selected === r.id ? `0 0 0 2px ${r.color}40` : 'none',
+                  color:       r.color,
+                  background:  selected === r.id ? r.bg : 'transparent',
+                  boxShadow:   selected === r.id ? `0 0 0 2px ${r.color}40` : 'none',
                 }}
               >
                 {r.label}
@@ -462,9 +444,9 @@ export default function SpineInteractive() {
             ))}
           </div>
 
-          {/* Spine (smaller on mobile) */}
-          <div className="overflow-hidden" style={{ maxHeight: '420px' }}>
-            <SpineSVG
+          {/* 3D spine */}
+          <div className="w-full rounded-3xl overflow-hidden bg-gradient-to-b from-slate-50 to-white border border-slate-100 shadow-sm" style={{ height: 360 }}>
+            <Spine3DViewer
               selected={selected}
               hovered={hovered}
               onSelect={handleSelect}
