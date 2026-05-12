@@ -9,29 +9,22 @@ export default function CTA() {
 
   return (
     <section id="contato" className="py-24 lg:py-32 relative overflow-hidden"
-      style={{ background: 'linear-gradient(150deg, #001040 0%, #0040cc 45%, #0057FF 80%, #001a70 100%)' }}
+      style={{ background: 'linear-gradient(155deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%)' }}
     >
-      {/* Animated blobs */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          animate={{ scale: [1, 1.3, 1], x: [0, 40, 0], y: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-40 right-1/4 w-[500px] h-[500px] rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #60a5fa, transparent 70%)' }}
-        />
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], x: [0, -30, 0], y: [0, 30, 0] }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
-          className="absolute -bottom-40 left-1/4 w-[500px] h-[500px] rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #3b82f6, transparent 70%)' }}
-        />
-        {/* Grid */}
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }} />
-      </div>
+      {/* Subtle static ambient */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(59,130,246,0.12) 0%, transparent 60%)' }}
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div

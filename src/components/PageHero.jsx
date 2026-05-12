@@ -24,8 +24,8 @@ export default function PageHero({
       className={`relative ${minHeight} flex flex-col justify-end overflow-hidden`}
       style={
         dark
-          ? { background: 'linear-gradient(150deg, #001040 0%, #0040cc 50%, #0057FF 100%)' }
-          : { background: 'linear-gradient(150deg, #f8fafc 0%, #eff6ff 100%)' }
+          ? { background: 'linear-gradient(155deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%)' }
+          : { background: 'linear-gradient(150deg, #fafafa 0%, #eff6ff 100%)' }
       }
     >
       {/* Background image */}

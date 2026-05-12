@@ -38,7 +38,7 @@ export default function Footer() {
       <div className="h-px bg-gradient-to-r from-transparent via-brand-600 to-transparent" />
 
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] opacity-[0.04] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse, #0057FF, transparent 70%)' }} />
+        style={{ background: 'radial-gradient(ellipse, #2563eb, transparent 70%)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-10 mb-12">
