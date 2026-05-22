@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle, Instagram, Facebook, Youtube, Linkedin } from 'lucide-react'
+import { toast } from 'sonner'
+import { Mail, MapPin, Clock, Send, Instagram, Facebook, Youtube, Linkedin } from 'lucide-react'
 import PageTransition from '../components/PageTransition'
 import PageHero from '../components/PageHero'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
@@ -8,12 +9,30 @@ import { staggerContainer, fadeUp, fadeLeft, fadeRight } from '../animations/var
 import { CLINIC_INFO } from '../data/content'
 
 const SUBJECTS = ['Agendar avaliação','Informações sobre tratamentos','Dúvidas sobre pagamento','Outros']
+
+const LOCATION_CARDS = [
+  {
+    ...CLINIC_INFO.locations[0],
+    // imagem real disponível quando clínica enviar foto da unidade POA
+    image: 'https://images.pexels.com/photos/4506107/pexels-photo-4506107.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop&crop=top',
+  },
+  {
+    ...CLINIC_INFO.locations[1],
+    // fachada real da Sapucaia Clínicas (prédio onde a Espinhal D.O.R atende)
+    image: 'https://sapucaiaclinicas.com.br/wp-content/uploads/2024/05/2023-09-18.jpg',
+  },
+  {
+    ...CLINIC_INFO.locations[2],
+    // imagem real disponível quando clínica enviar foto da unidade Gravataí
+    image: 'https://images.pexels.com/photos/4506109/pexels-photo-4506109.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop&crop=top',
+  },
+]
 const SOCIAL = [
   { icon: Instagram, href: CLINIC_INFO.instagram, label:'Instagram', color:'#E1306C' },
   { icon: Facebook,  href: CLINIC_INFO.facebook,  label:'Facebook',  color:'#1877F2' },
   { icon: Youtube,   href: CLINIC_INFO.youtube,   label:'YouTube',   color:'#FF0000' },
   { icon: Linkedin,  href: CLINIC_INFO.linkedin,  label:'LinkedIn',  color:'#0A66C2' },
-]
+].filter(s => s.href)
 
 function FloatInput({ label, type='text', name, value, onChange, required, as='input', rows=4 }) {
   const [focused, setFocused] = useState(false)
@@ -42,7 +61,6 @@ function FloatInput({ label, type='text', name, value, onChange, required, as='i
 export default function Contato() {
   const { ref, inView } = useScrollAnimation()
   const [form, setForm] = useState({ name:'', email:'', phone:'', subject:SUBJECTS[0], message:'' })
-  const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const onChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
@@ -52,14 +70,18 @@ export default function Contato() {
     setLoading(true)
     await new Promise(r => setTimeout(r, 1200))
     setLoading(false)
-    setSent(true)
+    setForm({ name:'', email:'', phone:'', subject:SUBJECTS[0], message:'' })
+    toast.success('Mensagem enviada!', {
+      description: 'Nossa equipe retornará em até 2 horas úteis.',
+      duration: 5000,
+    })
   }
 
   return (
     <PageTransition>
       <PageHero
         label="Contato"
-        title={<>Fale conosco — estamos<br /><span className="text-gradient">prontos para ajudar</span></>}
+        title={<>Entre em contato<br /><span className="text-gradient">com a nossa equipe</span></>}
         subtitle="Entre em contato pelo WhatsApp, telefone ou formulário. Respondemos em até 2 horas úteis."
         breadcrumbs={[{ label:'Contato' }]}
         cta={{ label:'WhatsApp direto', href:`https://wa.me/${CLINIC_INFO.whatsapp}?text=Olá!` }}
@@ -81,9 +103,8 @@ export default function Contato() {
               </div>
 
               {[
-                { Icon:Phone,   label:'Telefone',  value:CLINIC_INFO.phone, href:`tel:${CLINIC_INFO.phone}` },
                 { Icon:Mail,    label:'E-mail',    value:CLINIC_INFO.email, href:`mailto:${CLINIC_INFO.email}` },
-                { Icon:MapPin,  label:'Endereço',  value:CLINIC_INFO.address, href:'#' },
+                { Icon:MapPin,  label:'Unidades',  value:'Porto Alegre · Sapucaia do Sul · Gravataí', href:'#' },
                 { Icon:Clock,   label:'Horários',  value:CLINIC_INFO.hours, href:null },
               ].map((item,i) => (
                 <motion.div key={i} initial={{ opacity:0, x:-20 }} animate={inView?{ opacity:1, x:0 }:{}} transition={{ delay:0.1+i*0.1 }}
@@ -134,68 +155,95 @@ export default function Contato() {
             <motion.div variants={fadeRight} initial="hidden" animate={inView?'visible':'hidden'}
               className="lg:col-span-3">
               <div className="bg-white border border-neutral-100 rounded-3xl p-8 shadow-card">
-                {sent ? (
-                  <motion.div initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }} className="text-center py-8">
-                    <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-5">
-                      <CheckCircle size={30} className="text-green-600"/>
-                    </div>
-                    <h3 className="font-serif font-bold text-neutral-900 text-xl mb-2">Mensagem enviada!</h3>
-                    <p className="text-neutral-500 text-sm">Retornaremos em até 2 horas úteis.</p>
-                    <button onClick={()=>setSent(false)} className="mt-6 btn-primary">Enviar outra mensagem</button>
-                  </motion.div>
-                ) : (
-                  <>
-                    <h3 className="font-serif font-bold text-neutral-900 text-xl mb-6">Envie uma mensagem</h3>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <FloatInput label="Seu nome" name="name" value={form.name} onChange={onChange} required/>
-                        <FloatInput label="Telefone / WhatsApp" name="phone" value={form.phone} onChange={onChange}/>
-                      </div>
-                      <FloatInput label="E-mail" type="email" name="email" value={form.email} onChange={onChange} required/>
-                      {/* Subject select */}
-                      <div className="relative">
-                        <label className="absolute left-4 top-2 text-[10px] text-brand-600 font-bold tracking-wider uppercase z-10">
-                          Assunto *
-                        </label>
-                        <select name="subject" value={form.subject} onChange={onChange}
-                          className="w-full px-4 pt-6 pb-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-neutral-900 text-sm focus:outline-none focus:border-brand-600 transition-all appearance-none">
-                          {SUBJECTS.map(s => <option key={s}>{s}</option>)}
-                        </select>
-                      </div>
-                      <FloatInput label="Mensagem" name="message" value={form.message} onChange={onChange} as="textarea" rows={4} required/>
-                      <motion.button type="submit" disabled={loading}
-                        whileHover={{ scale:1.02, y:-1 }} whileTap={{ scale:0.98 }}
-                        className="btn-primary w-full justify-center py-4 disabled:opacity-70 disabled:cursor-not-allowed">
-                        {loading ? (
-                          <span className="flex items-center gap-2">
-                            <motion.span animate={{ rotate:360 }} transition={{ duration:1, repeat:Infinity, ease:'linear' }}
-                              className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full block"/>
-                            Enviando...
-                          </span>
-                        ) : (
-                          <span className="flex items-center gap-2"><Send size={16}/>Enviar Mensagem</span>
-                        )}
-                      </motion.button>
-                    </form>
-                  </>
-                )}
+                <h3 className="font-serif font-bold text-neutral-900 text-xl mb-6">Envie uma mensagem</h3>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <FloatInput label="Seu nome" name="name" value={form.name} onChange={onChange} required/>
+                    <FloatInput label="Telefone / WhatsApp" name="phone" value={form.phone} onChange={onChange}/>
+                  </div>
+                  <FloatInput label="E-mail" type="email" name="email" value={form.email} onChange={onChange} required/>
+                  <div className="relative">
+                    <label className="absolute left-4 top-2 text-[10px] text-brand-600 font-bold tracking-wider uppercase z-10">
+                      Assunto *
+                    </label>
+                    <select name="subject" value={form.subject} onChange={onChange}
+                      className="w-full px-4 pt-6 pb-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-neutral-900 text-sm focus:outline-none focus:border-brand-600 transition-all appearance-none">
+                      {SUBJECTS.map(s => <option key={s}>{s}</option>)}
+                    </select>
+                  </div>
+                  <FloatInput label="Mensagem" name="message" value={form.message} onChange={onChange} as="textarea" rows={4} required/>
+                  <motion.button type="submit" disabled={loading}
+                    whileHover={{ scale:1.02, y:-1 }} whileTap={{ scale:0.98 }}
+                    className="btn-primary w-full justify-center py-4 disabled:opacity-70 disabled:cursor-not-allowed">
+                    {loading ? (
+                      <span className="flex items-center gap-2">
+                        <motion.span animate={{ rotate:360 }} transition={{ duration:1, repeat:Infinity, ease:'linear' }}
+                          className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full block"/>
+                        Enviando...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2"><Send size={16}/>Enviar Mensagem</span>
+                    )}
+                  </motion.button>
+                </form>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Map placeholder */}
-      <section className="h-64 md:h-80 bg-neutral-100 relative overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1400&h=400&fit=crop" alt="Localização" className="w-full h-full object-cover opacity-60"/>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-xl text-center">
-            <MapPin size={22} className="text-brand-600 mx-auto mb-2"/>
-            <p className="font-semibold text-neutral-900 text-sm">{CLINIC_INFO.address}</p>
-            <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer"
-              className="text-brand-600 text-xs font-medium hover:underline mt-1 inline-block">
-              Ver no Google Maps →
-            </a>
+      {/* Locations */}
+      <section className="py-16 bg-neutral-50 border-t border-neutral-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="section-label">Onde estamos</span>
+            <h2 className="font-serif font-bold text-neutral-900 mt-3 tracking-[-0.025em]"
+              style={{ fontSize:'clamp(1.5rem,2vw+0.5rem,2rem)' }}>
+              Três unidades no Rio Grande do Sul
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {LOCATION_CARDS.map((loc, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="bg-white rounded-2xl border border-neutral-100 shadow-card overflow-hidden hover:-translate-y-1 hover:shadow-card-hover transition-[transform,box-shadow] duration-300"
+              >
+                {/* Imagem da unidade */}
+                <div className="relative h-44 overflow-hidden bg-neutral-100">
+                  <img
+                    src={loc.image}
+                    alt={`Unidade ${loc.city}`}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div className="absolute bottom-3 left-4">
+                    <span className="bg-white/90 backdrop-blur-sm text-neutral-900 text-xs font-semibold px-2.5 py-1 rounded-full">
+                      {loc.city}
+                    </span>
+                  </div>
+                </div>
+                {/* Info */}
+                <div className="p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-brand-100 flex items-center justify-center shrink-0 mt-0.5">
+                      <MapPin size={14} className="text-brand-600"/>
+                    </div>
+                    <div>
+                      <p className="text-neutral-800 text-sm font-medium leading-snug">{loc.street}</p>
+                      <p className="text-neutral-400 text-xs mt-0.5">{loc.neighborhood} – {loc.state}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-brand-400" />
+                    <p className="text-xs text-neutral-500">{loc.parking}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
+import { Toaster } from 'sonner'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
 import Header        from './components/Header'
 import Footer        from './sections/Footer'
@@ -48,6 +49,7 @@ export default function App() {
       </main>
       <Footer />
       <FloatingWhatsApp />
+      <Toaster richColors position="bottom-right" closeButton />
     </BrowserRouter>
   )
 }

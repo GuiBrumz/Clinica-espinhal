@@ -13,9 +13,9 @@ export default function Doctor() {
       {/* Decorative background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-[0.04]"
-          style={{ background: 'radial-gradient(circle, #0057FF, transparent 70%)', transform: 'translate(-30%, -30%)' }} />
+          style={{ background: 'radial-gradient(circle, #2563eb, transparent 70%)', transform: 'translate(-30%, -30%)' }} />
         <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-[0.04]"
-          style={{ background: 'radial-gradient(circle, #0057FF, transparent 70%)', transform: 'translate(30%, 30%)' }} />
+          style={{ background: 'radial-gradient(circle, #2563eb, transparent 70%)', transform: 'translate(30%, 30%)' }} />
         {/* Subtle lines */}
         <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-100 to-transparent" />
       </div>
@@ -98,7 +98,7 @@ export default function Doctor() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={leftInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.7, duration: 0.5 }}
-                className="absolute -right-8 top-1/4 bg-brand-600 rounded-xl px-3 py-2 shadow-glow text-white"
+                className="absolute -right-8 top-1/4 bg-brand-600 rounded-xl px-3 py-2 shadow-md text-white"
               >
                 <div className="flex items-center gap-1.5">
                   <Award size={13} className="shrink-0" />

@@ -27,11 +27,11 @@ export default function Specialties() {
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.025]"
         style={{
-          backgroundImage: 'radial-gradient(circle, #0057FF 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, #2563eb 1px, transparent 1px)',
           backgroundSize: '40px 40px',
         }} />
       <div className="absolute top-0 right-0 w-80 h-80 rounded-full opacity-5"
-        style={{ background: 'radial-gradient(circle, #0057FF, transparent)', transform: 'translate(20%, -30%)' }} />
+        style={{ background: 'radial-gradient(circle, #2563eb, transparent)', transform: 'translate(20%, -30%)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}

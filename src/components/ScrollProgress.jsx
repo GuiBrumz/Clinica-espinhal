@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { motion, useSpring } from 'framer-motion'
+import { motion, useSpring, useTransform } from 'framer-motion'
 
 export default function ScrollProgress() {
   const [progress, setProgress] = useState(0)
   const spring = useSpring(progress, { stiffness: 200, damping: 30 })
+  const scaleX = useTransform(spring, [0, 100], [0, 1])
 
   useEffect(() => {
     const onScroll = () => {
@@ -16,8 +17,8 @@ export default function ScrollProgress() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 z-[60] h-[3px] bg-gradient-to-r from-brand-400 via-brand-600 to-blue-400 origin-left"
-      style={{ scaleX: spring / 100, transformOrigin: 'left' }}
+      className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-brand-400 via-brand-600 to-blue-400 origin-left"
+      style={{ scaleX, transformOrigin: 'left' }}
     />
   )
 }

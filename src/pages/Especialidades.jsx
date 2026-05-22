@@ -33,7 +33,7 @@ function SpecialtyCard({ spec }) {
         <img src={spec.image} alt={spec.title} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy"/>
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/70 via-transparent to-transparent"/>
         <div className="absolute bottom-4 left-4 flex items-center gap-2.5">
-          <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${spec.color} flex items-center justify-center shadow-glow`}>
+          <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${spec.color} flex items-center justify-center shadow-sm`}>
             {Icon && <Icon size={16} className="text-white" />}
           </div>
           <h3 className="font-serif font-bold text-white text-lg">{spec.title}</h3>
@@ -119,10 +119,10 @@ export default function Especialidades() {
             <span className="section-label">Áreas de atuação</span>
             <h2 className="font-serif font-bold text-neutral-900 mt-4 mb-4 tracking-[-0.025em]"
               style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
-              Nossas especialidades
+              Condições tratadas na Espinhal D.O.R
             </h2>
             <p className="text-neutral-500 max-w-2xl mx-auto leading-relaxed">
-              Selecione uma especialidade para ver sintomas, abordagens terapêuticas e informações clínicas detalhadas.
+              Selecione uma condição para ver sintomas, abordagens terapêuticas e informações clínicas detalhadas.
             </p>
           </motion.div>
 

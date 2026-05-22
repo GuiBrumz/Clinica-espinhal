@@ -68,7 +68,7 @@ export default function Depoimentos() {
         subtitle="Mais de 12.000 pacientes tratados. Cada história é um testemunho de dedicação, técnica e cuidado genuíno."
         image="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=1400&h=700&fit=crop"
         breadcrumbs={[{ label:'Depoimentos' }]}
-        cta={{ label:'Seja o próximo', href:`https://wa.me/${CLINIC_INFO.whatsapp}?text=Gostaria de agendar minha avaliação` }}
+        cta={{ label:'Agendar Avaliação', href:`https://wa.me/${CLINIC_INFO.whatsapp}?text=Gostaria de agendar minha avaliação` }}
       />
 
       {/* Stats bar */}
@@ -76,7 +76,7 @@ export default function Depoimentos() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-center gap-10">
             {[
-              { n:'4.98★', l:'Nota no Google' },
+              { n:'4.98/5', l:'Nota no Google' },
               { n:'12.000+', l:'Pacientes tratados' },
               { n:'98%', l:'Taxa de satisfação' },
               { n:'15+', l:'Anos de experiência' },
@@ -113,7 +113,7 @@ export default function Depoimentos() {
       </section>
 
       {/* Featured quote */}
-      <section className="py-20" style={{ background:'linear-gradient(150deg,#001040 0%,#0040cc 50%,#0057FF 100%)' }}>
+      <section className="py-20" style={{ background:'linear-gradient(155deg,#0f172a 0%,#1e3a8a 55%,#1d4ed8 100%)' }}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Quote size={40} className="text-blue-300/30 mx-auto mb-6"/>
           <p className="font-serif text-white text-2xl md:text-3xl leading-relaxed italic font-medium mb-8">
@@ -130,7 +130,7 @@ export default function Depoimentos() {
         </div>
       </section>
 
-      <BottomCTA title="Escreva sua própria história de recuperação" subtitle="Agende sua avaliação e dê o primeiro passo para uma vida sem dor." ctaLabel="Agendar Agora" />
+      <BottomCTA title="Agende sua avaliação inicial" subtitle="Nossa equipe está disponível para compreender seu caso e apresentar as melhores opções de tratamento." ctaLabel="Agendar pelo WhatsApp" />
     </PageTransition>
   )
 }

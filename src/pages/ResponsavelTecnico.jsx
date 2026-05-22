@@ -20,7 +20,7 @@ export default function ResponsavelTecnico() {
         subtitle="Formação internacional, 15 anos de especialização e um compromisso inabalável com a excelência e o cuidado humanizado."
         image={DOCTOR.imageWide}
         breadcrumbs={[{ label:'Responsável Técnico' }]}
-        cta={{ label:'Agendar Consulta', href:`https://wa.me/${CLINIC_INFO.whatsapp}?text=Gostaria de agendar uma consulta com o Dr. André Cavalcanti` }}
+        cta={{ label:'Agendar Consulta', href:`https://wa.me/${CLINIC_INFO.whatsapp}?text=Gostaria de agendar uma consulta com o Dr. Elias` }}
       />
 
       {/* Bio */}
@@ -52,12 +52,12 @@ export default function ResponsavelTecnico() {
                     className="absolute -left-6 top-1/3 bg-white rounded-xl px-3 py-2 shadow-lg border border-neutral-100">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-brand-600 flex items-center justify-center"><Award size={12} className="text-white"/></div>
-                      <span className="text-xs font-semibold text-neutral-700">JHU Fellowship</span>
+                      <span className="text-xs font-semibold text-neutral-700">CRM 36782-RS</span>
                     </div>
                   </motion.div>
                   <motion.div initial={{ opacity:0, x:20 }} animate={v1?{ opacity:1, x:0 }:{}} transition={{ delay:0.7 }}
-                    className="absolute -right-6 top-1/4 bg-brand-600 rounded-xl px-3 py-2 shadow-glow text-white">
-                    <div className="text-xs font-semibold">15+ anos</div>
+                    className="absolute -right-6 top-1/4 bg-brand-600 rounded-xl px-3 py-2 shadow-md text-white">
+                    <div className="text-xs font-semibold">21+ anos</div>
                     <div className="text-blue-200 text-xs">de especialização</div>
                   </motion.div>
                 </div>
@@ -129,34 +129,36 @@ export default function ResponsavelTecnico() {
         </div>
       </section>
 
-      {/* Education Timeline */}
-      <section className="py-20 bg-neutral-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div ref={s2} initial={{ opacity:0, y:24 }} animate={v2?{ opacity:1, y:0 }:{}} transition={{ duration:0.65 }} className="text-center mb-12">
-            <span className="section-label">Formação Acadêmica</span>
-            <h2 className="font-serif font-bold text-neutral-900 mt-4 tracking-[-0.025em]"
-              style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.5rem)' }}>
-              Uma trajetória de <span className="text-gradient-blue">excelência</span>
-            </h2>
-          </motion.div>
-          <motion.div variants={staggerContainer} initial="hidden" animate={v2?'visible':'hidden'} className="space-y-4">
-            {DOCTOR.education.map((edu,i) => (
-              <motion.div key={i} variants={fadeUp}
-                className="flex gap-5 items-start bg-white border border-neutral-100 rounded-2xl p-5 shadow-card hover:-translate-y-0.5 hover:shadow-card-hover transition-all">
-                <div className="w-14 h-12 rounded-xl bg-brand-600 flex items-center justify-center shrink-0 shadow-glow">
-                  <span className="text-white font-bold text-xs">{edu.year}</span>
-                </div>
-                <div>
-                  <h4 className="font-serif font-semibold text-neutral-900 mb-0.5">{edu.title}</h4>
-                  <p className="text-brand-600 text-sm font-medium">{edu.institution}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      {/* Education Timeline — só renderiza quando há dados */}
+      {DOCTOR.education.length > 0 && (
+        <section className="py-20 bg-neutral-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div ref={s2} initial={{ opacity:0, y:24 }} animate={v2?{ opacity:1, y:0 }:{}} transition={{ duration:0.65 }} className="text-center mb-12">
+              <span className="section-label">Formação Acadêmica</span>
+              <h2 className="font-serif font-bold text-neutral-900 mt-4 tracking-[-0.025em]"
+                style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.5rem)' }}>
+                Uma trajetória de <span className="text-gradient-blue">excelência</span>
+              </h2>
+            </motion.div>
+            <motion.div variants={staggerContainer} initial="hidden" animate={v2?'visible':'hidden'} className="space-y-4">
+              {DOCTOR.education.map((edu,i) => (
+                <motion.div key={i} variants={fadeUp}
+                  className="flex gap-5 items-start bg-white border border-neutral-100 rounded-2xl p-5 shadow-card hover:-translate-y-0.5 hover:shadow-card-hover transition-all">
+                  <div className="w-14 h-12 rounded-xl bg-brand-600 flex items-center justify-center shrink-0 shadow-sm">
+                    <span className="text-white font-bold text-xs">{edu.year}</span>
+                  </div>
+                  <div>
+                    <h4 className="font-serif font-semibold text-neutral-900 mb-0.5">{edu.title}</h4>
+                    <p className="text-brand-600 text-sm font-medium">{edu.institution}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
-      <BottomCTA title={`Agende uma consulta com ${DOCTOR.name}`} subtitle="Diagnóstico preciso e tratamento personalizado por quem mais entende de coluna." ctaLabel="Agendar Consulta" />
+      <BottomCTA title="Agende uma consulta com o Dr. Elias" subtitle="Diagnóstico preciso e tratamento personalizado por quem mais entende de coluna." ctaLabel="Agendar Consulta" />
     </PageTransition>
   )
 }

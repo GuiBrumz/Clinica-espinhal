@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ZoomIn, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ZoomIn, X, ChevronLeft, ChevronRight, Building2, Crosshair, Dumbbell, ScanLine, Users, Car } from 'lucide-react'
 import PageTransition from '../components/PageTransition'
 import PageHero from '../components/PageHero'
 import BottomCTA from '../components/BottomCTA'
@@ -11,12 +11,12 @@ import { GALLERY_IMAGES, CLINIC_INFO } from '../data/content'
 const CATEGORIES = ['Todos', ...Array.from(new Set(GALLERY_IMAGES.map(i=>i.category)))]
 
 const ROOMS = [
-  { emoji:'🏥', title:'Consultórios',       desc:'3 consultórios privados com equipamentos de última geração para avaliação e diagnóstico.' },
-  { emoji:'🛏️', title:'Salas de Tratamento', desc:'4 salas de tratamento individuais com fluoroscopia e equipamentos de reabilitação.' },
-  { emoji:'🏋️', title:'Estúdio de Pilates',  desc:'Estúdio completo com Reformers, Cadillac e acessórios para reabilitação funcional.' },
-  { emoji:'🔬', title:'Centro Diagnóstico',  desc:'Biofotogrametria computadorizada e ultrassonografia musculoesquelética in-house.' },
-  { emoji:'🛋️', title:'Recepção Premium',    desc:'Ambiente acolhedor com atendimento personalizado, café e espaço de relaxamento.' },
-  { emoji:'🚗', title:'Estacionamento',      desc:'Vaga no próprio edifício para maior comodidade dos nossos pacientes.' },
+  { Icon: Building2,  title:'Consultórios',       desc:'3 consultórios privados com equipamentos de última geração para avaliação e diagnóstico.' },
+  { Icon: Crosshair,  title:'Salas de Tratamento', desc:'4 salas de tratamento individuais com fluoroscopia e equipamentos de reabilitação.' },
+  { Icon: Dumbbell,   title:'Estúdio de Pilates',  desc:'Estúdio completo com Reformers, Cadillac e acessórios para reabilitação funcional.' },
+  { Icon: ScanLine,   title:'Centro Diagnóstico',  desc:'Biofotogrametria computadorizada e ultrassonografia musculoesquelética in-house.' },
+  { Icon: Users,      title:'Recepção',            desc:'Ambiente acolhedor com atendimento personalizado e espaço de espera confortável.' },
+  { Icon: Car,        title:'Estacionamento',      desc:'Vaga no próprio edifício para maior comodidade dos nossos pacientes.' },
 ]
 
 export default function Estrutura() {
@@ -47,7 +47,7 @@ export default function Estrutura() {
             <span className="section-label">Espaços</span>
             <h2 className="font-serif font-bold text-neutral-900 mt-4 tracking-[-0.025em]"
               style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
-              Cada detalhe pensado <span className="text-gradient-blue">para você</span>
+              Infraestrutura projetada para <span className="text-gradient-blue">tratamentos de excelência</span>
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -55,7 +55,9 @@ export default function Estrutura() {
               <motion.div key={i} initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.3 }}
                 transition={{ delay:i*0.08, duration:0.6 }}
                 className="bg-white border border-neutral-100 rounded-2xl p-6 shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all">
-                <div className="text-3xl mb-4">{room.emoji}</div>
+                <div className="w-10 h-10 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-5">
+                  <room.Icon size={18} className="text-brand-600" />
+                </div>
                 <h4 className="font-serif font-semibold text-neutral-900 mb-2">{room.title}</h4>
                 <p className="text-neutral-500 text-sm leading-relaxed">{room.desc}</p>
               </motion.div>
@@ -78,7 +80,7 @@ export default function Estrutura() {
               {CATEGORIES.map(cat => (
                 <button key={cat} onClick={()=>setActiveCategory(cat)}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
-                    activeCategory===cat ? 'bg-brand-600 text-white shadow-glow' : 'bg-white border border-neutral-200 text-neutral-600 hover:border-brand-300 hover:text-brand-600'
+                    activeCategory===cat ? 'bg-brand-600 text-white shadow-sm' : 'bg-white border border-neutral-200 text-neutral-600 hover:border-brand-300 hover:text-brand-600'
                   }`}>
                   {cat}
                 </button>

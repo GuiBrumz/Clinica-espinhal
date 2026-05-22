@@ -147,7 +147,7 @@ export default function FAQ() {
         </div>
       </section>
 
-      <BottomCTA title="Pronto para agendar sua avaliação?" subtitle="Todas as suas dúvidas foram respondidas? Dê o próximo passo." ctaLabel="Agendar Agora" />
+      <BottomCTA title="Agende sua avaliação inicial" subtitle="Nossa equipe está disponível para responder dúvidas e agendar sua consulta com o especialista." ctaLabel="Agendar pelo WhatsApp" />
     </PageTransition>
   )
 }

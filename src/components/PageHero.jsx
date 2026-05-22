@@ -42,7 +42,7 @@ export default function PageHero({
               className="absolute inset-0"
               style={{
                 background: dark
-                  ? 'linear-gradient(135deg, rgba(0,16,64,0.85) 0%, rgba(0,64,204,0.75) 60%, rgba(0,87,255,0.6) 100%)'
+                  ? 'linear-gradient(135deg, rgba(15,23,42,0.88) 0%, rgba(30,58,138,0.78) 55%, rgba(29,78,216,0.65) 100%)'
                   : 'linear-gradient(135deg, rgba(248,250,252,0.92) 0%, rgba(239,246,255,0.85) 100%)',
               }}
             />
@@ -62,19 +62,6 @@ export default function PageHero({
         />
       )}
 
-      {/* Glow blobs */}
-      {dark && (
-        <>
-          <div
-            className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-10 pointer-events-none"
-            style={{ background: 'radial-gradient(circle, #60a5fa, transparent 70%)' }}
-          />
-          <div
-            className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full opacity-10 pointer-events-none"
-            style={{ background: 'radial-gradient(circle, #93c5fd, transparent 70%)' }}
-          />
-        </>
-      )}
 
       {/* Content */}
       <div className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-36 w-full ${centered ? 'text-center' : ''}`}>

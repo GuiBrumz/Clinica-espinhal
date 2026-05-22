@@ -39,7 +39,7 @@ export default function FloatingWhatsApp() {
             <div className="p-4 bg-[#ece5dd]">
               <div className="bg-white rounded-2xl rounded-tl-sm p-3 shadow-sm max-w-[90%]">
                 <p className="text-neutral-800 text-sm leading-relaxed">
-                  Olá! 👋 Como podemos te ajudar?<br />
+                  Olá! Como podemos ajudar?<br />
                   Clique abaixo para agendar sua avaliação ou tirar dúvidas.
                 </p>
                 <p className="text-neutral-400 text-xs mt-1 text-right">agora</p>

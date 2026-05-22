@@ -59,7 +59,7 @@ export default function Sobre() {
                 <div className="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center mb-5">
                   <p.icon size={18} className="text-white" />
                 </div>
-                <h3 className="font-serif font-bold text-neutral-900 text-xl mb-3">{p.title}</h3>
+                <h3 className="font-heading font-bold text-neutral-900 text-xl mb-3">{p.title}</h3>
                 <p className="text-neutral-600 text-sm leading-relaxed">{p.text}</p>
               </motion.div>
             ))}
@@ -81,7 +81,7 @@ export default function Sobre() {
                   <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=400&fit=crop" alt="Tecnologia" className="w-full h-full object-cover"/>
                 </motion.div>
                 <motion.div initial={{ opacity:0, scale:0 }} animate={v2?{ opacity:1, scale:1 }:{}} transition={{ delay:0.6, type:'spring' }}
-                  className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl bg-brand-600 flex flex-col items-center justify-center shadow-glow">
+                  className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl bg-brand-600 flex flex-col items-center justify-center shadow-md">
                   <span className="font-serif font-extrabold text-white text-2xl leading-none tracking-[-0.04em]">15</span>
                   <span className="text-blue-200 text-xs">anos</span>
                 </motion.div>
@@ -168,7 +168,7 @@ export default function Sobre() {
                       <p className="text-neutral-600 text-sm leading-relaxed">{m.desc}</p>
                     </div>
                   </div>
-                  <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-brand-600 border-4 border-white shadow-glow shrink-0 z-10">
+                  <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-brand-600 border-4 border-white shadow-md shrink-0 z-10">
                     <span className="text-white text-xs font-bold">{m.year.slice(2)}</span>
                   </div>
                   <div className="hidden md:flex flex-1"/>

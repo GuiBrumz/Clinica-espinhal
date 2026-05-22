@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { HeartHandshake, Cpu, GraduationCap, ScanLine, Building2, Layers } from 'lucide-react'
+import { HeartHandshake, Cpu, GraduationCap, ScanLine, Building2, Layers, Microscope } from 'lucide-react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { staggerContainer, fadeUp, fadeLeft } from '../animations/variants'
 import { DIFFERENTIALS } from '../data/content'
@@ -19,7 +19,7 @@ export default function Differentials() {
 
   return (
     <section className="py-24 lg:py-32 relative overflow-hidden"
-      style={{ background: 'linear-gradient(160deg, #001a5c 0%, #0040cc 50%, #0057FF 100%)' }}
+      style={{ background: 'linear-gradient(155deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%)' }}
     >
       {/* Decorative */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -104,7 +104,9 @@ export default function Differentials() {
                 transition={{ delay: 0.5 }}
                 className="absolute top-6 left-6 glass rounded-xl p-3 max-w-[170px]"
               >
-                <div className="text-yellow-400 text-xl mb-1">🔬</div>
+                <div className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center mb-2">
+                  <Microscope size={14} className="text-white" />
+                </div>
                 <p className="text-white text-xs font-semibold">Tecnologia de ponta</p>
                 <p className="text-blue-200 text-xs mt-0.5">Diagnóstico por imagem 3D</p>
               </motion.div>

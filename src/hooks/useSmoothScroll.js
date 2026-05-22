@@ -12,6 +12,11 @@ export function getLenis() {
 
 export function useSmoothScroll() {
   useEffect(() => {
+    // Prevent browser from restoring previous scroll position — Lenis/ScrollToTop manages this
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
+
     let lenis
 
     async function init() {
@@ -32,26 +37,28 @@ export function useSmoothScroll() {
         lenis.on('scroll', ScrollTrigger.update)
 
         // Replace rAF loop with GSAP ticker — one unified frame budget
-        gsap.ticker.add((time) => {
-          lenis.raf(time * 1000)
-        })
+        const tickerFn = (time) => lenis.raf(time * 1000)
+        gsap.ticker.add(tickerFn)
 
         // Prevent GSAP from compensating for lag frames (avoids jump)
         gsap.ticker.lagSmoothing(0)
+
+        cleanup = () => {
+          gsap.ticker.remove(tickerFn)
+          lenis.destroy()
+          lenisInstance = null
+        }
 
       } catch {
         // Graceful fallback to native scroll
       }
     }
 
+    let cleanup = null
     init()
 
     return () => {
-      if (lenis) {
-        gsap.ticker.remove((time) => lenis.raf(time * 1000))
-        lenis.destroy()
-        lenisInstance = null
-      }
+      if (cleanup) cleanup()
     }
   }, [])
 }

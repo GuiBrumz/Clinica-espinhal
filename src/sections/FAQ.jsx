@@ -65,7 +65,7 @@ export default function FAQ() {
   return (
     <section className="py-24 lg:py-32 bg-white relative overflow-hidden">
       <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.04]"
-        style={{ background: 'radial-gradient(circle, #0057FF, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+        style={{ background: 'radial-gradient(circle, #2563eb, transparent 70%)', transform: 'translate(30%, -30%)' }} />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}

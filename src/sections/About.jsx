@@ -26,7 +26,7 @@ export default function About() {
     <section id="sobre" className="py-24 lg:py-32 bg-neutral-50 relative overflow-hidden">
       {/* Background accent */}
       <div className="absolute top-0 right-0 w-1/2 h-full opacity-[0.03]"
-        style={{ background: 'radial-gradient(ellipse at 80% 50%, #0057FF, transparent 70%)' }} />
+        style={{ background: 'radial-gradient(ellipse at 80% 50%, #2563eb, transparent 70%)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
@@ -87,7 +87,7 @@ export default function About() {
               initial={{ opacity: 0, scale: 0 }}
               animate={leftInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 0.6, duration: 0.5, type: 'spring' }}
-              className="absolute -top-5 -left-5 w-20 h-20 rounded-2xl bg-brand-600 flex flex-col items-center justify-center shadow-glow text-white"
+              className="absolute -top-5 -left-5 w-20 h-20 rounded-2xl bg-brand-600 flex flex-col items-center justify-center shadow-md text-white"
             >
               <span className="font-serif font-bold text-2xl leading-none">15</span>
               <span className="text-xs text-blue-200 mt-0.5">anos</span>
@@ -202,7 +202,7 @@ export default function About() {
                     </div>
                   </div>
                   {/* Center dot */}
-                  <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-brand-600 border-4 border-white shadow-glow shrink-0 z-10">
+                  <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-brand-600 border-4 border-white shadow-md shrink-0 z-10">
                     <span className="text-white text-xs font-bold">{milestone.year.slice(2)}</span>
                   </div>
                   <div className="hidden md:flex flex-1" />

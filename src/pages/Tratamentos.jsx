@@ -92,14 +92,14 @@ export default function Tratamentos() {
             <span className="section-label">Como funciona</span>
             <h2 className="font-serif font-bold text-neutral-900 mt-4 tracking-[-0.025em]"
               style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
-              Nosso protocolo de <span className="text-gradient-blue">atendimento</span>
+              Do diagnóstico ao <span className="text-gradient-blue">acompanhamento</span>
             </h2>
           </motion.div>
           <motion.div variants={staggerContainer} initial="hidden" animate={pv?'visible':'hidden'} className="space-y-4">
             {PROCESS_STEPS.map((step, i) => (
               <motion.div key={i} variants={fadeUp}
                 className="flex items-start gap-5 bg-white border border-neutral-100 rounded-2xl p-5 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300">
-                <div className="w-12 h-12 rounded-xl bg-brand-600 flex items-center justify-center shrink-0 shadow-glow">
+                <div className="w-12 h-12 rounded-xl bg-brand-600 flex items-center justify-center shrink-0 shadow-sm">
                   <span className="text-white font-bold text-sm">{step.n}</span>
                 </div>
                 <div>
@@ -113,7 +113,7 @@ export default function Tratamentos() {
       </section>
 
       {/* Technologies */}
-      <section className="py-20" style={{ background:'linear-gradient(150deg,#001040 0%,#0040cc 50%,#0057FF 100%)' }}>
+      <section className="py-20" style={{ background:'linear-gradient(155deg,#0f172a 0%,#1e3a8a 55%,#1d4ed8 100%)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div ref={tr} initial={{ opacity:0, y:24 }} animate={tv?{ opacity:1, y:0 }:{}} transition={{ duration:0.65 }} className="text-center mb-12">
             <span className="section-label-white">Infraestrutura</span>

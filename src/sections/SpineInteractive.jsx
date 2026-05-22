@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { useGLTF, OrbitControls, Center } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronRight, MousePointer2, RotateCcw } from 'lucide-react'
+import { X, ChevronRight, MousePointer2, RotateCcw, Zap } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 // ─── Region data ──────────────────────────────────────────────────────────────
@@ -12,45 +12,56 @@ const REGIONS = [
     id: 'cervical',
     label: 'Coluna Cervical',
     sub: 'C1 – C7',
+    code: 'C',
+    num: '01',
     color: '#2563eb',
+    colorLight: '#dbeafe',
     specialty: 'Cervicalgia',
     desc: 'A região cervical suporta o peso da cabeça e permite ampla mobilidade. É frequentemente afetada por tensão muscular, hérnias e dores irradiadas para os braços.',
-    symptoms: ['Dor e rigidez no pescoço', 'Cefaleia de origem cervical', 'Dor irradiada para os braços', 'Dormência nas mãos e dedos'],
+    symptoms: ['Dor e rigidez no pescoço', 'Cefaleia cervicogênica', 'Dor irradiada nos braços', 'Dormência nas mãos'],
     treatments: ['Infiltrações cervicais guiadas por imagem', 'Bloqueio do nervo occipital', 'Fisioterapia manual especializada', 'Reeducação postural global'],
   },
   {
     id: 'thoracic',
     label: 'Coluna Torácica',
     sub: 'T1 – T12',
+    code: 'T',
+    num: '02',
     color: '#7c3aed',
+    colorLight: '#ede9fe',
     specialty: 'Dores Crônicas & Postura',
     desc: 'A coluna torácica é a mais estável da espinha. Dores nessa região estão associadas a postura inadequada, condições crônicas e tensão muscular persistente.',
-    symptoms: ['Dor persistente no dorso', 'Tensão muscular interescapular', 'Rigidez ao respirar fundo', 'Desvios posturais compensatórios'],
-    treatments: ['Infiltrações facetárias torácicas', 'Denervação por radiofrequência', 'Pilates clínico supervisionado', 'Análise postural computadorizada'],
+    symptoms: ['Dor persistente no dorso', 'Tensão interescapular', 'Rigidez ao respirar fundo', 'Desvios posturais'],
+    treatments: ['Infiltrações facetárias torácicas', 'Denervação por radiofrequência', 'Terapia manual especializada', 'Análise postural computadorizada'],
   },
   {
     id: 'lumbar',
     label: 'Coluna Lombar',
     sub: 'L1 – L5',
+    code: 'L',
+    num: '03',
     color: '#059669',
+    colorLight: '#d1fae5',
     specialty: 'Lombalgia & Hérnia de Disco',
     desc: 'A coluna lombar suporta a maior parte do peso corporal. É a região mais frequentemente afetada por hérnias de disco e lombalgia crônica no Brasil.',
-    symptoms: ['Dor lombar intensa ou crônica', 'Ciática — dor que irradia pela perna', 'Dor ao sentar, agachar ou torcer', 'Dormência ou fraqueza nas pernas'],
+    symptoms: ['Dor lombar intensa ou crônica', 'Ciática com irradiação na perna', 'Dor ao sentar ou agachar', 'Dormência nas pernas'],
     treatments: ['Infiltração epidural guiada por imagem', 'Nucleoplastia percutânea', 'Programa de reabilitação lombar', 'Cirurgia minimamente invasiva'],
   },
   {
     id: 'sacral',
     label: 'Região Sacral',
     sub: 'Sacro & Cóccix',
+    code: 'S',
+    num: '04',
     color: '#b45309',
+    colorLight: '#fef3c7',
     specialty: 'Estenose & Dor Sacroilíaca',
     desc: 'O sacro conecta a coluna à pelve. Problemas nessa área causam estenose do canal vertebral, artrite sacroilíaca e síndrome do piriforme.',
-    symptoms: ['Dor ao caminhar que melhora ao sentar', 'Claudicação neurogênica', 'Dormência bilateral nos membros', 'Dor na virilha e nádegas'],
+    symptoms: ['Dor ao caminhar que melhora sentado', 'Claudicação neurogênica', 'Dormência bilateral', 'Dor na virilha e nádegas'],
     treatments: ['Infiltração sacroilíaca guiada', 'Descompressão minimamente invasiva', 'Bloqueio diagnóstico e terapêutico', 'Estabilização vertebral'],
   },
 ]
 
-// Three.js colors — used only on the 3D model mesh
 const REGION_COLORS = {
   cervical: new THREE.Color('#2563eb'),
   thoracic: new THREE.Color('#7c3aed'),
@@ -66,7 +77,6 @@ function SpineModel({ selected, hovered, onSelect, onHover }) {
 
   const clonedScene = useMemo(() => {
     const clone = scene.clone(true)
-
     clone.updateMatrixWorld(true)
     const rawBox  = new THREE.Box3().setFromObject(clone)
     const rawSize = rawBox.getSize(new THREE.Vector3())
@@ -85,7 +95,6 @@ function SpineModel({ selected, hovered, onSelect, onHover }) {
       } else {
         child.material = child.material.clone()
       }
-
       const mb   = new THREE.Box3().setFromObject(child)
       const cy   = (mb.min.y + mb.max.y) / 2
       const relY = (cy - minY) / h
@@ -95,7 +104,6 @@ function SpineModel({ selected, hovered, onSelect, onHover }) {
       else if (relY >= 0.18) child.userData.region = 'lumbar'
       else                   child.userData.region = 'sacral'
     })
-
     return clone
   }, [scene])
 
@@ -106,11 +114,10 @@ function SpineModel({ selected, hovered, onSelect, onHover }) {
       const isActive = selected === r || hovered === r
       const isDimmed = (selected || hovered) && !isActive
       const mats     = Array.isArray(child.material) ? child.material : [child.material]
-
       mats.forEach(mat => {
         mat.color.copy(isActive ? REGION_COLORS[r] : BASE_COLOR)
         mat.emissive.copy(isActive ? REGION_COLORS[r] : BLACK)
-        mat.emissiveIntensity = isActive ? 0.12 : 0   // subtle, not glowing
+        mat.emissiveIntensity = isActive ? 0.12 : 0
         mat.transparent       = isDimmed
         mat.opacity           = isDimmed ? 0.2 : 1
         mat.needsUpdate       = true
@@ -138,7 +145,7 @@ function SpineModel({ selected, hovered, onSelect, onHover }) {
 
 useGLTF.preload('/assets/spine.glb')
 
-// ─── Error boundary ────────────────────────────────────────────────────────────
+// ─── Error boundary ───────────────────────────────────────────────────────────
 class SpineErrorBoundary extends Component {
   constructor(props) { super(props); this.state = { error: false } }
   static getDerivedStateFromError() { return { error: true } }
@@ -153,7 +160,6 @@ class SpineErrorBoundary extends Component {
   }
 }
 
-// ─── Loading skeleton (inside Canvas) ────────────────────────────────────────
 function SpineLoading() {
   return (
     <mesh>
@@ -163,7 +169,7 @@ function SpineLoading() {
   )
 }
 
-// ─── 3D Canvas wrapper ────────────────────────────────────────────────────────
+// ─── 3D Canvas ────────────────────────────────────────────────────────────────
 function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
   return (
     <SpineErrorBoundary>
@@ -173,18 +179,15 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
           style={{ background: 'transparent' }}
           gl={{ alpha: true, antialias: true }}
         >
-          {/* Neutral, even lighting — no colored tones */}
           <ambientLight intensity={0.85} />
-          <directionalLight position={[2, 5, 4]}   intensity={1.0} />
-          <directionalLight position={[-3, 2, -2]}  intensity={0.3} />
-          <pointLight       position={[0, -3, 2]}   intensity={0.2} color="#dde4f0" />
+          <directionalLight position={[2, 5, 4]}  intensity={1.0} />
+          <directionalLight position={[-3, 2, -2]} intensity={0.3} />
+          <pointLight       position={[0, -3, 2]}  intensity={0.2} color="#dde4f0" />
 
           <Suspense fallback={<SpineLoading />}>
             <SpineModel
-              selected={selected}
-              hovered={hovered}
-              onSelect={onSelect}
-              onHover={onHover}
+              selected={selected} hovered={hovered}
+              onSelect={onSelect}  onHover={onHover}
             />
           </Suspense>
 
@@ -198,8 +201,7 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
           />
         </Canvas>
 
-        {/* Hint badge — neutral */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-neutral-100 text-[11px] text-neutral-400 pointer-events-none select-none shadow-xs">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-neutral-200/60 text-[11px] text-neutral-400 pointer-events-none select-none">
           <MousePointer2 size={11} />
           Arraste · Clique para explorar
         </div>
@@ -208,92 +210,198 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
   )
 }
 
-// ─── Info Card ────────────────────────────────────────────────────────────────
+// ─── Region selector button ───────────────────────────────────────────────────
+function RegionButton({ region, isActive, onClick, onEnter, onLeave }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+      whileHover={{ x: 3 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      className="flex items-center gap-3 px-3 py-2.5 rounded-2xl text-left w-full transition-colors duration-200"
+      style={{
+        background: isActive ? `${region.color}0d` : 'transparent',
+      }}
+    >
+      <motion.div
+        className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black shrink-0 transition-all duration-300"
+        animate={{
+          background: isActive ? region.color : '#f4f4f5',
+          color: isActive ? '#ffffff' : '#a1a1aa',
+          scale: isActive ? 1.08 : 1,
+        }}
+      >
+        {region.num}
+      </motion.div>
+      <div className="min-w-0">
+        <p
+          className="text-sm font-semibold leading-tight transition-colors duration-200 truncate"
+          style={{ color: isActive ? region.color : '#3f3f46' }}
+        >
+          {region.label}
+        </p>
+        <p className="text-[11px] text-neutral-400 mt-0.5">{region.sub}</p>
+      </div>
+      <motion.div
+        className="ml-auto shrink-0 w-1 h-6 rounded-full"
+        animate={{ background: isActive ? region.color : 'transparent', opacity: isActive ? 1 : 0 }}
+        transition={{ duration: 0.2 }}
+      />
+    </motion.button>
+  )
+}
+
+// ─── Dark Info Card ───────────────────────────────────────────────────────────
 function InfoCard({ region, onClose }) {
   if (!region) return null
 
   return (
     <motion.div
       key={region.id}
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className="rounded-3xl border border-neutral-100 bg-white p-7 lg:p-8 w-full shadow-card"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-3xl bg-neutral-950 p-7 w-full relative overflow-hidden"
     >
-      {/* Thin color accent bar */}
+      {/* Watermark code */}
       <div
-        className="w-10 h-1 rounded-full mb-6"
-        style={{ backgroundColor: region.color }}
-      />
+        className="absolute -right-3 -top-5 font-heading font-black leading-none pointer-events-none select-none"
+        style={{
+          fontSize: '7rem',
+          color: region.color,
+          opacity: 0.07,
+        }}
+      >
+        {region.code}
+      </div>
 
-      {/* Header */}
+      {/* Accent + close */}
       <div className="flex items-start justify-between mb-5">
-        <div>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-400">
-            {region.sub}
-          </span>
-          <h3 className="font-heading font-bold text-2xl text-neutral-950 mt-1 tracking-[-0.02em]">
-            {region.label}
-          </h3>
-          <div className="flex items-center gap-2 mt-2">
-            <span
-              className="w-1.5 h-1.5 rounded-full shrink-0"
-              style={{ backgroundColor: region.color }}
-            />
-            <p className="text-sm font-medium text-neutral-500">{region.specialty}</p>
-          </div>
-        </div>
+        <div
+          className="w-8 h-1 rounded-full"
+          style={{ background: region.color }}
+        />
         <button
           onClick={onClose}
-          className="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition-colors mt-1 shrink-0"
+          className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors shrink-0"
           aria-label="Fechar"
         >
-          <X size={13} className="text-neutral-500" />
+          <X size={12} className="text-white/60" />
         </button>
       </div>
 
-      <p className="text-neutral-500 text-sm leading-relaxed mb-6">{region.desc}</p>
+      {/* Header */}
+      <span
+        className="text-[10px] font-bold uppercase tracking-[0.15em]"
+        style={{ color: region.color }}
+      >
+        {region.sub}
+      </span>
+      <h3 className="font-heading font-bold text-[1.35rem] text-white mt-1 mb-0.5 leading-tight tracking-[-0.02em]">
+        {region.label}
+      </h3>
+      <div className="flex items-center gap-1.5 mb-5">
+        <Zap size={11} style={{ color: region.color }} />
+        <p className="text-neutral-400 text-xs">{region.specialty}</p>
+      </div>
 
-      <div className="grid sm:grid-cols-2 gap-6 mb-7">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-neutral-400 mb-3">
-            Sintomas
-          </p>
-          <ul className="space-y-2">
-            {region.symptoms.map((s, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-neutral-700">
-                <span
-                  className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                  style={{ backgroundColor: region.color }}
-                />
-                {s}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-neutral-400 mb-3">
-            Tratamentos
-          </p>
-          <ul className="space-y-2">
-            {region.treatments.map((t, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-neutral-700">
-                <ChevronRight size={12} className="mt-0.5 shrink-0 text-neutral-300" />
-                {t}
-              </li>
-            ))}
-          </ul>
+      <p className="text-neutral-400 text-[0.8rem] leading-relaxed mb-6">
+        {region.desc}
+      </p>
+
+      {/* Symptoms — chips */}
+      <div className="mb-5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-neutral-500 mb-2.5">
+          Sintomas
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {region.symptoms.map((s, i) => (
+            <span
+              key={i}
+              className="px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-none"
+              style={{
+                background: `${region.color}12`,
+                borderColor: `${region.color}25`,
+                color: region.colorLight,
+              }}
+            >
+              {s}
+            </span>
+          ))}
         </div>
       </div>
 
+      {/* Treatments — numbered */}
+      <div className="mb-7">
+        <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-neutral-500 mb-2.5">
+          Tratamentos
+        </p>
+        <div className="space-y-2">
+          {region.treatments.map((t, i) => (
+            <div key={i} className="flex items-start gap-2.5">
+              <span
+                className="w-4.5 h-4.5 min-w-[1.125rem] min-h-[1.125rem] rounded-md flex items-center justify-center text-[9px] font-black mt-0.5 shrink-0"
+                style={{ background: `${region.color}20`, color: region.color }}
+              >
+                {i + 1}
+              </span>
+              <p className="text-neutral-300 text-[0.78rem] leading-relaxed">{t}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CTA */}
       <Link
         to="/especialidades"
-        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-neutral-950 text-white text-sm font-semibold transition-all duration-200 hover:bg-neutral-800 hover:-translate-y-px"
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold hover:-translate-y-px transition-all duration-200"
+        style={{ background: `linear-gradient(135deg, ${region.color}cc, ${region.color})` }}
       >
-        Ver especialidade completa
+        Ver especialidade
         <ChevronRight size={13} />
       </Link>
+    </motion.div>
+  )
+}
+
+// ─── Hint — nothing selected ──────────────────────────────────────────────────
+function HintPanel() {
+  return (
+    <motion.div
+      key="hint"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-1 pt-4"
+    >
+      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400 mb-3 px-2">
+        Regiões da Coluna
+      </p>
+      {REGIONS.map((r, i) => (
+        <motion.div
+          key={r.id}
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: i * 0.06, duration: 0.3 }}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
+        >
+          <span
+            className="w-2 h-2 rounded-full shrink-0"
+            style={{ background: r.color, opacity: 0.5 }}
+          />
+          <div>
+            <p className="text-sm text-neutral-500 font-medium">{r.label}</p>
+            <p className="text-[10px] text-neutral-400">{r.sub}</p>
+          </div>
+        </motion.div>
+      ))}
+      <p className="text-[11px] text-neutral-400 mt-3 px-3 flex items-center gap-1.5">
+        <MousePointer2 size={11} />
+        Clique no modelo ou em uma região
+      </p>
     </motion.div>
   )
 }
@@ -306,12 +414,16 @@ export default function SpineInteractive() {
   const activeRegion = REGIONS.find(r => r.id === selected)
   const handleSelect = (id) => setSelected(prev => prev === id ? null : id)
 
+  const glowColor = activeRegion?.color ?? hovered
+    ? REGIONS.find(r => r.id === hovered)?.color
+    : '#2563eb'
+
   return (
     <section
       data-header-theme="light"
       className="py-24 lg:py-32 bg-neutral-50 relative overflow-hidden"
     >
-      {/* Subtle top/bottom gradient fades */}
+      {/* Section gradient fades */}
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-24 pointer-events-none"
@@ -325,7 +437,7 @@ export default function SpineInteractive() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        {/* ── Section header ── */}
+        {/* Header */}
         <div className="text-center mb-16">
           <span className="section-label mb-4 inline-flex items-center gap-1.5">
             <MousePointer2 size={11} />
@@ -343,50 +455,25 @@ export default function SpineInteractive() {
           </p>
         </div>
 
-        {/* ── Desktop layout ─────────────────────────────────────────────────── */}
-        <div className="hidden lg:grid lg:grid-cols-[200px_1fr_360px] xl:grid-cols-[220px_1fr_400px] gap-8 xl:gap-12 items-start">
+        {/* ── Desktop ───────────────────────────────────────────────────────── */}
+        <div className="hidden lg:grid lg:grid-cols-[200px_1fr_360px] xl:grid-cols-[220px_1fr_380px] gap-8 xl:gap-12 items-start">
 
-          {/* Left: region list */}
-          <div className="flex flex-col gap-1.5 pt-16">
-            {REGIONS.map(r => {
-              const isActive = selected === r.id || hovered === r.id
-              return (
-                <button
-                  key={r.id}
-                  onClick={() => handleSelect(r.id)}
-                  onMouseEnter={() => setHovered(r.id)}
-                  onMouseLeave={() => setHovered(null)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-2xl border text-left transition-all duration-200 hover:-translate-y-px"
-                  style={{
-                    borderColor: isActive ? `${r.color}30` : 'transparent',
-                    background:  isActive ? `${r.color}08` : 'transparent',
-                  }}
-                >
-                  <span
-                    className="w-2 h-2 rounded-full shrink-0 transition-all duration-200"
-                    style={{
-                      backgroundColor: r.color,
-                      opacity: isActive ? 1 : 0.35,
-                      transform: isActive ? 'scale(1.25)' : 'scale(1)',
-                    }}
-                  />
-                  <div>
-                    <p
-                      className="text-sm font-semibold transition-colors duration-200"
-                      style={{ color: isActive ? r.color : '#52525b' }}
-                    >
-                      {r.label}
-                    </p>
-                    <p className="text-[11px] text-neutral-400">{r.sub}</p>
-                  </div>
-                </button>
-              )
-            })}
-
+          {/* Left: region buttons */}
+          <div className="flex flex-col gap-1 pt-20">
+            {REGIONS.map(r => (
+              <RegionButton
+                key={r.id}
+                region={r}
+                isActive={selected === r.id || hovered === r.id}
+                onClick={() => handleSelect(r.id)}
+                onEnter={() => setHovered(r.id)}
+                onLeave={() => setHovered(null)}
+              />
+            ))}
             {selected && (
               <button
                 onClick={() => setSelected(null)}
-                className="mt-3 flex items-center gap-1.5 text-xs text-neutral-400 hover:text-neutral-600 transition-colors px-4"
+                className="mt-3 flex items-center gap-1.5 text-xs text-neutral-400 hover:text-neutral-600 transition-colors px-3"
               >
                 <RotateCcw size={11} />
                 Limpar seleção
@@ -394,52 +481,34 @@ export default function SpineInteractive() {
             )}
           </div>
 
-          {/* Center: 3D canvas */}
-          <div
-            className="rounded-3xl overflow-hidden bg-white border border-neutral-100 shadow-card"
-            style={{ height: 560 }}
-          >
+          {/* Center: canvas — no box, with color glow */}
+          <div className="relative" style={{ height: 560 }}>
+            {/* Animated glow behind model */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none rounded-3xl"
+              animate={{
+                background: `radial-gradient(ellipse 55% 65% at 50% 48%, ${glowColor}18, transparent 68%)`,
+              }}
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
+            />
             <Spine3DViewer
-              selected={selected}
-              hovered={hovered}
-              onSelect={handleSelect}
-              onHover={setHovered}
+              selected={selected} hovered={hovered}
+              onSelect={handleSelect} onHover={setHovered}
             />
           </div>
 
-          {/* Right: info card or placeholder */}
-          <div className="pt-8">
+          {/* Right: info card or hint */}
+          <div className="pt-6">
             <AnimatePresence mode="wait">
-              {activeRegion ? (
-                <InfoCard
-                  key={activeRegion.id}
-                  region={activeRegion}
-                  onClose={() => setSelected(null)}
-                />
-              ) : (
-                <motion.div
-                  key="hint"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex flex-col items-center justify-center h-64 text-center gap-4"
-                >
-                  <div className="w-14 h-14 rounded-2xl bg-neutral-100 flex items-center justify-center">
-                    <MousePointer2 size={22} className="text-neutral-400" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-neutral-700 text-sm mb-1">Selecione uma região</p>
-                    <p className="text-neutral-400 text-sm leading-relaxed max-w-[200px]">
-                      Clique em qualquer segmento da coluna para ver detalhes
-                    </p>
-                  </div>
-                </motion.div>
-              )}
+              {activeRegion
+                ? <InfoCard key={activeRegion.id} region={activeRegion} onClose={() => setSelected(null)} />
+                : <HintPanel key="hint" />
+              }
             </AnimatePresence>
           </div>
         </div>
 
-        {/* ── Mobile layout ──────────────────────────────────────────────────── */}
+        {/* ── Mobile ────────────────────────────────────────────────────────── */}
         <div className="lg:hidden flex flex-col items-center gap-6">
 
           {/* Region pills */}
@@ -450,29 +519,35 @@ export default function SpineInteractive() {
                 <button
                   key={r.id}
                   onClick={() => handleSelect(r.id)}
-                  className="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 border"
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 border"
                   style={{
-                    borderColor: isActive ? `${r.color}40` : '#e4e4e7',
-                    color:       isActive ? r.color         : '#71717a',
-                    background:  isActive ? `${r.color}08`  : 'transparent',
+                    borderColor: isActive ? `${r.color}50` : '#e4e4e7',
+                    color:       isActive ? r.color          : '#71717a',
+                    background:  isActive ? `${r.color}0d`   : 'transparent',
                   }}
                 >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full shrink-0"
+                    style={{ background: r.color, opacity: isActive ? 1 : 0.4 }}
+                  />
                   {r.label}
                 </button>
               )
             })}
           </div>
 
-          {/* 3D canvas */}
-          <div
-            className="w-full rounded-3xl overflow-hidden bg-white border border-neutral-100 shadow-card"
-            style={{ height: 360 }}
-          >
+          {/* Canvas — no box */}
+          <div className="w-full relative" style={{ height: 360 }}>
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              animate={{
+                background: `radial-gradient(ellipse 60% 60% at 50% 50%, ${glowColor}15, transparent 70%)`,
+              }}
+              transition={{ duration: 0.6 }}
+            />
             <Spine3DViewer
-              selected={selected}
-              hovered={hovered}
-              onSelect={handleSelect}
-              onHover={setHovered}
+              selected={selected} hovered={hovered}
+              onSelect={handleSelect} onHover={setHovered}
             />
           </div>
 
@@ -480,11 +555,7 @@ export default function SpineInteractive() {
           <div className="w-full max-w-md">
             <AnimatePresence mode="wait">
               {activeRegion && (
-                <InfoCard
-                  key={activeRegion.id}
-                  region={activeRegion}
-                  onClose={() => setSelected(null)}
-                />
+                <InfoCard key={activeRegion.id} region={activeRegion} onClose={() => setSelected(null)} />
               )}
             </AnimatePresence>
           </div>

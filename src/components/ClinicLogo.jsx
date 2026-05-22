@@ -13,7 +13,7 @@ export default function ClinicLogo({ className = '' }) {
         y="25"
         fontSize="28"
         fontWeight="700"
-        fontFamily="Sora, system-ui, sans-serif"
+        fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
         letterSpacing="5"
       >
         D.O.R.
@@ -24,7 +24,7 @@ export default function ClinicLogo({ className = '' }) {
         y="37"
         fontSize="8.5"
         fontWeight="500"
-        fontFamily="Sora, system-ui, sans-serif"
+        fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
         letterSpacing="4.5"
         opacity="0.70"
       >

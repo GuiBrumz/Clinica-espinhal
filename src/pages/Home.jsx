@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Star, Shield, Award, Zap, Heart, Activity, Search, Bone, Quote } from 'lucide-react'
+import { ArrowRight, Star, Shield, Award, Microscope, Heart, Activity, Crosshair, Bone, Quote, Cpu, ScanLine } from 'lucide-react'
 import CountUp from 'react-countup'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
@@ -32,6 +32,7 @@ function WhatsAppIcon({ size = 18, color = '#25D366' }) {
 function HomeHero() {
   const heroRef = useRef(null)
   const copyRef = useRef(null)
+  const imgRef  = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -40,6 +41,16 @@ function HomeHero() {
         { opacity: 0, y: 22, willChange: 'transform, opacity' },
         { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, clearProps: 'will-change' }
       )
+      gsap.to(imgRef.current, {
+        yPercent: -12,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
     }, heroRef)
     return () => ctx.revert()
   }, [])
@@ -52,17 +63,19 @@ function HomeHero() {
       {/* Background photo */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1767972463825-96eaa9e0766b?q=85&w=1920&auto=format&fit=crop"
+          ref={imgRef}
+          src="https://images.pexels.com/photos/4506107/pexels-photo-4506107.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1280&fit=crop"
           alt=""
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover scale-[1.15]"
+          style={{ objectPosition: '45% center', willChange: 'transform' }}
           loading="eager"
           decoding="async"
         />
-        {/* Dark gradient — heavy at bottom, lighter at top */}
+        {/* Overlay escuro — mais pesado para compensar fundo claro da imagem */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.52) 30%, rgba(0,0,0,0.22) 60%, rgba(0,0,0,0.10) 100%)',
+            background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.72) 30%, rgba(0,0,0,0.48) 60%, rgba(0,0,0,0.30) 100%)',
           }}
         />
       </div>
@@ -93,9 +106,9 @@ function HomeHero() {
           className="opacity-0 text-white/75 font-semibold leading-relaxed mb-8 max-w-md"
           style={{ fontSize: 'clamp(0.9rem, 1vw + 0.3rem, 1.05rem)' }}
         >
-          Tecnologia de ponta, diagnóstico preciso e cuidado personalizado
-          para devolver sua qualidade de vida — referência em tratamentos
-          não-cirúrgicos da coluna vertebral.
+          Diagnóstico preciso, tratamentos baseados em evidências e
+          acompanhamento individualizado para devolver mobilidade
+          e qualidade de vida a cada paciente.
         </p>
 
         {/* CTAs — underlined text links */}
@@ -172,9 +185,9 @@ function TreatmentsPreview() {
   const sectionRef = useScrollReveal('[data-reveal]', { y: 20, stagger: 0.07, start: 'top 85%' })
 
   const cards = [
-    { icon: <Zap size={18} className="text-brand-600" />,        title: 'Dor Lombar',        desc: 'Tratamento multidisciplinar para dor persistente.' },
-    { icon: <Search size={18} className="text-brand-600" />,     title: 'Estenose do Canal', desc: 'Abordagem não-cirúrgica de alta resolução.' },
-    { icon: <Activity size={18} className="text-brand-600" />,   title: 'Cervicalgia',       desc: 'Protocolo para dores cervicais irradiadas.' },
+    { icon: <Activity size={18} className="text-brand-600" />,   title: 'Dor Lombar',        desc: 'Tratamento multidisciplinar para dor persistente.' },
+    { icon: <ScanLine size={18} className="text-brand-600" />,   title: 'Estenose do Canal', desc: 'Abordagem não-cirúrgica de alta resolução.' },
+    { icon: <Crosshair size={18} className="text-brand-600" />,  title: 'Cervicalgia',       desc: 'Protocolo para dores cervicais irradiadas.' },
     { icon: <Shield size={18} className="text-brand-600" />,     title: 'Infiltrações',      desc: 'Procedimentos guiados por imagem de precisão.' },
   ]
 
@@ -260,10 +273,10 @@ function WhySection() {
   const rightRef = useReveal({ x:  28, y: 0, duration: 0.85, delay: 0.12, start: 'top 85%' })
 
   const pillars = [
-    { icon: <Zap size={15} />,      title: 'Tecnologia de Ponta',    desc: 'Equipamentos de última geração para diagnóstico e tratamento de precisão.' },
-    { icon: <Search size={15} />,   title: 'Diagnóstico Preciso',    desc: 'Avaliação abrangente com protocolos internacionais de excelência.' },
-    { icon: <Heart size={15} />,    title: 'Cuidado Humanizado',     desc: 'Cada paciente recebe atenção personalizada e acompanhamento contínuo.' },
-    { icon: <Activity size={15} />, title: 'Resultados Comprovados', desc: '98% de satisfação com metodologia baseada em evidências científicas.' },
+    { icon: <Cpu size={15} />,         title: 'Tecnologia de Ponta',    desc: 'Equipamentos de última geração para diagnóstico e tratamento de precisão.' },
+    { icon: <Microscope size={15} />,  title: 'Diagnóstico Preciso',    desc: 'Avaliação abrangente com protocolos internacionais de excelência.' },
+    { icon: <Heart size={15} />,       title: 'Cuidado Humanizado',     desc: 'Cada paciente recebe atenção personalizada e acompanhamento contínuo.' },
+    { icon: <Activity size={15} />,    title: 'Resultados Comprovados', desc: '98% de satisfação com metodologia baseada em evidências científicas.' },
   ]
 
   return (
@@ -293,7 +306,7 @@ function WhySection() {
                 <Award size={14} className="text-amber-400 shrink-0" />
                 <div className="text-xs font-bold text-white leading-tight">Referência Nacional</div>
               </div>
-              <div className="text-neutral-400 text-[10px] leading-tight">15+ anos de especialização</div>
+              <div className="text-neutral-400 text-[10px] leading-tight">21+ anos de especialização</div>
             </div>
           </div>
 
@@ -308,8 +321,8 @@ function WhySection() {
               para a medicina da coluna
             </h2>
             <p className="text-neutral-500 text-base leading-relaxed mb-10">
-              Combinamos tecnologia de ponta com cuidado humanizado para oferecer
-              a experiência clínica mais completa do setor.
+              Integramos tecnologia de diagnóstico avançada com acompanhamento individualizado,
+              devolvendo mobilidade e qualidade de vida a cada paciente.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-6">
