@@ -499,7 +499,7 @@ function EnvironmentPreview() {
   )
 }
 
-// ─── Dr. André Cavalcanti ─────────────────────────────────────────────────────
+// ─── Dr. Elias Fernando Ibarra Mancilla ──────────────────────────────────────
 function DoctorPreview() {
   const cardRef = useReveal({ y: 20, duration: 0.7, start: 'top 88%' })
 

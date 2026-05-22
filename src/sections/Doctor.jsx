@@ -54,12 +54,9 @@ export default function Doctor() {
             {/* Image frame */}
             <div className="relative z-10">
               <div className="relative rounded-3xl overflow-hidden w-72 md:w-80 shadow-2xl">
-                <img
-                  src={DOCTOR.image}
-                  alt={DOCTOR.name}
-                  className="w-full aspect-[3/4] object-cover object-top hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                />
+                <div className="w-full aspect-[3/4] bg-neutral-300 flex items-center justify-center">
+                  <span className="text-neutral-600 text-sm font-medium">(Imagem de Dr Elias)</span>
+                </div>
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-900/40 via-transparent to-transparent" />
 
@@ -166,7 +163,7 @@ export default function Doctor() {
 
             {/* CTA */}
             <motion.a
-              href={`https://wa.me/${CLINIC_INFO.whatsapp}?text=Olá! Gostaria de agendar uma consulta com o Dr. André Cavalcanti`}
+              href={`https://wa.me/${CLINIC_INFO.whatsapp}?text=Olá! Gostaria de agendar uma consulta com o ${DOCTOR.name}`}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03, y: -1 }}

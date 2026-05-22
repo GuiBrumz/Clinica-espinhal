@@ -121,7 +121,7 @@ export default function Differentials() {
                 <p className="text-white text-sm leading-relaxed italic font-serif">
                   "Devolver qualidade de vida e movimento com o mais alto nível de medicina espinhal disponível."
                 </p>
-                <p className="text-blue-300 text-xs mt-3">— Dr. André Cavalcanti</p>
+                <p className="text-blue-300 text-xs mt-3">— Dr. Elias Fernando Ibarra Mancilla</p>
               </motion.div>
             </div>
 

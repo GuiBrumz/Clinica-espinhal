@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Shield, Award, Star, ChevronDown, Users, Trophy, TrendingUp } from 'lucide-react'
-import { CLINIC_INFO } from '../data/content'
+import { CLINIC_INFO, DOCTOR } from '../data/content'
 import { fadeUp, fadeLeft, fadeRight, staggerContainer, floatSlow } from '../animations/variants'
 
 const FLOATING_CARDS = [
@@ -206,8 +206,8 @@ export default function Hero() {
                     <Award size={16} className="text-white" />
                   </div>
                   <div>
-                    <div className="text-white font-semibold text-sm">Dr. André Cavalcanti</div>
-                    <div className="text-blue-200 text-xs">Especialista em Coluna – CRM-SP 123.456</div>
+                    <div className="text-white font-semibold text-sm">{DOCTOR.name}</div>
+                    <div className="text-blue-200 text-xs">Especialista em Coluna – {DOCTOR.crm}</div>
                   </div>
                 </div>
               </motion.div>

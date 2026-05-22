@@ -35,7 +35,9 @@ export default function ResponsavelTecnico() {
                     <div className="w-80 h-80 rounded-full bg-gradient-to-br from-brand-50 to-brand-100 opacity-70"/>
                   </div>
                   <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl aspect-[3/4]">
-                    <img src={DOCTOR.image} alt={DOCTOR.name} className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700" loading="eager"/>
+                    <div className="w-full h-full bg-neutral-300 flex items-center justify-center">
+                      <span className="text-neutral-600 text-sm font-medium">(Imagem de Dr Elias)</span>
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-900/50 via-transparent to-transparent"/>
                     <div className="absolute bottom-6 left-6 right-6 glass-dark rounded-2xl p-4">
                       <div className="flex items-center gap-1 mb-2">

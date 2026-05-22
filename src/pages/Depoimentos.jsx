@@ -1,9 +1,7 @@
 import { motion } from 'framer-motion'
-import { Star, Quote, ArrowRight } from 'lucide-react'
+import { Star, Quote } from 'lucide-react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
-import { useRef } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import PageTransition from '../components/PageTransition'
@@ -57,8 +55,6 @@ function TestimonialFull({ t }) {
 
 export default function Depoimentos() {
   const { ref, inView } = useScrollAnimation({ threshold:0.05 })
-  const prevRef = useRef(null)
-  const nextRef = useRef(null)
 
   return (
     <PageTransition>
@@ -117,7 +113,7 @@ export default function Depoimentos() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Quote size={40} className="text-blue-300/30 mx-auto mb-6"/>
           <p className="font-serif text-white text-2xl md:text-3xl leading-relaxed italic font-medium mb-8">
-            "O Dr. André foi a primeira pessoa que realmente ouviu minha história e me deu esperança.
+            "O Dr. Elias foi a primeira pessoa que realmente ouviu minha história e me deu esperança.
             Hoje corro, danço e vivo sem dor — coisas que achei que nunca mais faria."
           </p>
           <div className="flex items-center justify-center gap-3">
