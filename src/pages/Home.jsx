@@ -440,9 +440,9 @@ function DoctorPreview() {
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-50 to-brand-100 translate-x-3 translate-y-3" />
               <div className="relative rounded-3xl overflow-hidden aspect-[3/4] shadow-xl">
                 <img
-                  src="/img/dr-elias-crop.png"
+                  src="/img/Dr.Elias2.png"
                   alt={DOCTOR.name}
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-[75%_center]"
                   loading="lazy"
                   decoding="async"
                 />
