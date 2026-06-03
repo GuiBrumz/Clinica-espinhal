@@ -4,18 +4,19 @@ import { ChevronRight } from 'lucide-react'
 
 // Generic page-hero used by every interior page
 export default function PageHero({
-  label,           // overline eyebrow
-  title,           // main heading (can contain JSX)
-  subtitle,        // body paragraph
-  image,           // background or side image URL
-  breadcrumbs = [],// [{ label, href }]
-  cta,             // { label, href, onClick }
-  ctaSecondary,    // { label, href }
-  align = 'left',  // 'left' | 'center'
-  overlay = true,  // dark gradient overlay on image
-  dark = true,     // dark (blue) vs light variant
+  label,
+  title,
+  subtitle,
+  image,
+  breadcrumbs = [],
+  cta,
+  ctaSecondary,
+  align = 'left',
+  overlay = true,
+  dark = true,
   minHeight = 'min-h-[480px] md:min-h-[560px]',
-  children,        // optional slot for extra right-column content
+  waveColor = 'white',
+  children,
 }) {
   const centered = align === 'center'
 
@@ -183,7 +184,7 @@ export default function PageHero({
       {/* Bottom wave */}
       <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
         <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-10 md:h-12">
-          <path d="M0 24 C480 48 960 0 1440 24 L1440 48 L0 48 Z" fill="white" />
+          <path d="M0 24 C480 48 960 0 1440 24 L1440 48 L0 48 Z" fill={waveColor} />
         </svg>
       </div>
     </section>

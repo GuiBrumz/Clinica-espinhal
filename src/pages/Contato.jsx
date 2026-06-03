@@ -10,23 +10,6 @@ import { CLINIC_INFO } from '../data/content'
 
 const SUBJECTS = ['Agendar avaliação','Informações sobre tratamentos','Dúvidas sobre pagamento','Outros']
 
-const LOCATION_CARDS = [
-  {
-    ...CLINIC_INFO.locations[0],
-    // imagem real disponível quando clínica enviar foto da unidade POA
-    image: 'https://images.pexels.com/photos/4506107/pexels-photo-4506107.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop&crop=top',
-  },
-  {
-    ...CLINIC_INFO.locations[1],
-    // fachada real da Sapucaia Clínicas (prédio onde a Espinhal D.O.R atende)
-    image: 'https://sapucaiaclinicas.com.br/wp-content/uploads/2024/05/2023-09-18.jpg',
-  },
-  {
-    ...CLINIC_INFO.locations[2],
-    // imagem real disponível quando clínica enviar foto da unidade Gravataí
-    image: 'https://images.pexels.com/photos/4506109/pexels-photo-4506109.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop&crop=top',
-  },
-]
 const SOCIAL = [
   { icon: Instagram, href: CLINIC_INFO.instagram, label:'Instagram', color:'#E1306C' },
   { icon: Facebook,  href: CLINIC_INFO.facebook,  label:'Facebook',  color:'#1877F2' },
@@ -192,61 +175,6 @@ export default function Contato() {
         </div>
       </section>
 
-      {/* Locations */}
-      <section className="py-16 bg-neutral-50 border-t border-neutral-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="section-label">Onde estamos</span>
-            <h2 className="font-serif font-bold text-neutral-900 mt-3 tracking-[-0.025em]"
-              style={{ fontSize:'clamp(1.5rem,2vw+0.5rem,2rem)' }}>
-              Três unidades no Rio Grande do Sul
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {LOCATION_CARDS.map((loc, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="bg-white rounded-2xl border border-neutral-100 shadow-card overflow-hidden hover:-translate-y-1 hover:shadow-card-hover transition-[transform,box-shadow] duration-300"
-              >
-                {/* Imagem da unidade */}
-                <div className="relative h-44 overflow-hidden bg-neutral-100">
-                  <img
-                    src={loc.image}
-                    alt={`Unidade ${loc.city}`}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <div className="absolute bottom-3 left-4">
-                    <span className="bg-white/90 backdrop-blur-sm text-neutral-900 text-xs font-semibold px-2.5 py-1 rounded-full">
-                      {loc.city}
-                    </span>
-                  </div>
-                </div>
-                {/* Info */}
-                <div className="p-5">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-brand-100 flex items-center justify-center shrink-0 mt-0.5">
-                      <MapPin size={14} className="text-brand-600"/>
-                    </div>
-                    <div>
-                      <p className="text-neutral-800 text-sm font-medium leading-snug">{loc.street}</p>
-                      <p className="text-neutral-400 text-xs mt-0.5">{loc.neighborhood} – {loc.state}</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-brand-400" />
-                    <p className="text-xs text-neutral-500">{loc.parking}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
     </PageTransition>
   )
 }

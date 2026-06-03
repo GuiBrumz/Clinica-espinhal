@@ -6,8 +6,7 @@ import { CLINIC_INFO } from '../data/content'
 const FOOTER_NAV = {
   'Clínica': [
     { label: 'Sobre Nós',            to: '/sobre'              },
-    { label: 'Responsável Técnico',  to: '/responsavel-tecnico'},
-    { label: 'Nossa Estrutura',      to: '/estrutura'          },
+    { label: 'Localização',           to: '/estrutura'          },
     { label: 'Diferenciais',         to: '/sobre'              },
   ],
   'Especialidades': [

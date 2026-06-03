@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 72" fill="none">
+  <!-- D.O.R. -->
+  <text
+    x="110" y="21"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', Times, serif"
+    font-size="22"
+    font-weight="700"
+    fill="white"
+    letter-spacing="6"
+  >D.O.R.</text>
+
+  <!-- Wave arc -->
+  <path
+    d="M 16 33 Q 68 22 110 33 Q 152 44 204 33"
+    stroke="white"
+    stroke-width="1.2"
+    stroke-opacity="0.6"
+    fill="none"
+    stroke-linecap="round"
+  />
+
+  <!-- CLÍNICA ESPINHAL -->
+  <text
+    x="110" y="52"
+    text-anchor="middle"
+    font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+    font-size="13"
+    font-weight="300"
+    fill="white"
+    fill-opacity="0.92"
+    letter-spacing="3.5"
+  >CLÍNICA ESPINHAL</text>
+
+  <!-- Subtitle -->
+  <text
+    x="110" y="66"
+    text-anchor="middle"
+    font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+    font-size="8.5"
+    font-weight="300"
+    fill="white"
+    fill-opacity="0.52"
+    letter-spacing="0.8"
+  >Doenças Ortopédicas e Reabilitação</text>
+</svg>

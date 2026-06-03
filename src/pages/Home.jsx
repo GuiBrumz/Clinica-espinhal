@@ -15,7 +15,7 @@ import SpineInteractive from '../sections/SpineInteractive'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { useScrollReveal, useReveal } from '../hooks/useScrollReveal'
 import { staggerContainer, fadeUp, scaleIn } from '../animations/variants'
-import { CLINIC_INFO, STATS, SPECIALTIES, TESTIMONIALS, GALLERY_IMAGES, DOCTOR, DIFFERENTIALS } from '../data/content'
+import { CLINIC_INFO, STATS, SPECIALTIES, TESTIMONIALS, DOCTOR, DIFFERENTIALS } from '../data/content'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -185,10 +185,10 @@ function TreatmentsPreview() {
   const sectionRef = useScrollReveal('[data-reveal]', { y: 20, stagger: 0.07, start: 'top 85%' })
 
   const cards = [
-    { icon: <Activity size={18} className="text-brand-600" />,   title: 'Dor Lombar',        desc: 'Tratamento multidisciplinar para dor persistente.' },
-    { icon: <ScanLine size={18} className="text-brand-600" />,   title: 'Estenose do Canal', desc: 'Abordagem não-cirúrgica de alta resolução.' },
-    { icon: <Crosshair size={18} className="text-brand-600" />,  title: 'Cervicalgia',       desc: 'Protocolo para dores cervicais irradiadas.' },
-    { icon: <Shield size={18} className="text-brand-600" />,     title: 'Infiltrações',      desc: 'Procedimentos guiados por imagem de precisão.' },
+    { icon: <Activity size={20} className="text-brand-600" />,   title: 'Dor Lombar',        desc: 'Tratamento multidisciplinar para dor lombar persistente.' },
+    { icon: <ScanLine size={20} className="text-brand-600" />,   title: 'Estenose do Canal', desc: 'Abordagem não-cirúrgica de alta resolução e precisão.' },
+    { icon: <Crosshair size={20} className="text-brand-600" />,  title: 'Cervicalgia',       desc: 'Protocolo especializado para dores cervicais irradiadas.' },
+    { icon: <Shield size={20} className="text-brand-600" />,     title: 'Infiltrações',      desc: 'Procedimentos guiados por imagem de alta precisão.' },
   ]
 
   return (
@@ -199,7 +199,7 @@ function TreatmentsPreview() {
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
 
-        <div data-reveal className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-14">
+        <div data-reveal className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-12">
           <div>
             <span className="section-label-blue mb-4 inline-flex">O que tratamos</span>
             <h2
@@ -218,45 +218,65 @@ function TreatmentsPreview() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
+        {/* Bento grid — 3 cols on lg, feature card takes left column full height */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5" style={{ gridTemplateRows: 'auto' }}>
 
-          {/* Feature card */}
+          {/* Feature card — tall, left column */}
           <div
             data-reveal
-            className="col-span-2 row-span-2 group relative rounded-3xl overflow-hidden cursor-pointer border border-neutral-900"
-            style={{ background: 'linear-gradient(145deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%)' }}
+            className="md:row-span-2 group relative rounded-3xl overflow-hidden cursor-pointer min-h-[380px] md:min-h-0"
+            style={{ background: 'linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%)' }}
           >
+            {/* Decorative rings */}
+            <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full border border-white/10" />
+            <div className="absolute -top-8 -right-8 w-44 h-44 rounded-full border border-white/8" />
+            <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-white/[0.03]" />
+
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-              style={{ background: 'radial-gradient(ellipse at 25% 65%, rgba(147,197,253,0.10), transparent 55%)' }}
+              style={{ background: 'radial-gradient(ellipse at 30% 60%, rgba(147,197,253,0.13), transparent 60%)' }}
             />
-            <div className="absolute top-7 left-7">
-              <div className="w-11 h-11 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center">
-                <Bone size={20} className="text-white/90" />
+
+            {/* Icon */}
+            <div className="absolute top-8 left-8">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center">
+                <Bone size={22} className="text-white/90" />
               </div>
             </div>
-            <div className="absolute bottom-7 left-7 right-7">
-              <h3 className="font-heading font-bold text-white text-xl mb-2 tracking-[-0.02em]">Hérnia de Disco</h3>
-              <p className="text-blue-100/65 text-sm leading-relaxed">Diagnóstico preciso e protocolo conservador para alívio duradouro.</p>
-              <div className="mt-5 inline-flex items-center gap-2 text-blue-200/80 text-xs font-semibold group-hover:gap-3 transition-all duration-200">
+
+            {/* Content */}
+            <div className="absolute bottom-8 left-8 right-8">
+              <p className="text-blue-300/60 text-xs font-semibold uppercase tracking-widest mb-3">Especialidade</p>
+              <h3 className="font-heading font-bold text-white text-2xl mb-3 tracking-[-0.02em] leading-tight">
+                Hérnia de Disco
+              </h3>
+              <p className="text-blue-100/60 text-sm leading-relaxed mb-6">
+                Diagnóstico preciso e protocolo conservador ou intervencionista para alívio duradouro.
+              </p>
+              <div className="inline-flex items-center gap-2 text-blue-200/80 text-xs font-semibold group-hover:gap-3 transition-all duration-200">
                 Saiba mais <ArrowRight size={13} />
               </div>
             </div>
           </div>
 
+          {/* Small cards — 2×2 on the right */}
           {cards.map((card, i) => (
             <div
               key={i}
               data-reveal
-              className="group relative rounded-3xl bg-white border border-neutral-100 p-6 flex flex-col justify-between hover:border-brand-100 hover:shadow-card-hover transition-all duration-300 cursor-pointer overflow-hidden"
+              className="group relative rounded-3xl bg-white border border-neutral-100 p-7 flex flex-col gap-5 hover:border-brand-100 hover:shadow-card-hover transition-all duration-300 cursor-pointer overflow-hidden min-h-[160px]"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-50/0 to-brand-50/60 opacity-0 group-hover:opacity-100 transition-opacity duration-400 rounded-3xl" />
-              <div className="relative w-9 h-9 rounded-xl bg-brand-50 border border-brand-100 group-hover:bg-brand-600 group-hover:border-brand-600 flex items-center justify-center transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent to-brand-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl" />
+
+              <div className="relative w-11 h-11 rounded-2xl bg-brand-50 border border-brand-100 group-hover:bg-brand-600 group-hover:border-brand-600 flex items-center justify-center transition-all duration-300 shrink-0">
                 <span className="group-hover:[&>*]:text-white transition-colors duration-300">{card.icon}</span>
               </div>
-              <div className="relative">
-                <h4 className="font-heading font-semibold text-neutral-900 text-sm mb-1 tracking-tight">{card.title}</h4>
-                <p className="text-neutral-400 text-xs leading-relaxed">{card.desc}</p>
+
+              <div className="relative flex-1">
+                <h4 className="font-heading font-semibold text-neutral-900 text-base mb-2 tracking-tight leading-snug">
+                  {card.title}
+                </h4>
+                <p className="text-neutral-400 text-sm leading-relaxed">{card.desc}</p>
               </div>
             </div>
           ))}
@@ -269,8 +289,7 @@ function TreatmentsPreview() {
 
 // ─── Por que a Espinhal ───────────────────────────────────────────────────────
 function WhySection() {
-  const leftRef  = useReveal({ x: -28, y: 0, duration: 0.85, start: 'top 85%' })
-  const rightRef = useReveal({ x:  28, y: 0, duration: 0.85, delay: 0.12, start: 'top 85%' })
+  const rightRef = useReveal({ y: 20, duration: 0.85, start: 'top 85%' })
 
   const pillars = [
     { icon: <Cpu size={15} />,         title: 'Tecnologia de Ponta',    desc: 'Equipamentos de última geração para diagnóstico e tratamento de precisão.' },
@@ -281,34 +300,8 @@ function WhySection() {
 
   return (
     <section data-header-theme="light" className="py-24 lg:py-36 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-
-          <div ref={leftRef} className="relative opacity-0">
-            <div className="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-premium">
-              <img
-                src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&h=1000&fit=crop&crop=center"
-                alt="Ambiente clínico premium"
-                className="w-full h-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 glass-light rounded-2xl p-4 border border-white/70">
-                <p className="text-neutral-500 text-xs font-medium mb-0.5 uppercase tracking-widest">Ambiente</p>
-                <p className="text-neutral-900 font-semibold text-sm">Clínica de padrão internacional</p>
-              </div>
-            </div>
-
-            {/* Credential chip */}
-            <div className="absolute -top-5 -right-5 bg-neutral-950 text-white rounded-2xl px-5 py-4 shadow-premium">
-              <div className="flex items-center gap-2.5 mb-1.5">
-                <Award size={14} className="text-amber-400 shrink-0" />
-                <div className="text-xs font-bold text-white leading-tight">Referência Nacional</div>
-              </div>
-              <div className="text-neutral-400 text-[10px] leading-tight">21+ anos de especialização</div>
-            </div>
-          </div>
+      <div className="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8">
+        <div>
 
           <div ref={rightRef} className="opacity-0">
             <span className="section-label-blue mb-6 inline-flex">Por que nos escolher</span>
@@ -429,122 +422,71 @@ function TestimonialsPreview() {
   )
 }
 
-// ─── Estrutura da Clínica ─────────────────────────────────────────────────────
-function EnvironmentPreview() {
-  const sectionRef = useScrollReveal('[data-reveal]', { y: 20, stagger: 0.08, start: 'top 85%' })
-
-  return (
-    <section ref={sectionRef} data-header-theme="light" className="py-24 lg:py-32 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-
-        <div data-reveal className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-14">
-          <div>
-            <span className="section-label mb-4 inline-flex">Nossa Estrutura</span>
-            <h2
-              className="font-heading font-bold text-neutral-950 tracking-[-0.03em] leading-[1.08] text-balance"
-              style={{ fontSize: 'clamp(1.875rem, 3.5vw + 0.25rem, 2.875rem)' }}
-            >
-              Um ambiente pensado{' '}
-              <span className="text-gradient-blue">para você</span>
-            </h2>
-          </div>
-          <Link
-            to="/estrutura"
-            className="inline-flex items-center gap-2 font-semibold text-sm text-brand-700 hover:text-brand-800 transition-all duration-200 hover:gap-3 shrink-0"
-          >
-            Ver estrutura completa <ArrowRight size={15} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[260px]">
-          <div
-            data-reveal
-            className="lg:col-span-2 lg:row-span-2 group relative rounded-3xl overflow-hidden cursor-pointer"
-          >
-            <img
-              src={GALLERY_IMAGES[0]?.src || 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=900&h=700&fit=crop'}
-              alt={GALLERY_IMAGES[0]?.alt || 'Clínica'}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <p className="absolute bottom-5 left-5 text-white font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {GALLERY_IMAGES[0]?.label || 'Espaço Principal'}
-            </p>
-          </div>
-          {GALLERY_IMAGES.slice(1, 3).map(img => (
-            <div
-              key={img.id}
-              data-reveal
-              className="group relative rounded-3xl overflow-hidden cursor-pointer"
-            >
-              <img
-                src={img.src}
-                alt={img.alt}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <p className="absolute bottom-4 left-4 text-white font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {img.label}
-              </p>
-            </div>
-          ))}
-        </div>
-
-      </div>
-    </section>
-  )
-}
 
 // ─── Dr. Elias Fernando Ibarra Mancilla ──────────────────────────────────────
 function DoctorPreview() {
-  const cardRef = useReveal({ y: 20, duration: 0.7, start: 'top 88%' })
+  const sectionRef = useReveal({ y: 24, duration: 0.8, start: 'top 85%' })
 
   return (
-    <section data-header-theme="light" className="py-20 lg:py-24 bg-neutral-50">
-      <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8">
-        <div
-          ref={cardRef}
-          className="bg-white rounded-3xl p-8 lg:p-12 border border-neutral-100 shadow-card flex flex-col lg:flex-row items-start gap-8 opacity-0"
-        >
-          <div className="w-16 h-16 rounded-2xl overflow-hidden ring-4 ring-brand-50 shrink-0">
-            <img
-              src={DOCTOR.image}
-              alt={DOCTOR.name}
-              className="w-full h-full object-cover object-top"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-              <div>
-                <h3 className="font-heading font-bold text-neutral-950 text-xl tracking-[-0.02em]">{DOCTOR.name}</h3>
-                <p className="text-brand-700 text-sm font-medium mt-0.5">{DOCTOR.title}</p>
-                <p className="text-neutral-400 text-xs mt-0.5">{DOCTOR.crm}</p>
+    <section data-header-theme="light" className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+        <div ref={sectionRef} className="opacity-0 grid lg:grid-cols-5 gap-10 lg:gap-16 items-center">
+
+          {/* Foto — 2 colunas */}
+          <div className="lg:col-span-2 flex justify-center">
+            <div className="relative w-64 lg:w-full max-w-xs">
+              {/* Fundo decorativo */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-50 to-brand-100 translate-x-3 translate-y-3" />
+              <div className="relative rounded-3xl overflow-hidden aspect-[3/4] shadow-xl">
+                <img
+                  src="/img/dr-elias-crop.png"
+                  alt={DOCTOR.name}
+                  className="w-full h-full object-cover object-top"
+                  loading="lazy"
+                  decoding="async"
+                />
+                {/* Overlay sutil para suavizar o fundo da foto */}
+                <div className="absolute inset-0"
+                  style={{ background: 'linear-gradient(to bottom, transparent 50%, rgba(15,23,42,0.6) 100%)' }} />
+                {/* Badge no rodapé */}
+                <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2.5">
+                  <p className="text-neutral-900 font-bold text-sm leading-tight">{DOCTOR.name}</p>
+                  <p className="text-brand-600 text-xs font-medium mt-0.5">{DOCTOR.crm}</p>
+                </div>
               </div>
-              <Link
-                to="/responsavel-tecnico"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-brand-700 hover:text-brand-800 transition-all duration-200 hover:gap-3"
-              >
-                Ver perfil completo <ArrowRight size={12} />
-              </Link>
             </div>
-            <p className="text-neutral-500 text-sm leading-relaxed mb-5 line-clamp-3">{DOCTOR.bio[0]}</p>
-            <div className="flex flex-wrap gap-2">
-              {DOCTOR.specialties.slice(0, 4).map((s, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 bg-brand-50 text-brand-700 text-xs font-medium rounded-lg border border-brand-100"
-                >
-                  {s}
-                </span>
+          </div>
+
+          {/* Conteúdo — 3 colunas */}
+          <div className="lg:col-span-3">
+            <span className="section-label-blue mb-5 inline-flex">Responsável Técnico</span>
+            <h2 className="font-heading font-bold text-neutral-950 tracking-[-0.03em] leading-tight mb-2"
+              style={{ fontSize: 'clamp(1.5rem, 2.5vw + 0.5rem, 2.25rem)' }}>
+              {DOCTOR.name}
+            </h2>
+            <p className="text-brand-700 font-semibold text-sm mb-6">{DOCTOR.title}</p>
+
+            <p className="text-neutral-500 text-sm leading-relaxed mb-8">{DOCTOR.bio[0]}</p>
+
+            {/* Stats em linha */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 pb-8 border-b border-neutral-100">
+              {DOCTOR.achievements.map((a, i) => (
+                <div key={i}>
+                  <div className="font-heading font-extrabold text-brand-600 text-2xl tracking-tight">{a.number}</div>
+                  <div className="text-neutral-400 text-xs mt-0.5 leading-snug">{a.label}</div>
+                </div>
               ))}
             </div>
+
+            <Link
+              to="/sobre"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-800 transition-all duration-200 hover:gap-3"
+            >
+              Ver perfil completo <ArrowRight size={14} />
+            </Link>
           </div>
+
         </div>
       </div>
     </section>
@@ -560,9 +502,7 @@ export default function Home() {
       <SpineInteractive />
       <TreatmentsPreview />
       <WhySection />
-      <TestimonialsPreview />
-      <EnvironmentPreview />
-      <DoctorPreview />
+<DoctorPreview />
       <BottomCTA />
     </PageTransition>
   )

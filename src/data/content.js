@@ -50,8 +50,8 @@ export const DOCTOR = {
   name:      'Dr. Elias Fernando Ibarra Mancilla',
   title:     'Especialista em Ortopedia, Traumatologia e Coluna Vertebral',
   crm:       'CRM 36782-RS',
-  image:     'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&h=800&fit=crop&crop=face',
-  imageWide: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=1200&h=700&fit=crop',
+  image:     '/img/Foto-profissional.png',
+  imageWide: '/img/Foto-profissional.png',
   bio: [
     'Médico especialista em Ortopedia e Traumatologia, com ênfase em Coluna Vertebral e Tratamento da Dor, atuando na área desde 2005. Fundou a Clínica Espinhal D.O.R em maio de 2013 com o objetivo de oferecer atendimento especializado em coluna vertebral com alto padrão técnico e cuidado humanizado.',
     'Ao longo de mais de duas décadas de especialização, realiza diagnóstico e tratamento de hérnias de disco, doenças degenerativas da coluna, estenose do canal vertebral, compressões nervosas, escoliose, fraturas vertebrais e dores crônicas — por meio de tratamento conservador, procedimentos minimamente invasivos e cirurgias de média e alta complexidade.',
@@ -396,14 +396,19 @@ export const FAQ_ITEMS = FAQ_CATEGORIES.flatMap(c => c.items)
 
 // ─── Gallery ─────────────────────────────────────────────────────────────────
 export const GALLERY_IMAGES = [
-  { id: 1, src: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&h=600&fit=crop',  alt: 'Sala de tratamento moderna',    label: 'Sala de Tratamento',   category: 'Tratamentos' },
-  { id: 2, src: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=800&h=600&fit=crop',  alt: 'Recepção premium',               label: 'Recepção',              category: 'Recepção'    },
-  { id: 3, src: 'https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&h=600&fit=crop',     alt: 'Consultório especializado',       label: 'Consultório',           category: 'Consultórios'},
-  { id: 4, src: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=600&fit=crop',     alt: 'Equipamentos de diagnóstico',     label: 'Diagnóstico',           category: 'Tecnologia'  },
-  { id: 5, src: 'https://images.unsplash.com/photo-1527613426441-4da17471b66d?w=800&h=600&fit=crop',  alt: 'Área de atendimento',             label: 'Atendimento',           category: 'Tratamentos' },
-  { id: 6, src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop',  alt: 'Área de espera premium',          label: 'Área de Espera',        category: 'Recepção'    },
-  { id: 7, src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&h=600&fit=crop',  alt: 'Corredor clínico',                label: 'Corredor',              category: 'Estrutura'   },
-  { id: 8, src: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&h=600&fit=crop',  alt: 'Consulta médica',                 label: 'Consulta',              category: 'Consultórios'},
+  // ── Unidades (fotos reais Google Maps) ───────────────────────────────────
+  { id:  1, src: 'https://sapucaiaclinicas.com.br/wp-content/uploads/2024/05/2024-04-04.jpg',          alt: 'Fachada Sapucaia Clínicas',       label: 'Fachada – Sapucaia do Sul', category: 'Unidades'    },
+  { id:  2, src: '/img/porto-alegre-fachada.webp',                                                     alt: 'Unidade Porto Alegre',            label: 'Fachada – Porto Alegre',    category: 'Unidades'    },
+  { id:  3, src: '/img/sapucaia-fachada-2.jpg',                                                        alt: 'Vista lateral Sapucaia Clínicas', label: 'Vista – Sapucaia do Sul',   category: 'Unidades'    },
+  { id:  4, src: '/img/sapucaia-entrada.webp',                                                         alt: 'Entrada Sapucaia Clínicas',       label: 'Entrada – Sapucaia do Sul', category: 'Unidades'    },
+  // ── Recepção & Espera ────────────────────────────────────────────────────
+  { id:  5, src: '/img/sapucaia-sala-espera.webp',                                                     alt: 'Sala de espera da clínica',       label: 'Sala de Espera',            category: 'Recepção'    },
+  // ── Consultórios ─────────────────────────────────────────────────────────
+  { id:  6, src: '/img/sapucaia-consultorio-1.webp',                                                   alt: 'Consultório médico',              label: 'Consultório',               category: 'Consultórios'},
+  { id:  7, src: '/img/sapucaia-consultorio-2.webp',                                                   alt: 'Consultório médico',              label: 'Consultório',               category: 'Consultórios'},
+  { id:  8, src: '/img/sapucaia-consultorio-3.webp',                                                   alt: 'Consultório com maca',            label: 'Sala de Exame',             category: 'Consultórios'},
+  // ── Tecnologia ───────────────────────────────────────────────────────────
+  { id:  9, src: '/img/sapucaia-ecografia.webp',                                                       alt: 'Equipamento de ecografia',        label: 'Ecografia',                 category: 'Tecnologia'  },
 ]
 
 // ─── Nav links ────────────────────────────────────────────────────────────────
@@ -412,8 +417,7 @@ export const NAV_LINKS = [
   { label: 'Sobre',               href: '/sobre'              },
   { label: 'Especialidades',      href: '/especialidades'     },
   { label: 'Tratamentos',         href: '/tratamentos'        },
-  { label: 'Responsável Técnico', href: '/responsavel-tecnico'},
-  { label: 'Estrutura',           href: '/estrutura'          },
+  { label: 'Localização',          href: '/estrutura'          },
   { label: 'Depoimentos',         href: '/depoimentos'        },
   { label: 'FAQ',                 href: '/faq'                },
   { label: 'Contato',             href: '/contato'            },

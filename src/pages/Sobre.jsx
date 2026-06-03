@@ -5,16 +5,7 @@ import PageHero from '../components/PageHero'
 import BottomCTA from '../components/BottomCTA'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { staggerContainer, fadeUp, fadeLeft, fadeRight, scaleIn } from '../animations/variants'
-import { VALUES } from '../data/content'
-
-const MILESTONES = [
-  { year:'2009', title:'Fundação',        desc:'Abertura da Espinhal D.O.R com foco exclusivo em coluna vertebral, com 1 consultório e 2 profissionais.' },
-  { year:'2011', title:'Crescimento',     desc:'Expansão para 3 consultórios e incorporação do diagnóstico por imagem in-house.' },
-  { year:'2014', title:'Reconhecimento',  desc:'Certificação pela Sociedade Brasileira de Coluna e implementação dos primeiros protocolos minimamente invasivos.' },
-  { year:'2017', title:'Internacionalização', desc:'Parcerias com centros de referência nos EUA e Europa, com validação internacional dos nossos protocolos.' },
-  { year:'2021', title:'Inovação',        desc:'Implementação de fluoroscopia in-house e expansão da equipe multidisciplinar.' },
-  { year:'2024', title:'Nova Sede',       desc:'Instalação na Av. Paulista com 8 salas, sala cirúrgica e área dedicada de reabilitação.' },
-]
+import { VALUES, DOCTOR, CLINIC_INFO } from '../data/content'
 
 const PILLARS = [
   { icon: Target,  title: 'Missão',    text: 'Oferecer o mais alto nível de medicina espinhal, com diagnóstico preciso, tratamento individualizado e acompanhamento humanizado.' },
@@ -33,8 +24,9 @@ const VALUE_ICONS = {
 
 export default function Sobre() {
   const { ref: s1, inView: v1 } = useScrollAnimation()
-  const { ref: s2, inView: v2 } = useScrollAnimation({ threshold:0.1 })
-  const { ref: s3, inView: v3 } = useScrollAnimation({ threshold:0.1 })
+  const { ref: s2, inView: v2 } = useScrollAnimation({ threshold: 0.1 })
+  const { ref: s3, inView: v3 } = useScrollAnimation({ threshold: 0.1 })
+  const { ref: s4, inView: v4 } = useScrollAnimation({ threshold: 0.1 })
 
   return (
     <PageTransition>
@@ -43,15 +35,14 @@ export default function Sobre() {
         title={<>Mais que uma clínica,<br /><span className="text-gradient">uma filosofia de cuidado</span></>}
         subtitle="Nascemos da convicção de que o tratamento da coluna exige muito mais do que técnica — exige escuta, precisão, humanidade e inovação contínua."
         image="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1400&h=700&fit=crop"
-        breadcrumbs={[{ label:'Sobre a Clínica' }]}
-        cta={{ label:'Agendar Avaliação', href:`https://wa.me/5511999999999?text=Olá!`, }}
-        ctaSecondary={{ label:'Conheça o Especialista', href:'/responsavel-tecnico' }}
+        breadcrumbs={[{ label: 'Sobre a Clínica' }]}
+        cta={{ label: 'Agendar Avaliação', href: `https://wa.me/${CLINIC_INFO.whatsapp}?text=Olá!` }}
       />
 
       {/* ── Mission / Vision / Purpose ── */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div ref={s1} variants={staggerContainer} initial="hidden" animate={v1?'visible':'hidden'}
+          <motion.div ref={s1} variants={staggerContainer} initial="hidden" animate={v1 ? 'visible' : 'hidden'}
             className="grid md:grid-cols-3 gap-6">
             {PILLARS.map((p, i) => (
               <motion.div key={i} variants={scaleIn}
@@ -71,40 +62,40 @@ export default function Sobre() {
       <section className="py-20 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div ref={s2} variants={fadeLeft} initial="hidden" animate={v2?'visible':'hidden'}>
+            <motion.div ref={s2} variants={fadeLeft} initial="hidden" animate={v2 ? 'visible' : 'hidden'}>
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl shadow-neutral-200">
-                  <img src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&h=600&fit=crop" alt="Nossa história" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"/>
+                  <img src="https://images.unsplash.com/photo-1640876777002-badf6aee5bcc?w=800&h=600&fit=crop" alt="Equipe médica especializada" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
-                <motion.div initial={{ opacity:0, x:30, y:30 }} animate={v2?{ opacity:1, x:0, y:0 }:{}} transition={{ delay:0.4, duration:0.7 }}
+                <motion.div initial={{ opacity: 0, x: 30, y: 30 }} animate={v2 ? { opacity: 1, x: 0, y: 0 } : {}} transition={{ delay: 0.4, duration: 0.7 }}
                   className="absolute -bottom-6 -right-5 w-48 rounded-2xl overflow-hidden shadow-xl border-4 border-white aspect-square">
-                  <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=400&fit=crop" alt="Tecnologia" className="w-full h-full object-cover"/>
+                  <img src="https://images.unsplash.com/photo-1631563018856-81be9c118283?w=400&h=400&fit=crop" alt="Diagnóstico por imagem" className="w-full h-full object-cover" />
                 </motion.div>
-                <motion.div initial={{ opacity:0, scale:0 }} animate={v2?{ opacity:1, scale:1 }:{}} transition={{ delay:0.6, type:'spring' }}
+                <motion.div initial={{ opacity: 0, scale: 0 }} animate={v2 ? { opacity: 1, scale: 1 } : {}} transition={{ delay: 0.6, type: 'spring' }}
                   className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl bg-brand-600 flex flex-col items-center justify-center shadow-md">
-                  <span className="font-serif font-extrabold text-white text-2xl leading-none tracking-[-0.04em]">15</span>
+                  <span className="font-serif font-extrabold text-white text-2xl leading-none tracking-[-0.04em]">13</span>
                   <span className="text-blue-200 text-xs">anos</span>
                 </motion.div>
               </div>
             </motion.div>
 
-            <motion.div variants={fadeRight} initial="hidden" animate={v2?'visible':'hidden'} className="space-y-6">
+            <motion.div variants={fadeRight} initial="hidden" animate={v2 ? 'visible' : 'hidden'} className="space-y-6">
               <span className="section-label">Nossa História</span>
               <h2 className="font-serif font-bold text-neutral-900 leading-tight tracking-[-0.025em] text-balance"
-                style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
+                style={{ fontSize: 'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
                 Medicina espinhal de alto nível com cuidado genuinamente humano
               </h2>
               <p className="text-neutral-600 leading-relaxed">
-                A Espinhal D.O.R nasceu em 2009 com uma proposta clara: oferecer o que existe de mais avançado em diagnóstico e tratamento de patologias da coluna vertebral, com o rigor e a atenção que cada paciente merece.
+                A Espinhal D.O.R nasceu em 2013 com uma proposta clara: oferecer o que existe de mais avançado em diagnóstico e tratamento de patologias da coluna vertebral, com o rigor e a atenção que cada paciente merece.
               </p>
               <p className="text-neutral-600 leading-relaxed">
-                Ao longo de 15 anos, construímos uma estrutura de alto padrão, reunimos uma equipe especializada e desenvolvemos protocolos que combinam medicina baseada em evidências com acompanhamento individualizado.
+                Ao longo de mais de 13 anos, construímos uma estrutura de alto padrão, reunimos uma equipe especializada e desenvolvemos protocolos que combinam medicina baseada em evidências com acompanhamento individualizado.
               </p>
               <div className="space-y-3 pt-2">
-                {['Equipe multidisciplinar altamente qualificada','Tecnologia de diagnóstico de última geração','Tratamentos conservadores e minimamente invasivos','Protocolos personalizados baseados em evidências'].map((item, i) => (
-                  <motion.div key={i} initial={{ opacity:0, x:20 }} animate={v2?{ opacity:1, x:0 }:{}} transition={{ delay:0.3+i*0.1 }}
+                {['Equipe multidisciplinar altamente qualificada', 'Tecnologia de diagnóstico de última geração', 'Tratamentos conservadores e minimamente invasivos', 'Protocolos personalizados baseados em evidências'].map((item, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, x: 20 }} animate={v2 ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 + i * 0.1 }}
                     className="flex items-start gap-3">
-                    <CheckCircle size={16} className="text-brand-600 shrink-0 mt-0.5"/>
+                    <CheckCircle size={16} className="text-brand-600 shrink-0 mt-0.5" />
                     <span className="text-neutral-700 text-sm">{item}</span>
                   </motion.div>
                 ))}
@@ -117,14 +108,14 @@ export default function Sobre() {
       {/* ── Values ── */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div ref={s3} initial={{ opacity:0, y:24 }} animate={v3?{ opacity:1, y:0 }:{}} transition={{ duration:0.65 }} className="text-center mb-12">
+          <motion.div ref={s3} initial={{ opacity: 0, y: 24 }} animate={v3 ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.65 }} className="text-center mb-12">
             <span className="section-label">Nossos Valores</span>
             <h2 className="font-serif font-bold text-neutral-900 mt-4 tracking-[-0.025em]"
-              style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
+              style={{ fontSize: 'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
               O que nos <span className="text-gradient-blue">guia</span> todos os dias
             </h2>
           </motion.div>
-          <motion.div variants={staggerContainer} initial="hidden" animate={v3?'visible':'hidden'}
+          <motion.div variants={staggerContainer} initial="hidden" animate={v3 ? 'visible' : 'hidden'}
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {VALUES.map((v, i) => {
               const Icon = VALUE_ICONS[v.icon]
@@ -145,46 +136,90 @@ export default function Sobre() {
         </div>
       </section>
 
-      {/* ── Timeline ── */}
-      <section className="py-20 bg-neutral-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="section-label">Nossa Trajetória</span>
-            <h2 className="font-serif font-bold text-neutral-900 mt-4 tracking-[-0.025em]"
-              style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
-              15 anos de evolução contínua
+      {/* ── Dr. Elias ── */}
+      <section id="dr-elias" className="py-24 bg-neutral-950 relative overflow-hidden">
+        {/* Glow */}
+        <div className="absolute -top-40 left-1/3 w-[500px] h-[500px] opacity-10 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #2563eb, transparent)' }} />
+        <div className="absolute -bottom-40 right-0 w-96 h-96 opacity-8 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #3b82f6, transparent)' }} />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {/* Header */}
+          <motion.div ref={s4} initial={{ opacity: 0, y: 20 }} animate={v4 ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}
+            className="mb-16">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-brand-400 mb-4">
+              <span className="w-5 h-px bg-brand-400" />
+              Responsável Técnico
+              <span className="w-5 h-px bg-brand-400" />
+            </span>
+            <h2 className="font-heading font-bold text-white tracking-[-0.03em] leading-tight"
+              style={{ fontSize: 'clamp(1.75rem, 3vw + 0.5rem, 2.5rem)' }}>
+              O especialista por trás{' '}
+              <span className="text-brand-400">dos resultados</span>
             </h2>
-          </div>
-          <div className="relative">
-            <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-600 to-brand-100 -translate-x-1/2 hidden md:block"/>
-            <div className="space-y-8">
-              {MILESTONES.map((m, i) => (
-                <motion.div key={i} initial={{ opacity:0, x: i%2===0?-30:30 }} whileInView={{ opacity:1, x:0 }}
-                  viewport={{ once:true, amount:0.4 }} transition={{ duration:0.6, delay:0.1 }}
-                  className={`flex items-center gap-6 ${i%2===0?'md:flex-row':'md:flex-row-reverse'}`}>
-                  <div className={`hidden md:flex flex-1 ${i%2===0?'justify-end':'justify-start'}`}>
-                    <div className={`bg-white border border-neutral-100 rounded-2xl p-5 shadow-card max-w-xs ${i%2===0?'text-right':''}`}>
-                      <div className="font-serif font-bold text-brand-600 text-lg mb-1">{m.title}</div>
-                      <p className="text-neutral-600 text-sm leading-relaxed">{m.desc}</p>
-                    </div>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-5 gap-12 items-start">
+
+            {/* Foto — 2 colunas */}
+            <motion.div variants={fadeLeft} initial="hidden" animate={v4 ? 'visible' : 'hidden'}
+              className="lg:col-span-2">
+              <div className="sticky top-28">
+                <div className="relative rounded-3xl overflow-hidden aspect-[3/4] shadow-2xl shadow-black/50">
+                  <img
+                    src={DOCTOR.image}
+                    alt={DOCTOR.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <p className="text-white font-bold text-lg leading-tight">{DOCTOR.name}</p>
+                    <p className="text-brand-400 text-xs font-semibold mt-1">{DOCTOR.crm}</p>
                   </div>
-                  <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-brand-600 border-4 border-white shadow-md shrink-0 z-10">
-                    <span className="text-white text-xs font-bold">{m.year.slice(2)}</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Conteúdo — 3 colunas */}
+            <motion.div variants={fadeRight} initial="hidden" animate={v4 ? 'visible' : 'hidden'}
+              className="lg:col-span-3 space-y-8">
+
+              <div>
+                <h3 className="font-heading font-bold text-white text-2xl tracking-[-0.025em]">{DOCTOR.name}</h3>
+                <p className="text-brand-400 font-semibold mt-1">{DOCTOR.title}</p>
+              </div>
+
+              <div className="space-y-5">
+                {DOCTOR.bio.map((para, i) => (
+                  <p key={i} className="text-neutral-400 leading-relaxed text-sm">{para}</p>
+                ))}
+              </div>
+
+              {/* Áreas de Atuação */}
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-neutral-600 mb-3">Áreas de Atuação</p>
+                <div className="flex flex-wrap gap-2">
+                  {DOCTOR.specialties.map((s, i) => (
+                    <span key={i} className="px-3 py-1.5 bg-white/[0.06] border border-white/10 text-neutral-300 text-xs font-medium rounded-lg">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                {DOCTOR.achievements.map((a, i) => (
+                  <div key={i} className="bg-white/[0.05] border border-white/8 rounded-2xl p-4 text-center">
+                    <div className="font-heading font-extrabold text-white text-xl tracking-tight">{a.number}</div>
+                    <div className="text-neutral-500 text-xs mt-1 leading-snug">{a.label}</div>
                   </div>
-                  <div className="hidden md:flex flex-1"/>
-                  {/* Mobile */}
-                  <div className="md:hidden flex items-start gap-4 w-full">
-                    <div className="flex items-center justify-center w-14 h-8 rounded-full bg-brand-600 shrink-0">
-                      <span className="text-white text-xs font-bold">{m.year}</span>
-                    </div>
-                    <div className="bg-white border border-neutral-100 rounded-xl p-4 shadow-sm flex-1">
-                      <div className="font-serif font-bold text-brand-600 mb-1">{m.title}</div>
-                      <p className="text-neutral-600 text-sm">{m.desc}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                ))}
+              </div>
+
+            </motion.div>
           </div>
         </div>
       </section>

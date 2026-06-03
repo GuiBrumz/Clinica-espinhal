@@ -11,7 +11,6 @@ import Home               from './pages/Home'
 import Sobre              from './pages/Sobre'
 import Especialidades     from './pages/Especialidades'
 import Tratamentos        from './pages/Tratamentos'
-import ResponsavelTecnico from './pages/ResponsavelTecnico'
 import Estrutura          from './pages/Estrutura'
 import Depoimentos        from './pages/Depoimentos'
 import FAQ                from './pages/FAQ'
@@ -28,7 +27,6 @@ function AnimatedRoutes() {
         <Route path="/sobre"               element={<Sobre />} />
         <Route path="/especialidades"      element={<Especialidades />} />
         <Route path="/tratamentos"         element={<Tratamentos />} />
-        <Route path="/responsavel-tecnico" element={<ResponsavelTecnico />} />
         <Route path="/estrutura"           element={<Estrutura />} />
         <Route path="/depoimentos"         element={<Depoimentos />} />
         <Route path="/faq"                 element={<FAQ />} />

@@ -188,7 +188,7 @@ export default function Hero() {
               className="relative rounded-3xl overflow-hidden shadow-2xl shadow-black/40 aspect-[4/5] max-h-[620px]"
             >
               <img
-                src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=700&h=875&fit=crop&crop=center"
+                src="/img/Foto-profissional.png"
                 alt="Médico especialista em coluna"
                 className="w-full h-full object-cover"
                 loading="eager"
