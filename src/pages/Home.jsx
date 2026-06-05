@@ -364,12 +364,6 @@ function TestimonialsPreview() {
               <span className="text-gradient-blue">suas vidas</span>
             </h2>
           </div>
-          <Link
-            to="/depoimentos"
-            className="inline-flex items-center gap-2 font-semibold text-sm text-brand-700 hover:text-brand-800 transition-all duration-200 hover:gap-3 shrink-0"
-          >
-            Ver todos <ArrowRight size={15} />
-          </Link>
         </div>
 
         <div ref={swiperRef} className="opacity-0">
@@ -440,7 +434,7 @@ function DoctorPreview() {
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-50 to-brand-100 translate-x-3 translate-y-3" />
               <div className="relative rounded-3xl overflow-hidden aspect-[3/4] shadow-xl">
                 <img
-                  src="/img/Dr.Elias2.png"
+                  src="/img/Doutor.jpeg"
                   alt={DOCTOR.name}
                   className="w-full h-full object-cover object-[75%_center]"
                   loading="lazy"

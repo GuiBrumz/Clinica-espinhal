@@ -1,13 +1,16 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { MapPin, Phone, Mail, Clock, Instagram, Facebook, Youtube, Linkedin, Heart } from 'lucide-react'
+import { MapPin, Mail, Clock, Instagram, Facebook, Heart } from 'lucide-react'
 import { CLINIC_INFO } from '../data/content'
 
 const FOOTER_NAV = {
-  'Clínica': [
-    { label: 'Sobre Nós',            to: '/sobre'              },
-    { label: 'Localização',           to: '/estrutura'          },
-    { label: 'Diferenciais',         to: '/sobre'              },
+  'Navegação': [
+    { label: 'Início',               to: '/'                   },
+    { label: 'Sobre a Clínica',      to: '/sobre'              },
+    { label: 'Especialidades',       to: '/especialidades'     },
+    { label: 'Tratamentos',          to: '/tratamentos'        },
+    { label: 'Localização',          to: '/estrutura'          },
+    { label: 'Contato',              to: '/contato'            },
   ],
   'Especialidades': [
     { label: 'Hérnia de Disco',      to: '/especialidades'     },
@@ -16,19 +19,11 @@ const FOOTER_NAV = {
     { label: 'Dores Crônicas',       to: '/especialidades'     },
     { label: 'Reabilitação',         to: '/especialidades'     },
   ],
-  'Navegação': [
-    { label: 'Tratamentos',          to: '/tratamentos'        },
-    { label: 'Depoimentos',          to: '/depoimentos'        },
-    { label: 'Perguntas Frequentes', to: '/faq'                },
-    { label: 'Contato',              to: '/contato'            },
-  ],
 }
 
 const SOCIAL = [
   { icon: Instagram, href: CLINIC_INFO.instagram, label: 'Instagram' },
   { icon: Facebook,  href: CLINIC_INFO.facebook,  label: 'Facebook'  },
-  { icon: Youtube,   href: CLINIC_INFO.youtube,   label: 'YouTube'   },
-  { icon: Linkedin,  href: CLINIC_INFO.linkedin,  label: 'LinkedIn'  },
 ]
 
 export default function Footer() {
@@ -92,10 +87,6 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <h4 className="text-white font-semibold text-sm mb-4">Contato</h4>
             <div className="space-y-3">
-              <a href={`tel:${CLINIC_INFO.phone}`} className="flex items-start gap-2.5 hover:text-white transition-colors text-sm group">
-                <Phone size={13} className="shrink-0 mt-0.5 text-brand-500 group-hover:text-brand-400" />
-                {CLINIC_INFO.phone}
-              </a>
               <a href={`mailto:${CLINIC_INFO.email}`} className="flex items-start gap-2.5 hover:text-white transition-colors text-sm group">
                 <Mail size={13} className="shrink-0 mt-0.5 text-brand-500 group-hover:text-brand-400" />
                 {CLINIC_INFO.email}
@@ -112,33 +103,13 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Newsletter */}
-        <div className="border-t border-neutral-800 pt-8 pb-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-5">
-            <div>
-              <p className="text-white font-semibold text-sm mb-0.5">Receba dicas de saúde da coluna</p>
-              <p className="text-neutral-500 text-xs">Conteúdo exclusivo de especialistas, sem spam.</p>
-            </div>
-            <div className="flex items-center gap-2 w-full md:w-auto">
-              <input
-                type="email"
-                placeholder="Seu melhor e-mail"
-                className="flex-1 md:w-60 px-4 py-2.5 bg-neutral-800 border border-neutral-700 rounded-xl text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-brand-600 transition-colors"
-              />
-              <button className="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors whitespace-nowrap">
-                Inscrever
-              </button>
-            </div>
-          </div>
-        </div>
-
         {/* Bottom bar */}
         <div className="border-t border-neutral-800 pt-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-neutral-500">
           <p>© 2026 Espinhal D.O.R. Todos os direitos reservados.</p>
           <p className="flex items-center gap-1.5">
             Feito com <Heart size={11} className="text-red-400 fill-red-400" /> para quem merece viver sem dor
           </p>
-          <p>CFM | CRM-SP 123.456</p>
+          <p>CRM 36782-RS</p>
         </div>
       </div>
     </footer>

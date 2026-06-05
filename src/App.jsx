@@ -12,8 +12,6 @@ import Sobre              from './pages/Sobre'
 import Especialidades     from './pages/Especialidades'
 import Tratamentos        from './pages/Tratamentos'
 import Estrutura          from './pages/Estrutura'
-import Depoimentos        from './pages/Depoimentos'
-import FAQ                from './pages/FAQ'
 import Contato            from './pages/Contato'
 
 function AnimatedRoutes() {
@@ -28,8 +26,6 @@ function AnimatedRoutes() {
         <Route path="/especialidades"      element={<Especialidades />} />
         <Route path="/tratamentos"         element={<Tratamentos />} />
         <Route path="/estrutura"           element={<Estrutura />} />
-        <Route path="/depoimentos"         element={<Depoimentos />} />
-        <Route path="/faq"                 element={<FAQ />} />
         <Route path="/contato"             element={<Contato />} />
       </Routes>
     </AnimatePresence>

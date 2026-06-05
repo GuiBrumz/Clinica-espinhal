@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { toast } from 'sonner'
 import { Mail, MapPin, Clock, Send, Instagram, Facebook, Youtube, Linkedin } from 'lucide-react'
 import PageTransition from '../components/PageTransition'
 import PageHero from '../components/PageHero'
@@ -44,20 +43,21 @@ function FloatInput({ label, type='text', name, value, onChange, required, as='i
 export default function Contato() {
   const { ref, inView } = useScrollAnimation()
   const [form, setForm] = useState({ name:'', email:'', phone:'', subject:SUBJECTS[0], message:'' })
-  const [loading, setLoading] = useState(false)
 
   const onChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    setLoading(true)
-    await new Promise(r => setTimeout(r, 1200))
-    setLoading(false)
+    const body = [
+      `Nome: ${form.name}`,
+      form.phone ? `Telefone: ${form.phone}` : '',
+      form.email ? `E-mail: ${form.email}` : '',
+      `Assunto: ${form.subject}`,
+      `\nMensagem:\n${form.message}`,
+    ].filter(Boolean).join('\n')
+
+    window.location.href = `mailto:${CLINIC_INFO.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(body)}`
     setForm({ name:'', email:'', phone:'', subject:SUBJECTS[0], message:'' })
-    toast.success('Mensagem enviada!', {
-      description: 'Nossa equipe retornará em até 2 horas úteis.',
-      duration: 5000,
-    })
   }
 
   return (
@@ -155,18 +155,10 @@ export default function Contato() {
                     </select>
                   </div>
                   <FloatInput label="Mensagem" name="message" value={form.message} onChange={onChange} as="textarea" rows={4} required/>
-                  <motion.button type="submit" disabled={loading}
+                  <motion.button type="submit"
                     whileHover={{ scale:1.02, y:-1 }} whileTap={{ scale:0.98 }}
-                    className="btn-primary w-full justify-center py-4 disabled:opacity-70 disabled:cursor-not-allowed">
-                    {loading ? (
-                      <span className="flex items-center gap-2">
-                        <motion.span animate={{ rotate:360 }} transition={{ duration:1, repeat:Infinity, ease:'linear' }}
-                          className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full block"/>
-                        Enviando...
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2"><Send size={16}/>Enviar Mensagem</span>
-                    )}
+                    className="btn-primary w-full justify-center py-4">
+                    <span className="flex items-center gap-2"><Send size={16}/>Enviar Mensagem</span>
                   </motion.button>
                 </form>
               </div>

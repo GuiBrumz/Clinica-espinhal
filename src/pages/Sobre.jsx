@@ -86,10 +86,19 @@ export default function Sobre() {
                 Medicina espinhal de alto nível com cuidado genuinamente humano
               </h2>
               <p className="text-neutral-600 leading-relaxed">
-                A Espinhal D.O.R nasceu em 2013 com uma proposta clara: oferecer o que existe de mais avançado em diagnóstico e tratamento de patologias da coluna vertebral, com o rigor e a atenção que cada paciente merece.
+                Fundada em 2013, a Clínica Espinhal D.O.R. nasceu com a missão de oferecer atendimento especializado em doenças da coluna vertebral, unindo excelência médica, inovação terapêutica e cuidado humanizado. Desde sua criação, a clínica tem se dedicado a proporcionar aos pacientes um acompanhamento próximo, individualizado e focado em suas necessidades específicas.
               </p>
               <p className="text-neutral-600 leading-relaxed">
-                Ao longo de mais de 13 anos, construímos uma estrutura de alto padrão, reunimos uma equipe especializada e desenvolvemos protocolos que combinam medicina baseada em evidências com acompanhamento individualizado.
+                Um dos principais diferenciais da Clínica Espinhal D.O.R. é o atendimento personalizado realizado diretamente pela equipe, garantindo acolhimento, orientação e suporte em todas as etapas do tratamento. Acreditamos que cada paciente possui uma história única e merece um cuidado baseado na confiança, na transparência e na construção de uma relação próxima com os profissionais responsáveis pelo seu acompanhamento.
+              </p>
+              <p className="text-neutral-600 leading-relaxed">
+                A equipe atua em Porto Alegre e Região Metropolitana, oferecendo consultas, avaliações especializadas e acompanhamento contínuo. Os procedimentos cirúrgicos são realizados em hospitais de referência, como o Hospital Moinhos de Vento, Hospital Mãe de Deus, Hospital Divina Providência, Blanc Hospital e outras instituições reconhecidas pela excelência assistencial e estrutura de alta complexidade.
+              </p>
+              <p className="text-neutral-600 leading-relaxed">
+                Com uma equipe formada por médicos de diferentes subespecialidades que trabalham de maneira integrada, a Clínica Espinhal D.O.R. busca oferecer as melhores opções de tratamento, desde abordagens conservadoras até procedimentos cirúrgicos avançados, sempre com o objetivo de reduzir a dor, restaurar a funcionalidade e proporcionar mais qualidade de vida aos seus pacientes.
+              </p>
+              <p className="text-neutral-600 leading-relaxed">
+                Há mais de uma década, seguimos comprometidos com a excelência médica e com um atendimento verdadeiramente humano, colocando o paciente e sua família no centro de cada decisão.
               </p>
               <div className="space-y-3 pt-2">
                 {['Equipe multidisciplinar altamente qualificada', 'Tecnologia de diagnóstico de última geração', 'Tratamentos conservadores e minimamente invasivos', 'Protocolos personalizados baseados em evidências'].map((item, i) => (

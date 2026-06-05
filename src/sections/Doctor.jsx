@@ -54,9 +54,11 @@ export default function Doctor() {
             {/* Image frame */}
             <div className="relative z-10">
               <div className="relative rounded-3xl overflow-hidden w-72 md:w-80 shadow-2xl">
-                <div className="w-full aspect-[3/4] bg-neutral-300 flex items-center justify-center">
-                  <span className="text-neutral-600 text-sm font-medium">(Imagem de Dr Elias)</span>
-                </div>
+                <img
+                  src="/img/Doutor.jpeg"
+                  alt={DOCTOR.name}
+                  className="w-full aspect-[3/4] object-cover object-top"
+                />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-900/40 via-transparent to-transparent" />
 

@@ -16,12 +16,12 @@ const PROCESS_STEPS = [
 ]
 
 const TECHS = [
-  { icon: Crosshair, title: 'Fluoroscopia Digital', desc: 'Guia em tempo real para infiltrações e procedimentos com posicionamento de precisão máxima.' },
-  { icon: Scan,      title: 'RM 3 Tesla',           desc: 'Ressonância magnética de alta resolução para diagnóstico diferencial preciso.' },
-  { icon: Waves,     title: 'Ondas de Choque',       desc: 'Tratamento não invasivo para inflamações crônicas e dores musculoesqueléticas.' },
-  { icon: Zap,       title: 'Radiofrequência',       desc: 'Denervação seletiva de facetas articulares para alívio duradouro e comprovado da dor.' },
-  { icon: Activity,  title: 'Pilates Clínico',       desc: 'Reabilitação funcional com equipamentos Reformer adaptados para patologias da coluna.' },
-  { icon: BarChart2, title: 'Biofotogrametria',      desc: 'Avaliação postural computadorizada com medições digitais de alta precisão.' },
+  { icon: Crosshair, title: 'Fluoroscopia Digital', desc: 'Guia em tempo real para infiltrações e procedimentos com posicionamento de precisão máxima.', image: 'https://images.unsplash.com/photo-1770134195107-0217c17ccaad?w=600&h=300&fit=crop' },
+  { icon: Scan,      title: 'RM 3 Tesla',           desc: 'Ressonância magnética de alta resolução para diagnóstico diferencial preciso.',               image: 'https://images.unsplash.com/photo-1666214282459-c7dff167ecc0?w=600&h=300&fit=crop' },
+  { icon: Waves,     title: 'Ondas de Choque',      desc: 'Tratamento não invasivo para inflamações crônicas e dores musculoesqueléticas.',              image: 'https://images.unsplash.com/photo-1772122028843-9139d23af4fb?w=600&h=300&fit=crop' },
+  { icon: Zap,       title: 'Radiofrequência',      desc: 'Denervação seletiva de facetas articulares para alívio duradouro e comprovado da dor.',       image: 'https://images.unsplash.com/photo-1754941622136-6664a3f50b2e?w=600&h=300&fit=crop' },
+  { icon: Activity,  title: 'Pilates Clínico',      desc: 'Reabilitação funcional com equipamentos Reformer adaptados para patologias da coluna.',        image: 'https://images.unsplash.com/photo-1649751361457-01d3a696c7e6?w=600&h=300&fit=crop' },
+  { icon: BarChart2, title: 'Biofotogrametria',     desc: 'Avaliação postural computadorizada com medições digitais de alta precisão.',                  image: 'https://images.unsplash.com/photo-1666214280165-20e3d73d70bf?w=600&h=300&fit=crop' },
 ]
 
 function TreatmentBlock({ t, index }) {
@@ -125,12 +125,19 @@ export default function Tratamentos() {
           <motion.div variants={staggerContainer} initial="hidden" animate={tv?'visible':'hidden'}
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {TECHS.map((t, i) => (
-              <motion.div key={i} variants={fadeUp} className="glass rounded-2xl p-6 hover:bg-white/15 transition-colors">
-                <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-4">
-                  <t.icon size={18} className="text-blue-200" />
+              <motion.div key={i} variants={fadeUp} className="glass rounded-2xl overflow-hidden hover:bg-white/15 transition-colors">
+                {t.image && (
+                  <div className="w-full h-36 overflow-hidden">
+                    <img src={t.image} alt={t.title} className="w-full h-full object-cover opacity-50 hover:opacity-60 transition-opacity duration-300" loading="lazy" />
+                  </div>
+                )}
+                <div className="p-6">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-4">
+                    <t.icon size={18} className="text-blue-200" />
+                  </div>
+                  <h4 className="font-serif font-semibold text-white mb-2">{t.title}</h4>
+                  <p className="text-blue-200/70 text-sm leading-relaxed">{t.desc}</p>
                 </div>
-                <h4 className="font-serif font-semibold text-white mb-2">{t.title}</h4>
-                <p className="text-blue-200/70 text-sm leading-relaxed">{t.desc}</p>
               </motion.div>
             ))}
           </motion.div>
