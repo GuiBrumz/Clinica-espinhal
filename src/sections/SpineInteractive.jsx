@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef, Suspense, Component } from 'react'
+import { useState, useMemo, useEffect, useRef, Suspense, Component, useCallback } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useGLTF, OrbitControls, Center } from '@react-three/drei'
 import * as THREE from 'three'
@@ -72,7 +72,7 @@ const BASE_COLOR = new THREE.Color('#c8d4e0')
 const BLACK      = new THREE.Color(0, 0, 0)
 
 // ─── 3D Spine Model ───────────────────────────────────────────────────────────
-function SpineModel({ selected, hovered, onSelect, onHover }) {
+function SpineModel({ selected, hovered, onSelect, onHover, onLoaded }) {
   const { scene } = useGLTF('/assets/spine.glb')
 
   const clonedScene = useMemo(() => {
@@ -125,6 +125,8 @@ function SpineModel({ selected, hovered, onSelect, onHover }) {
     })
   }, [selected, hovered, clonedScene])
 
+  useEffect(() => { onLoaded?.() }, [])
+
   const getRegion = (e) => e.object?.userData?.region ?? null
 
   return (
@@ -159,20 +161,16 @@ class SpineErrorBoundary extends Component {
   }
 }
 
-function SpineLoading() {
-  return (
-    <mesh>
-      <boxGeometry args={[0.6, 3, 0.4]} />
-      <meshStandardMaterial color="#e4e4e7" opacity={0.4} transparent />
-    </mesh>
-  )
-}
-
 // ─── 3D Canvas ────────────────────────────────────────────────────────────────
 function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
+  const [loaded, setLoaded] = useState(false)
+
   return (
     <SpineErrorBoundary>
-      <div className="relative w-full h-full">
+      <div
+        className="relative w-full h-full transition-opacity duration-700"
+        style={{ opacity: loaded ? 1 : 0 }}
+      >
         <Canvas
           camera={{ position: [0, 0, 4.5], fov: 38 }}
           style={{ background: 'transparent' }}
@@ -183,10 +181,11 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
           <directionalLight position={[-3, 2, -2]} intensity={0.3} />
           <pointLight       position={[0, -3, 2]}  intensity={0.2} color="#dde4f0" />
 
-          <Suspense fallback={<SpineLoading />}>
+          <Suspense fallback={null}>
             <SpineModel
               selected={selected} hovered={hovered}
               onSelect={onSelect}  onHover={onHover}
+              onLoaded={() => setLoaded(true)}
             />
           </Suspense>
 
