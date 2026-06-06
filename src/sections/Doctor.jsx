@@ -72,7 +72,6 @@ export default function Doctor() {
                       <span className="text-yellow-200 text-xs ml-1">4.98</span>
                     </div>
                     <p className="text-white font-serif font-bold text-base leading-tight">{DOCTOR.name}</p>
-                    <p className="text-blue-200 text-xs mt-0.5">{DOCTOR.title}</p>
                   </div>
                 </div>
               </div>

@@ -459,7 +459,6 @@ function DoctorPreview() {
               style={{ fontSize: 'clamp(1.5rem, 2.5vw + 0.5rem, 2.25rem)' }}>
               {DOCTOR.name}
             </h2>
-            <p className="text-brand-700 font-semibold text-sm mb-6">{DOCTOR.title}</p>
 
             <p className="text-neutral-500 text-sm leading-relaxed mb-8">{DOCTOR.bio[0]}</p>
 
