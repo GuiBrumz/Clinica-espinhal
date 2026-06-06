@@ -9,7 +9,7 @@ import { VALUES, DOCTOR, CLINIC_INFO } from '../data/content'
 
 const PILLARS = [
   { icon: Target,  title: 'Missão',    text: 'Oferecer o mais alto nível de medicina da coluna, com diagnóstico preciso, tratamento individualizado e acompanhamento humanizado.' },
-  { icon: Eye,     title: 'Visão',     text: 'Ser a referência nacional em tratamentos para coluna, reconhecida pela excelência técnica e pelo cuidado genuíno com cada paciente.' },
+  { icon: Eye,     title: 'Visão',     text: 'Ser a referência na região metropolitana de Porto Alegre em tratamentos para coluna, reconhecida pela excelência técnica e pelo cuidado genuíno com cada paciente.' },
   { icon: Compass, title: 'Propósito', text: 'Devolver qualidade de vida e mobilidade a pessoas com dores na coluna, transformando limitação em capacidade funcional.' },
 ]
 
@@ -34,7 +34,8 @@ export default function Sobre() {
         label="Sobre a Clínica"
         title={<>Mais que uma clínica,<br /><span className="text-gradient">uma filosofia de cuidado</span></>}
         subtitle="Nascemos da convicção de que o tratamento da coluna exige muito mais do que técnica — exige escuta, precisão, humanidade e inovação contínua."
-        image="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1400&h=700&fit=crop"
+        image="/img/Dr.Elias4.jpg"
+        imagePosition="center 80%"
         breadcrumbs={[{ label: 'Sobre a Clínica' }]}
         cta={{ label: 'Agendar Avaliação', href: `https://wa.me/${CLINIC_INFO.whatsapp}?text=Olá!` }}
       />
@@ -61,56 +62,67 @@ export default function Sobre() {
       {/* ── Story ── */}
       <section className="py-20 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+          <div className="space-y-8">
 
-            <motion.div ref={s2} variants={fadeLeft} initial="hidden" animate={v2 ? 'visible' : 'hidden'}>
-              <div className="relative">
-                <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl shadow-neutral-200">
-                  <img src="https://images.unsplash.com/photo-1640876777002-badf6aee5bcc?w=800&h=600&fit=crop" alt="Equipe médica especializada" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-                </div>
-                <motion.div initial={{ opacity: 0, x: 30, y: 30 }} animate={v2 ? { opacity: 1, x: 0, y: 0 } : {}} transition={{ delay: 0.4, duration: 0.7 }}
-                  className="hidden md:block absolute -bottom-6 -right-5 w-48 rounded-2xl overflow-hidden shadow-xl border-4 border-white aspect-square">
-                  <img src="https://images.unsplash.com/photo-1631563018856-81be9c118283?w=400&h=400&fit=crop" alt="Diagnóstico por imagem" className="w-full h-full object-cover" />
-                </motion.div>
-                <motion.div initial={{ opacity: 0, scale: 0 }} animate={v2 ? { opacity: 1, scale: 1 } : {}} transition={{ delay: 0.6, type: 'spring' }}
-                  className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl bg-brand-600 flex flex-col items-center justify-center shadow-md">
-                  <span className="font-serif font-extrabold text-white text-2xl leading-none tracking-[-0.04em]">13</span>
-                  <span className="text-blue-200 text-xs">anos</span>
-                </motion.div>
-              </div>
-            </motion.div>
-
-            <motion.div variants={fadeRight} initial="hidden" animate={v2 ? 'visible' : 'hidden'} className="space-y-6">
-              <span className="section-label">Nossa História</span>
-              <h2 className="font-serif font-bold text-neutral-900 leading-tight tracking-[-0.025em] text-balance"
-                style={{ fontSize: 'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
-                Medicina da coluna de alto nível com cuidado genuinamente humano
-              </h2>
-              <p className="text-neutral-600 leading-relaxed">
-                Fundada em 2013, a Clínica Espinhal D.O.R. nasceu com a missão de oferecer atendimento especializado em doenças da coluna vertebral, unindo excelência médica, inovação terapêutica e cuidado humanizado. Desde sua criação, a clínica tem se dedicado a proporcionar aos pacientes um acompanhamento próximo, individualizado e focado em suas necessidades específicas.
-              </p>
-              <p className="text-neutral-600 leading-relaxed">
-                Um dos principais diferenciais da Clínica Espinhal D.O.R. é o atendimento personalizado realizado diretamente pela equipe, garantindo acolhimento, orientação e suporte em todas as etapas do tratamento. Acreditamos que cada paciente possui uma história única e merece um cuidado baseado na confiança, na transparência e na construção de uma relação próxima com os profissionais responsáveis pelo seu acompanhamento.
-              </p>
-              <p className="text-neutral-600 leading-relaxed">
-                A equipe atua em Porto Alegre e Região Metropolitana, oferecendo consultas, avaliações especializadas e acompanhamento contínuo. Os procedimentos cirúrgicos são realizados em hospitais de referência, como o Hospital Moinhos de Vento, Hospital Mãe de Deus, Hospital Divina Providência, Blanc Hospital e outras instituições reconhecidas pela excelência assistencial e estrutura de alta complexidade.
-              </p>
-              <p className="text-neutral-600 leading-relaxed">
-                Com uma equipe formada por médicos de diferentes subespecialidades que trabalham de maneira integrada, a Clínica Espinhal D.O.R. busca oferecer as melhores opções de tratamento, desde abordagens conservadoras até procedimentos cirúrgicos avançados, sempre com o objetivo de reduzir a dor, restaurar a funcionalidade e proporcionar mais qualidade de vida aos seus pacientes.
-              </p>
-              <p className="text-neutral-600 leading-relaxed">
-                Há mais de uma década, seguimos comprometidos com a excelência médica e com um atendimento verdadeiramente humano, colocando o paciente e sua família no centro de cada decisão.
-              </p>
-              <div className="space-y-3 pt-2">
-                {['Equipe multidisciplinar altamente qualificada', 'Tecnologia de diagnóstico de última geração', 'Tratamentos conservadores e minimamente invasivos', 'Protocolos personalizados baseados em evidências'].map((item, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, x: 20 }} animate={v2 ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 + i * 0.1 }}
-                    className="flex items-start gap-3">
-                    <CheckCircle size={16} className="text-brand-600 shrink-0 mt-0.5" />
-                    <span className="text-neutral-700 text-sm">{item}</span>
+            {/* Linha 1 — imagem esquerda | texto direita */}
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <motion.div ref={s2} variants={fadeLeft} initial="hidden" animate={v2 ? 'visible' : 'hidden'}>
+                <div className="relative">
+                  <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl shadow-neutral-200">
+                    <img src="/img/Dr.Elias3.jpeg" alt="Equipe médica especializada" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                  </div>
+                  <motion.div initial={{ opacity: 0, scale: 0 }} animate={v2 ? { opacity: 1, scale: 1 } : {}} transition={{ delay: 0.6, type: 'spring' }}
+                    className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl bg-brand-600 flex flex-col items-center justify-center shadow-md">
+                    <span className="font-serif font-extrabold text-white text-2xl leading-none tracking-[-0.04em]">13</span>
+                    <span className="text-blue-200 text-xs">anos</span>
                   </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeRight} initial="hidden" animate={v2 ? 'visible' : 'hidden'} className="space-y-5">
+                <span className="section-label">Nossa História</span>
+                <h2 className="font-serif font-bold text-neutral-900 leading-tight tracking-[-0.025em] text-balance"
+                  style={{ fontSize: 'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
+                  Medicina da coluna de alto nível com cuidado genuinamente humano
+                </h2>
+                <p className="text-neutral-600 leading-relaxed">
+                  Fundada em 2013, a Clínica Espinhal D.O.R. nasceu com a missão de oferecer atendimento especializado em doenças da coluna vertebral, unindo excelência médica, inovação terapêutica e cuidado humanizado. Desde sua criação, a clínica tem se dedicado a proporcionar aos pacientes um acompanhamento próximo, individualizado e focado em suas necessidades específicas.
+                </p>
+                <p className="text-neutral-600 leading-relaxed">
+                  Um dos principais diferenciais da Clínica Espinhal D.O.R. é o atendimento personalizado realizado diretamente pela equipe, garantindo acolhimento, orientação e suporte em todas as etapas do tratamento. Acreditamos que cada paciente possui uma história única e merece um cuidado baseado na confiança, na transparência e na construção de uma relação próxima com os profissionais responsáveis pelo seu acompanhamento.
+                </p>
+              </motion.div>
+            </div>
+
+            {/* Linha 2 — texto esquerda | imagem direita */}
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <motion.div variants={fadeLeft} initial="hidden" animate={v2 ? 'visible' : 'hidden'} className="space-y-5">
+                <p className="text-neutral-600 leading-relaxed">
+                  A equipe atua em Porto Alegre e Região Metropolitana, oferecendo consultas, avaliações especializadas e acompanhamento contínuo. Os procedimentos cirúrgicos são realizados em hospitais de referência, como o Hospital Moinhos de Vento, Hospital Mãe de Deus, Hospital Divina Providência, Blanc Hospital e outras instituições reconhecidas pela excelência assistencial e estrutura de alta complexidade.
+                </p>
+                <p className="text-neutral-600 leading-relaxed">
+                  Com uma equipe formada por médicos de diferentes subespecialidades que trabalham de maneira integrada, a Clínica Espinhal D.O.R. busca oferecer as melhores opções de tratamento, desde abordagens conservadoras até procedimentos cirúrgicos avançados, sempre com o objetivo de reduzir a dor, restaurar a funcionalidade e proporcionar mais qualidade de vida aos seus pacientes.
+                </p>
+                <p className="text-neutral-600 leading-relaxed">
+                  Há mais de uma década, seguimos comprometidos com a excelência médica e com um atendimento verdadeiramente humano, colocando o paciente e sua família no centro de cada decisão.
+                </p>
+                <div className="space-y-3 pt-2">
+                  {['Equipe multidisciplinar altamente qualificada', 'Tecnologia de diagnóstico de última geração', 'Tratamentos conservadores e minimamente invasivos', 'Protocolos personalizados baseados em evidências'].map((item, i) => (
+                    <motion.div key={i} initial={{ opacity: 0, x: 20 }} animate={v2 ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 + i * 0.1 }}
+                      className="flex items-start gap-3">
+                      <CheckCircle size={16} className="text-brand-600 shrink-0 mt-0.5" />
+                      <span className="text-neutral-700 text-sm">{item}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeRight} initial="hidden" animate={v2 ? 'visible' : 'hidden'}>
+                <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl shadow-neutral-200">
+                  <img src="/img/Dr.Elias4.jpg" alt="Clínica Espinhal D.O.R." className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" style={{ objectPosition: 'center 85%' }} />
+                </div>
+              </motion.div>
+            </div>
 
           </div>
         </div>
@@ -199,7 +211,6 @@ export default function Sobre() {
 
               <div>
                 <h3 className="font-heading font-bold text-white text-2xl tracking-[-0.025em]">{DOCTOR.name}</h3>
-                <p className="text-brand-400 font-semibold mt-1">{DOCTOR.title}</p>
               </div>
 
               <div className="space-y-5">

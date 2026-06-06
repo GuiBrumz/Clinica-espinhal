@@ -16,6 +16,7 @@ export default function PageHero({
   dark = true,
   minHeight = 'min-h-[480px] md:min-h-[560px]',
   waveColor = 'white',
+  imagePosition,
   children,
 }) {
   const centered = align === 'center'
@@ -36,6 +37,7 @@ export default function PageHero({
             src={image}
             alt=""
             className="w-full h-full object-cover"
+            style={imagePosition ? { objectPosition: imagePosition } : undefined}
             loading="eager"
           />
           {overlay && (

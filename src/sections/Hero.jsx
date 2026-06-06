@@ -207,7 +207,7 @@ export default function Hero() {
                   </div>
                   <div>
                     <div className="text-white font-semibold text-sm">{DOCTOR.name}</div>
-                    <div className="text-blue-200 text-xs">Especialista em Coluna – {DOCTOR.crm}</div>
+                    <div className="text-blue-200 text-xs">Responsável Técnico – {DOCTOR.crm}</div>
                   </div>
                 </div>
               </motion.div>

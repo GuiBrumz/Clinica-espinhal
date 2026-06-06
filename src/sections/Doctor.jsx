@@ -116,7 +116,7 @@ export default function Doctor() {
             className="space-y-7"
           >
             <div>
-              <span className="section-label mb-4 inline-flex">Especialista</span>
+              <span className="section-label mb-4 inline-flex">Responsável Técnico</span>
               <h3 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 mt-3 mb-2">
                 {DOCTOR.name}
               </h3>
@@ -172,7 +172,7 @@ export default function Doctor() {
               whileTap={{ scale: 0.97 }}
               className="btn-primary inline-flex"
             >
-              Agendar Consulta com o Especialista
+              Agendar Consulta com o Dr. Elias
             </motion.a>
           </motion.div>
         </div>

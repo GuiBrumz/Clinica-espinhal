@@ -48,19 +48,19 @@ export const STATS = [
 // ─── Doctor ──────────────────────────────────────────────────────────────────
 export const DOCTOR = {
   name:      'Dr. Elias Fernando Ibarra Mancilla',
-  title:     'Especialista em Ortopedia, Traumatologia e Coluna Vertebral',
+  title:     'Médico em Ortopedia, Traumatologia e Coluna Vertebral',
   crm:       'CRM 36782-RS',
-  image:     '/img/Foto-profissional.png',
-  imageWide: '/img/Foto-profissional.png',
+  image:     '/img/Doutor.jpeg',
+  imageWide: '/img/Doutor.jpeg',
   bio: [
-    'Dr. Elias Fernando Ibarra Mancilla é o responsável técnico e coordenador da equipe cirúrgica da Clínica Espinhal D.O.R., atuando com dedicação ao diagnóstico, tratamento e acompanhamento de pacientes com doenças da coluna vertebral.',
-    'Com sólida experiência, lidera uma equipe multidisciplinar composta por especialistas em diferentes subespecialidades, trabalhando de forma integrada para oferecer atendimento individualizado, seguro e baseado nas melhores práticas da medicina moderna.',
-    'A Clínica Espinhal D.O.R. tem como missão proporcionar tratamentos eficazes, desde abordagens conservadoras até procedimentos cirúrgicos de alta complexidade, sempre priorizando a qualidade de vida, a recuperação funcional e o bem-estar dos pacientes.',
-    'Sob a coordenação do Dr. Elias Fernando Ibarra Mancilla, a equipe mantém o compromisso permanente com a excelência técnica, a atualização científica e o cuidado humanizado em todas as etapas do tratamento.',
+    'Dr. Elias Fernando Ibarra Mancilla é o responsável técnico e coordenador da equipe cirúrgica da Clínica Espinhal D.O.R., atuando no diagnóstico, tratamento e acompanhamento de pacientes com doenças da coluna vertebral.',
+    'Ao longo de sua trajetória profissional, participa da condução de casos clínicos e cirúrgicos em conjunto com uma equipe multidisciplinar formada por médicos de diferentes áreas de atuação, promovendo uma abordagem integrada e individualizada para cada paciente.',
+    'A Clínica Espinhal D.O.R. realiza atendimentos voltados ao tratamento das doenças da coluna vertebral, oferecendo desde abordagens conservadoras até procedimentos cirúrgicos, conforme a indicação médica e as necessidades de cada caso.',
+    'Sob sua coordenação, a equipe mantém compromisso permanente com a atualização científica, o atendimento humanizado e o acompanhamento contínuo dos pacientes em todas as etapas do tratamento.',
   ],
   education: [],
   certifications: [
-    'Especialista em Ortopedia e Traumatologia',
+    'Médico em Ortopedia e Traumatologia',
     'Ênfase em Cirurgia da Coluna Vertebral',
     'Procedimentos Minimamente Invasivos da Coluna',
     'Infiltrações Guiadas por Fluoroscopia e Ultrassonografia',
