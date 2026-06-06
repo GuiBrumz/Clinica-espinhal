@@ -120,7 +120,7 @@ export default function Doctor() {
               <h3 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 mt-3 mb-2">
                 {DOCTOR.name}
               </h3>
-              <p className="text-brand-600 font-semibold">{DOCTOR.title}</p>
+
             </div>
 
             {DOCTOR.bio.map((para, i) => (
