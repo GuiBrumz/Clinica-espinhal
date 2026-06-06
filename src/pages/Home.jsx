@@ -1,4 +1,4 @@
-import { useEffect, useRef, lazy, Suspense } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Star, Shield, Award, Microscope, Heart, Activity, Crosshair, Bone, Quote, Cpu, ScanLine } from 'lucide-react'
@@ -11,7 +11,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import PageTransition from '../components/PageTransition'
 import BottomCTA from '../components/BottomCTA'
-const SpineInteractive = lazy(() => import('../sections/SpineInteractive'))
+import SpineInteractive from '../sections/SpineInteractive'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { useScrollReveal, useReveal } from '../hooks/useScrollReveal'
 import { staggerContainer, fadeUp, scaleIn } from '../animations/variants'
@@ -493,13 +493,7 @@ export default function Home() {
     <PageTransition>
       <HomeHero />
       <TrustStrip />
-      <Suspense fallback={
-        <div className="py-24 flex items-center justify-center bg-neutral-950">
-          <div className="w-8 h-8 rounded-full border-2 border-brand-500 border-t-transparent animate-spin" />
-        </div>
-      }>
-        <SpineInteractive />
-      </Suspense>
+      <SpineInteractive />
       <TreatmentsPreview />
       <WhySection />
 <DoctorPreview />
