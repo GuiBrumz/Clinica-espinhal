@@ -8,7 +8,7 @@ import { staggerContainer, fadeUp, fadeLeft, fadeRight, scaleIn } from '../anima
 import { VALUES, DOCTOR, CLINIC_INFO } from '../data/content'
 
 const PILLARS = [
-  { icon: Target,  title: 'Missão',    text: 'Oferecer o mais alto nível de medicina espinhal, com diagnóstico preciso, tratamento individualizado e acompanhamento humanizado.' },
+  { icon: Target,  title: 'Missão',    text: 'Oferecer o mais alto nível de medicina da coluna, com diagnóstico preciso, tratamento individualizado e acompanhamento humanizado.' },
   { icon: Eye,     title: 'Visão',     text: 'Ser a referência nacional em tratamentos para coluna, reconhecida pela excelência técnica e pelo cuidado genuíno com cada paciente.' },
   { icon: Compass, title: 'Propósito', text: 'Devolver qualidade de vida e mobilidade a pessoas com dores na coluna, transformando limitação em capacidade funcional.' },
 ]
@@ -61,14 +61,15 @@ export default function Sobre() {
       {/* ── Story ── */}
       <section className="py-20 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+
             <motion.div ref={s2} variants={fadeLeft} initial="hidden" animate={v2 ? 'visible' : 'hidden'}>
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl shadow-neutral-200">
                   <img src="https://images.unsplash.com/photo-1640876777002-badf6aee5bcc?w=800&h=600&fit=crop" alt="Equipe médica especializada" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
                 <motion.div initial={{ opacity: 0, x: 30, y: 30 }} animate={v2 ? { opacity: 1, x: 0, y: 0 } : {}} transition={{ delay: 0.4, duration: 0.7 }}
-                  className="absolute -bottom-6 -right-5 w-48 rounded-2xl overflow-hidden shadow-xl border-4 border-white aspect-square">
+                  className="hidden md:block absolute -bottom-6 -right-5 w-48 rounded-2xl overflow-hidden shadow-xl border-4 border-white aspect-square">
                   <img src="https://images.unsplash.com/photo-1631563018856-81be9c118283?w=400&h=400&fit=crop" alt="Diagnóstico por imagem" className="w-full h-full object-cover" />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, scale: 0 }} animate={v2 ? { opacity: 1, scale: 1 } : {}} transition={{ delay: 0.6, type: 'spring' }}
@@ -83,7 +84,7 @@ export default function Sobre() {
               <span className="section-label">Nossa História</span>
               <h2 className="font-serif font-bold text-neutral-900 leading-tight tracking-[-0.025em] text-balance"
                 style={{ fontSize: 'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
-                Medicina espinhal de alto nível com cuidado genuinamente humano
+                Medicina da coluna de alto nível com cuidado genuinamente humano
               </h2>
               <p className="text-neutral-600 leading-relaxed">
                 Fundada em 2013, a Clínica Espinhal D.O.R. nasceu com a missão de oferecer atendimento especializado em doenças da coluna vertebral, unindo excelência médica, inovação terapêutica e cuidado humanizado. Desde sua criação, a clínica tem se dedicado a proporcionar aos pacientes um acompanhamento próximo, individualizado e focado em suas necessidades específicas.
@@ -110,6 +111,7 @@ export default function Sobre() {
                 ))}
               </div>
             </motion.div>
+
           </div>
         </div>
       </section>

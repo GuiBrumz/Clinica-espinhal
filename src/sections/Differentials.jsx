@@ -119,7 +119,7 @@ export default function Differentials() {
               >
                 <p className="text-blue-200 text-xs mb-2 uppercase tracking-widest font-semibold">Nossa missão</p>
                 <p className="text-white text-sm leading-relaxed italic font-serif">
-                  "Devolver qualidade de vida e movimento com o mais alto nível de medicina espinhal disponível."
+                  "Devolver qualidade de vida e movimento com o mais alto nível de medicina da coluna disponível."
                 </p>
                 <p className="text-blue-300 text-xs mt-3">— Dr. Elias Fernando Ibarra Mancilla</p>
               </motion.div>
@@ -130,7 +130,7 @@ export default function Differentials() {
               initial={{ opacity: 0, scale: 0 }}
               animate={imgInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
-              className="absolute -right-6 top-1/3 glass rounded-2xl p-4 text-center min-w-[110px] shadow-xl"
+              className="hidden md:block absolute -right-6 top-1/3 glass rounded-2xl p-4 text-center min-w-[110px] shadow-xl"
             >
               <div className="font-serif font-bold text-white text-3xl">98%</div>
               <div className="text-blue-200 text-xs mt-1 leading-tight">de satisfação<br />dos pacientes</div>

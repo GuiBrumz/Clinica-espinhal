@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Calendar, Phone, Star, Shield } from 'lucide-react'
+import { ArrowRight, Calendar, Star, Shield } from 'lucide-react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { staggerContainer, fadeUp } from '../animations/variants'
 import { CLINIC_INFO } from '../data/content'
@@ -82,15 +82,6 @@ export default function CTA() {
               <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
             </motion.a>
 
-            <motion.a
-              href={`tel:${CLINIC_INFO.phone}`}
-              whileHover={{ scale: 1.04, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className="btn-ghost text-base py-5 px-9"
-            >
-              <Phone size={18} />
-              {CLINIC_INFO.phone}
-            </motion.a>
           </motion.div>
 
           {/* Trust micro-badges */}

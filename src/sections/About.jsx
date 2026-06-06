@@ -73,7 +73,7 @@ export default function About() {
               initial={{ opacity: 0, x: 30, y: 30 }}
               animate={leftInView ? { opacity: 1, x: 0, y: 0 } : {}}
               transition={{ delay: 0.4, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute -bottom-8 -right-6 w-48 md:w-56 rounded-2xl overflow-hidden shadow-xl border-4 border-white aspect-square"
+              className="hidden md:block absolute -bottom-8 -right-6 w-48 md:w-56 rounded-2xl overflow-hidden shadow-xl border-4 border-white aspect-square"
             >
               <img
                 src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=400&h=400&fit=crop"
@@ -104,7 +104,7 @@ export default function About() {
           >
             <span className="section-label">Sobre a Clínica</span>
             <h3 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 leading-tight">
-              Excelência em medicina espinhal com abordagem humana
+              Excelência em medicina da coluna com abordagem humana
             </h3>
             <p className="text-neutral-600 leading-relaxed">
               A Espinhal D.O.R nasceu em 2009 com uma proposta clara: oferecer o que existe de mais

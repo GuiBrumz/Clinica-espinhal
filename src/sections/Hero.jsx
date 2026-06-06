@@ -128,7 +128,7 @@ export default function Hero() {
               className="text-blue-100/80 text-lg sm:text-xl leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0"
             >
               Tecnologia, precisão e cuidado especializado para sua qualidade de vida.
-              Mais de 15 anos transformando vidas com medicina espinhal de alto nível.
+              Mais de 15 anos transformando vidas com medicina da coluna de alto nível.
             </motion.p>
 
             {/* CTA Buttons */}

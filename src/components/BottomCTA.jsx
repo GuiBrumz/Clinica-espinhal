@@ -69,13 +69,6 @@ export default function BottomCTA({
               {ctaLabel}
               <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
             </a>
-            <a
-              href={`tel:${CLINIC_INFO.phone}`}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-white/80 font-semibold rounded-xl text-sm border border-white/20 hover:border-white/40 hover:bg-white/8 transition-[background-color,border-color,transform] duration-200 hover:-translate-y-px"
-            >
-              <Phone size={15} />
-              {CLINIC_INFO.phone}
-            </a>
           </div>
 
         </motion.div>

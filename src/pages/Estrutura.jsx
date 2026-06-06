@@ -106,7 +106,7 @@ export default function Estrutura() {
 
             {/* Mapa */}
             <div className="lg:col-span-3">
-              <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl" style={{ height: '520px' }}>
+              <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl" style={{ height: 'clamp(320px, 60vw, 520px)' }}>
                 <iframe key={selectedLoc} src={LOCATION_CARDS[selectedLoc].mapUrl}
                   width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade" title={`Mapa – ${LOCATION_CARDS[selectedLoc].city}`} />

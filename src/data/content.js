@@ -5,7 +5,7 @@ export const CLINIC_INFO = {
   subtitle:  'Tecnologia, precisão e cuidado especializado para sua qualidade de vida',
   whatsapp:  '5551999804716',
   phone:     null,
-  email:     'guibrumbatista@gmail.com',
+  email:     'clinicaespinhaldor@gmail.com',
   address:   'Av. Brasil, 888 – Navegantes, Porto Alegre – RS',
   locations: [
     {
@@ -94,7 +94,7 @@ export const SPECIALTIES = [
     fullDesc: 'A hérnia de disco ocorre quando o material do núcleo pulposo do disco intervertebral se desloca para fora de sua posição normal, podendo comprimir estruturas nervosas adjacentes. É uma das condições mais prevalentes na população adulta e frequentemente responsável por dores incapacitantes na coluna cervical e lombar.',
     symptoms: ['Dor localizada ou irradiada para os membros', 'Formigamento ou dormência', 'Fraqueza muscular', 'Dificuldade de movimentação', 'Dor que piora ao sentar ou tossir'],
     treatments: ['Tratamento conservador e orientação clínica', 'Infiltração epidural guiada por imagem', 'Nucleoplastia percutânea', 'Microdiscectomia minimamente invasiva', 'Cirurgia aberta em casos complexos'],
-    image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=500&fit=crop',
+    image: 'https://images.unsplash.com/photo-1772122028898-1640a4dd2d7f?w=800&h=500&fit=crop',
     color: 'from-blue-600 to-brand-600',
   },
   {
@@ -105,7 +105,7 @@ export const SPECIALTIES = [
     fullDesc: 'A lombalgia crônica é definida como dor na região lombar com duração superior a 12 semanas. Afeta cerca de 80% da população em algum momento da vida e é a principal causa de afastamento do trabalho no Brasil. Nossa abordagem integra diagnóstico preciso com plano terapêutico individualizado.',
     symptoms: ['Dor persistente na região lombar', 'Rigidez matinal', 'Dor que irradia para as nádegas ou pernas', 'Limitação funcional nas atividades diárias', 'Alterações posturais compensatórias'],
     treatments: ['Diagnóstico por imagem especializado', 'Infiltrações facetárias guiadas por imagem', 'Denervação por radiofrequência', 'Bloqueios radiculares', 'Avaliação cirúrgica quando indicado'],
-    image: 'https://images.unsplash.com/photo-1544991875-5dc1b05f6a30?w=800&h=500&fit=crop',
+    image: 'https://images.unsplash.com/photo-1540205895360-4ad4cffb3aa8?w=800&h=500&fit=crop',
     color: 'from-brand-600 to-indigo-600',
   },
   {
@@ -116,7 +116,7 @@ export const SPECIALTIES = [
     fullDesc: 'A cervicalgia é a dor localizada na região cervical (pescoço) que pode irradiar para os ombros, braços e cabeça. Altamente prevalente em profissionais que trabalham longos períodos em frente ao computador, a condição pode variar de simples tensões musculares a compressões radiculares severas.',
     symptoms: ['Dor e rigidez no pescoço', 'Cefaleia de origem cervical', 'Dor que irradia para os braços', 'Dormência nas mãos', 'Tonturas e zumbidos'],
     treatments: ['Avaliação clínica especializada', 'Infiltrações cervicais guiadas por imagem', 'Bloqueio de nervo occipital', 'Radiofrequência facetária cervical', 'Cirurgia quando necessário'],
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=500&fit=crop',
+    image: 'https://images.unsplash.com/photo-1701826510629-051bb954fb8f?w=800&h=500&fit=crop',
     color: 'from-cyan-500 to-brand-600',
   },
   {
@@ -127,7 +127,7 @@ export const SPECIALTIES = [
     fullDesc: 'A dor crônica é uma condição complexa que persiste por mais de 3 meses e frequentemente não responde a tratamentos convencionais. Envolve mecanismos neurobiológicos que exigem abordagem especializada, com procedimentos intervencionistas precisos para obter resultados duradouros.',
     symptoms: ['Dor persistente por mais de 3 meses', 'Impacto na qualidade do sono', 'Alterações de humor e ansiedade', 'Limitação nas atividades cotidianas', 'Resistência a tratamentos anteriores'],
     treatments: ['Mapeamento e diagnóstico da dor', 'Bloqueios diagnósticos e terapêuticos', 'Radiofrequência para controle da dor', 'Infiltrações guiadas por imagem', 'Acompanhamento clínico contínuo'],
-    image: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=800&h=500&fit=crop',
+    image: 'https://images.unsplash.com/photo-1585917138424-61cf3ee524d9?w=800&h=500&fit=crop',
     color: 'from-violet-500 to-brand-600',
   },
   {
@@ -138,7 +138,7 @@ export const SPECIALTIES = [
     fullDesc: 'As doenças degenerativas da coluna vertebral incluem discopatia degenerativa, artrose, espondilose e espondilolistese — condições que causam dor progressiva, rigidez e limitação funcional. O tratamento adequado depende de diagnóstico preciso e avaliação criteriosa da gravidade de cada caso.',
     symptoms: ['Dor progressiva na coluna', 'Rigidez e limitação de movimento', 'Sensação de desgaste articular', 'Dor que piora ao longo do dia', 'Irradiação para membros'],
     treatments: ['Diagnóstico por imagem especializado', 'Tratamento conservador individualizado', 'Infiltrações e bloqueios articulares', 'Radiofrequência para alívio da dor', 'Cirurgia em casos avançados'],
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=500&fit=crop',
+    image: 'https://images.unsplash.com/photo-1728347037609-d59ba357b703?w=800&h=500&fit=crop',
     color: 'from-brand-600 to-blue-400',
   },
   {
@@ -149,7 +149,7 @@ export const SPECIALTIES = [
     fullDesc: 'A escoliose, a cifose e a lordose são alterações estruturais da coluna vertebral que podem gerar dor, comprometimento funcional e impacto estético. As fraturas vertebrais, frequentes em pacientes osteoporóticos e politraumatizados, também exigem avaliação e conduta especializada.',
     symptoms: ['Assimetria visível na postura', 'Dor na coluna associada à deformidade', 'Limitação de movimentos', 'Alteração progressiva da postura', 'Dor pós-traumática na coluna'],
     treatments: ['Avaliação clínica e de imagem', 'Tratamento conservador monitorado', 'Acompanhamento periódico da progressão', 'Tratamento cirúrgico de deformidades', 'Tratamento de fraturas vertebrais'],
-    image: 'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=800&h=500&fit=crop',
+    image: 'https://images.unsplash.com/photo-1768507423533-b87b62769758?w=800&h=500&fit=crop',
     color: 'from-teal-500 to-brand-600',
   },
   {
@@ -160,7 +160,7 @@ export const SPECIALTIES = [
     fullDesc: 'A estenose do canal vertebral é o estreitamento do canal espinhal que pode comprimir a medula espinhal ou as raízes nervosas. Mais frequente em adultos acima de 50 anos, manifesta-se principalmente com dor e cansaço nas pernas ao caminhar (claudicação neurogênica).',
     symptoms: ['Dor e fraqueza nas pernas ao caminhar', 'Alívio ao sentar ou curvar-se', 'Dormência bilateral nos membros inferiores', 'Dificuldade progressiva para caminhar', 'Dor lombar associada'],
     treatments: ['Diagnóstico por ressonância magnética', 'Infiltrações epidurais guiadas por imagem', 'Descompressão minimamente invasiva', 'Laminectomia aberta em casos graves', 'Estabilização vertebral quando indicado'],
-    image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=800&h=500&fit=crop',
+    image: 'https://images.unsplash.com/photo-1666214275099-0ca566aefe26?w=800&h=500&fit=crop',
     color: 'from-brand-700 to-blue-500',
   },
   {
@@ -169,9 +169,10 @@ export const SPECIALTIES = [
     title: 'Acompanhamento',
     shortDesc: 'Seguimento clínico contínuo e plano terapêutico adaptado à evolução de cada paciente.',
     fullDesc: 'O acompanhamento clínico contínuo é fundamental para garantir resultados duradouros e prevenir recidivas. Na Espinhal D.O.R, cada paciente tem um plano de seguimento personalizado com reavaliações periódicas, ajustes terapêuticos e suporte próximo em todas as etapas do tratamento.',
-    symptoms: ['Manutenção de resultados terapêuticos', 'Prevenção de recidivas', 'Monitoramento de condições crônicas', 'Ajuste de medicações e protocolos', 'Suporte contínuo na recuperação'],
+    noExpand: true,
+    symptoms: ['Manutenção dos resultados terapêuticos', 'Prevenção de recidivas', 'Monitoramento de condições crônicas', 'Ajuste de medicações e protocolos', 'Suporte contínuo na recuperação'],
     treatments: ['Consultas de seguimento periódicas', 'Reavaliações por imagem quando necessário', 'Ajuste de protocolo terapêutico', 'Orientações de autocuidado', 'Atendimento exclusivo de casos próprios'],
-    image: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&h=500&fit=crop',
+    image: 'https://images.unsplash.com/photo-1758691462814-485c3672e447?w=800&h=500&fit=crop',
     color: 'from-blue-500 to-brand-500',
   },
 ]
@@ -312,105 +313,6 @@ export const TESTIMONIALS = [
   },
 ]
 
-// ─── FAQ ─────────────────────────────────────────────────────────────────────
-export const FAQ_CATEGORIES = [
-  {
-    category: 'Agendamento & Consultas',
-    icon: 'calendar',
-    items: [
-      {
-        question: 'Como funciona a primeira avaliação?',
-        answer: 'A avaliação inicial é uma consulta completa com o especialista. Inclui anamnese detalhada, exame físico, análise de exames de imagem e elaboração do plano terapêutico personalizado. Trazendo exames anteriores, conseguimos ter uma visão mais completa do seu histórico.',
-      },
-      {
-        question: 'Como posso agendar uma avaliação?',
-        answer: 'O agendamento é feito pelo WhatsApp ou pelo botão "Agendar Avaliação" no site. Nossa equipe retorna em até 2 horas úteis para confirmar data e horário de sua preferência.',
-      },
-      {
-        question: 'Qual o tempo de espera para o atendimento?',
-        answer: 'Trabalhamos com agenda controlada para garantir o tempo necessário de atenção a cada paciente. Em casos urgentes, avaliamos disponibilidade para encaixe. Entre em contato pelo WhatsApp para verificar a agenda.',
-      },
-    ],
-  },
-  {
-    category: 'Tratamentos & Resultados',
-    icon: 'stethoscope',
-    items: [
-      {
-        question: 'Os tratamentos são personalizados para cada paciente?',
-        answer: 'Absolutamente. Cada protocolo é desenvolvido individualmente com base no diagnóstico preciso, estilo de vida, objetivos e condições clínicas de cada paciente. Não existe tratamento genérico na Espinhal D.O.R.',
-      },
-      {
-        question: 'Quais tipos de dor e condições são tratadas?',
-        answer: 'Tratamos toda a gama de condições espinhais: hérnias de disco (cervical, torácica e lombar), lombalgia aguda e crônica, cervicalgia, estenose do canal vertebral, dores pós-cirúrgicas, escoliose, doenças degenerativas, ciatalgia, fibromialgia e dores crônicas musculoesqueléticas, entre outras.',
-      },
-      {
-        question: 'Quanto tempo dura o tratamento?',
-        answer: 'Varia conforme o diagnóstico e a resposta de cada paciente. Casos agudos podem ser resolvidos em poucas semanas. Condições crônicas geralmente requerem acompanhamento de meses. O especialista definirá uma previsão após a avaliação inicial.',
-      },
-      {
-        question: 'A clínica atende pós-operatório de outros médicos?',
-        answer: 'A Espinhal D.O.R realiza acompanhamento pós-operatório exclusivamente dos casos tratados pelo próprio Dr. Elias. Para casos operados por outros profissionais, recomendamos contato prévio pelo WhatsApp para avaliação da situação.',
-      },
-    ],
-  },
-  {
-    category: 'Pagamentos & Convênios',
-    icon: 'credit-card',
-    items: [
-      {
-        question: 'A clínica atende por convênio ou plano de saúde?',
-        answer: 'Atendemos de forma particular. Nossa estrutura e modelo de atendimento foram desenvolvidos para oferecer o máximo de atenção e personalização, o que requer tempo e recursos que o sistema de convênios não comporta. Trabalhamos com tabela transparente e parcelamento.',
-      },
-      {
-        question: 'Quais formas de pagamento são aceitas?',
-        answer: 'Aceitamos cartão de crédito (parcelamento em até 12x), débito, PIX e dinheiro. Oferecemos pacotes de tratamento com condições especiais para pagamento à vista ou em poucas parcelas.',
-      },
-      {
-        question: 'É possível solicitar reembolso do plano de saúde?',
-        answer: 'Sim. Fornecemos toda a documentação necessária (nota fiscal, receituário, laudos) para que você solicite reembolso junto ao seu plano de saúde, conforme as regras de cada operadora.',
-      },
-    ],
-  },
-  {
-    category: 'Estrutura & Localização',
-    icon: 'map-pin',
-    items: [
-      {
-        question: 'Onde fica a clínica?',
-        answer: 'Atendemos em três unidades no Rio Grande do Sul: Porto Alegre (Av. Brasil, 888 – Bairro Navegantes), Sapucaia do Sul (Av. João Pereira de Vargas, 500 – Centro) e Gravataí (R. Pref. Ary Tubbs, 665 – 5º andar – Centro). Entre em contato pelo WhatsApp para informações de acesso e disponibilidade em cada unidade.',
-      },
-      {
-        question: 'Qual o horário de funcionamento?',
-        answer: 'Atendemos de segunda a sexta-feira em horário comercial. Não realizamos atendimentos aos finais de semana, feriados ou em regime de plantão. O atendimento é exclusivamente eletivo.',
-      },
-      {
-        question: 'Tem estacionamento?',
-        answer: 'Depende da unidade. Porto Alegre conta com estacionamento disponível. Em Sapucaia do Sul há desconto em estacionamento parceiro. Em Gravataí não há estacionamento próprio. Mais detalhes podem ser obtidos pelo WhatsApp ao agendar sua consulta.',
-      },
-    ],
-  },
-]
-
-// flat list for backward-compat
-export const FAQ_ITEMS = FAQ_CATEGORIES.flatMap(c => c.items)
-
-// ─── Gallery ─────────────────────────────────────────────────────────────────
-export const GALLERY_IMAGES = [
-  // ── Unidades (fotos reais Google Maps) ───────────────────────────────────
-  { id:  1, src: 'https://sapucaiaclinicas.com.br/wp-content/uploads/2024/05/2024-04-04.jpg',          alt: 'Fachada Sapucaia Clínicas',       label: 'Fachada – Sapucaia do Sul', category: 'Unidades'    },
-  { id:  2, src: '/img/porto-alegre-fachada.webp',                                                     alt: 'Unidade Porto Alegre',            label: 'Fachada – Porto Alegre',    category: 'Unidades'    },
-  { id:  3, src: '/img/sapucaia-fachada-2.jpg',                                                        alt: 'Vista lateral Sapucaia Clínicas', label: 'Vista – Sapucaia do Sul',   category: 'Unidades'    },
-  { id:  4, src: '/img/sapucaia-entrada.webp',                                                         alt: 'Entrada Sapucaia Clínicas',       label: 'Entrada – Sapucaia do Sul', category: 'Unidades'    },
-  // ── Recepção & Espera ────────────────────────────────────────────────────
-  { id:  5, src: '/img/sapucaia-sala-espera.webp',                                                     alt: 'Sala de espera da clínica',       label: 'Sala de Espera',            category: 'Recepção'    },
-  // ── Consultórios ─────────────────────────────────────────────────────────
-  { id:  6, src: '/img/sapucaia-consultorio-1.webp',                                                   alt: 'Consultório médico',              label: 'Consultório',               category: 'Consultórios'},
-  { id:  7, src: '/img/sapucaia-consultorio-2.webp',                                                   alt: 'Consultório médico',              label: 'Consultório',               category: 'Consultórios'},
-  { id:  8, src: '/img/sapucaia-consultorio-3.webp',                                                   alt: 'Consultório com maca',            label: 'Sala de Exame',             category: 'Consultórios'},
-  // ── Tecnologia ───────────────────────────────────────────────────────────
-  { id:  9, src: '/img/sapucaia-ecografia.webp',                                                       alt: 'Equipamento de ecografia',        label: 'Ecografia',                 category: 'Tecnologia'  },
-]
 
 // ─── Nav links ────────────────────────────────────────────────────────────────
 export const NAV_LINKS = [

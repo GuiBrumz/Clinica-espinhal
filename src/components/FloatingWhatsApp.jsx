@@ -7,7 +7,7 @@ export default function FloatingWhatsApp() {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3">
       <AnimatePresence>
         {open && (
           <motion.div
@@ -15,7 +15,7 @@ export default function FloatingWhatsApp() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-white rounded-2xl shadow-2xl border border-neutral-100 w-80 overflow-hidden"
+            className="bg-white rounded-2xl shadow-2xl border border-neutral-100 w-80 max-w-[calc(100vw-1.5rem)] overflow-hidden"
           >
             {/* Header */}
             <div className="bg-[#075E54] px-4 py-4 flex items-center justify-between">

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, MapPin, Clock, Send, Instagram, Facebook, Youtube, Linkedin } from 'lucide-react'
+import { Mail, MapPin, Clock, Send, Instagram, Facebook } from 'lucide-react'
 import PageTransition from '../components/PageTransition'
 import PageHero from '../components/PageHero'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
@@ -12,8 +12,6 @@ const SUBJECTS = ['Agendar avaliação','Informações sobre tratamentos','Dúvi
 const SOCIAL = [
   { icon: Instagram, href: CLINIC_INFO.instagram, label:'Instagram', color:'#E1306C' },
   { icon: Facebook,  href: CLINIC_INFO.facebook,  label:'Facebook',  color:'#1877F2' },
-  { icon: Youtube,   href: CLINIC_INFO.youtube,   label:'YouTube',   color:'#FF0000' },
-  { icon: Linkedin,  href: CLINIC_INFO.linkedin,  label:'LinkedIn',  color:'#0A66C2' },
 ].filter(s => s.href)
 
 function FloatInput({ label, type='text', name, value, onChange, required, as='input', rows=4 }) {
@@ -56,7 +54,7 @@ export default function Contato() {
       `\nMensagem:\n${form.message}`,
     ].filter(Boolean).join('\n')
 
-    window.location.href = `mailto:${CLINIC_INFO.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(body)}`
+    window.open(`https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(CLINIC_INFO.email)}&su=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(body)}`, '_blank')
     setForm({ name:'', email:'', phone:'', subject:SUBJECTS[0], message:'' })
   }
 
@@ -72,7 +70,7 @@ export default function Contato() {
 
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-5 gap-12">
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
 
             {/* Left: Info */}
             <motion.div ref={ref} variants={fadeLeft} initial="hidden" animate={inView?'visible':'hidden'}

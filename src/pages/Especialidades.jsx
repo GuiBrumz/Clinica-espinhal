@@ -28,37 +28,35 @@ function SpecialtyCard({ spec }) {
       variants={scaleIn}
       className={`bg-white border rounded-2xl overflow-hidden shadow-card transition-all duration-300 ${open ? 'border-brand-200 shadow-card-hover' : 'border-neutral-100 hover:border-brand-100 hover:-translate-y-1 hover:shadow-card-hover'}`}
     >
-      {/* Image */}
-      <div className="relative aspect-[16/7] overflow-hidden">
-        <img src={spec.image} alt={spec.title} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy"/>
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/70 via-transparent to-transparent"/>
-        <div className="absolute bottom-4 left-4 flex items-center gap-2.5">
-          <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${spec.color} flex items-center justify-center shadow-sm`}>
-            {Icon && <Icon size={16} className="text-white" />}
-          </div>
-          <h3 className="font-serif font-bold text-white text-lg">{spec.title}</h3>
+      {/* Header */}
+      <div className="p-6 pb-4 flex items-center gap-3 border-b border-neutral-100">
+        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${spec.color} flex items-center justify-center shadow-sm shrink-0`}>
+          {Icon && <Icon size={17} className="text-white" />}
         </div>
+        <h3 className="font-serif font-bold text-neutral-900 text-lg leading-snug">{spec.title}</h3>
       </div>
 
       {/* Body */}
-      <div className="p-6">
+      <div className="p-6 pt-4">
         <p className="text-neutral-600 text-sm leading-relaxed mb-4">{spec.fullDesc}</p>
 
+        {!spec.noExpand && (
         <button onClick={() => setOpen(!open)}
           className="flex items-center justify-between w-full text-brand-600 text-sm font-semibold hover:text-brand-700 transition-colors">
           <span>{open ? 'Menos detalhes' : 'Ver sintomas e abordagens'}</span>
           <ChevronDown size={16} className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}/>
         </button>
+        )}
 
         <AnimatePresence>
-          {open && (
+          {!spec.noExpand && open && (
             <motion.div initial={{ height:0, opacity:0 }} animate={{ height:'auto', opacity:1 }} exit={{ height:0, opacity:0 }}
               transition={{ duration:0.35, ease:[0.22,1,0.36,1] }}>
               <div className="pt-5 grid sm:grid-cols-2 gap-5">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <AlertCircle size={14} className="text-orange-500"/>
-                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">Sintomas Comuns</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">{spec.symptomsLabel || 'Sintomas Comuns'}</span>
                   </div>
                   <ul className="space-y-1.5">
                     {spec.symptoms.map((s, i) => (
@@ -107,7 +105,7 @@ export default function Especialidades() {
         label="Especialidades"
         title={<>Diagnóstico e tratamento<br /><span className="text-gradient">de toda a coluna vertebral</span></>}
         subtitle="Protocolos clínicos precisos e individualizados para cada patologia espinhal, do diagnóstico ao acompanhamento."
-        image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1400&h=700&fit=crop"
+        image="https://images.unsplash.com/photo-1706353399656-210cca727a33?w=1400&h=700&fit=crop&crop=bottom"
         breadcrumbs={[{ label:'Especialidades' }]}
         cta={{ label:'Agendar Avaliação', href:`https://wa.me/${CLINIC_INFO.whatsapp}` }}
         ctaSecondary={{ label:'Ver Tratamentos', href:'/tratamentos' }}

@@ -53,7 +53,7 @@ export default function Doctor() {
 
             {/* Image frame */}
             <div className="relative z-10">
-              <div className="relative rounded-3xl overflow-hidden w-72 md:w-80 shadow-2xl">
+              <div className="relative rounded-3xl overflow-hidden w-full max-w-[288px] md:max-w-[320px] shadow-2xl">
                 <img
                   src="/img/Doutor.jpeg"
                   alt={DOCTOR.name}
@@ -82,7 +82,7 @@ export default function Doctor() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={leftInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.5, duration: 0.5 }}
-                className="absolute -left-8 top-1/3 bg-white rounded-xl px-3 py-2 shadow-lg border border-neutral-100"
+                className="hidden md:block absolute -left-8 top-1/3 bg-white rounded-xl px-3 py-2 shadow-lg border border-neutral-100"
               >
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full bg-brand-600 flex items-center justify-center">
@@ -97,7 +97,7 @@ export default function Doctor() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={leftInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.7, duration: 0.5 }}
-                className="absolute -right-8 top-1/4 bg-brand-600 rounded-xl px-3 py-2 shadow-md text-white"
+                className="hidden md:block absolute -right-8 top-1/4 bg-brand-600 rounded-xl px-3 py-2 shadow-md text-white"
               >
                 <div className="flex items-center gap-1.5">
                   <Award size={13} className="shrink-0" />

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { CheckCircle, ArrowRight, Crosshair, Scan, Waves, Zap, Activity, BarChart2 } from 'lucide-react'
+import { CheckCircle, ArrowRight, Crosshair, Scan, Waves, Zap, Activity, BarChart2, Shield, Target } from 'lucide-react'
 import PageTransition from '../components/PageTransition'
 import PageHero from '../components/PageHero'
 import BottomCTA from '../components/BottomCTA'
@@ -24,43 +24,13 @@ const TECHS = [
   { icon: BarChart2, title: 'Biofotogrametria',     desc: 'Avaliação postural computadorizada com medições digitais de alta precisão.',                  image: 'https://images.unsplash.com/photo-1666214280165-20e3d73d70bf?w=600&h=300&fit=crop' },
 ]
 
-function TreatmentBlock({ t, index }) {
-  const { ref, inView } = useScrollAnimation()
-  const isEven = index % 2 === 0
-
-  return (
-    <motion.div ref={ref} initial={{ opacity:0, y:40 }} animate={inView?{ opacity:1, y:0 }:{}} transition={{ duration:0.7, ease:[0.22,1,0.36,1] }}
-      className="grid lg:grid-cols-2 gap-12 items-center">
-      <div className={`${isEven ? '' : 'lg:order-2'}`}>
-        <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-xl shadow-neutral-100">
-          <img src={t.image} alt={t.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" loading="lazy"/>
-        </div>
-      </div>
-
-      <div className={`${isEven ? '' : 'lg:order-1'}`}>
-        <span className="section-label">{t.subtitle}</span>
-        <h3 className="font-serif font-bold text-neutral-900 mt-4 mb-4 tracking-[-0.02em] leading-tight"
-          style={{ fontSize:'clamp(1.5rem,2vw+0.5rem,2.25rem)' }}>
-          {t.title}
-        </h3>
-        <p className="text-neutral-600 leading-relaxed mb-6">{t.desc}</p>
-        <div className="space-y-2.5 mb-7">
-          {t.items.map((item, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <CheckCircle size={16} className="text-brand-600 shrink-0 mt-0.5"/>
-              <span className="text-neutral-700 text-sm">{item}</span>
-            </div>
-          ))}
-        </div>
-        <a href={`https://wa.me/${CLINIC_INFO.whatsapp}?text=Gostaria de saber mais sobre ${t.title}`}
-          target="_blank" rel="noopener noreferrer"
-          className="group inline-flex items-center gap-2 text-brand-600 font-semibold text-sm hover:text-brand-700 transition-colors">
-          Agendar avaliação <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform"/>
-        </a>
-      </div>
-    </motion.div>
-  )
-}
+const TREATMENT_ICONS = { shield: Shield, target: Target, zap: Zap, scan: Scan }
+const ACCENT_COLORS = [
+  { bg: 'bg-brand-50', border: 'border-brand-200', icon: 'bg-brand-600', text: 'text-brand-600', badge: 'text-brand-500' },
+  { bg: 'bg-blue-50',  border: 'border-blue-200',  icon: 'bg-blue-600',  text: 'text-blue-600',  badge: 'text-blue-500'  },
+  { bg: 'bg-violet-50',border: 'border-violet-200',icon: 'bg-violet-600',text: 'text-violet-600',badge: 'text-violet-500'},
+  { bg: 'bg-cyan-50',  border: 'border-cyan-200',  icon: 'bg-cyan-700',  text: 'text-cyan-700',  badge: 'text-cyan-600'  },
+]
 
 export default function Tratamentos() {
   const { ref: pr, inView: pv } = useScrollAnimation({ threshold:0.05 })
@@ -80,8 +50,49 @@ export default function Tratamentos() {
 
       {/* Treatment blocks */}
       <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
-          {TREATMENTS.map((t, i) => <TreatmentBlock key={t.id} t={t} index={i}/>)}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div variants={staggerContainer} initial="hidden" animate="visible"
+            className="grid md:grid-cols-2 gap-6">
+            {TREATMENTS.map((t, i) => {
+              const Icon = TREATMENT_ICONS[t.icon] || Zap
+              const c = ACCENT_COLORS[i % 4]
+              return (
+                <motion.div key={t.id} variants={fadeUp}
+                  className={`rounded-3xl border ${c.border} ${c.bg} p-8 flex flex-col gap-6 hover:shadow-lg transition-shadow duration-300`}>
+                  <div className="flex items-start justify-between gap-4">
+                    <div className={`w-12 h-12 rounded-2xl ${c.icon} flex items-center justify-center shrink-0 shadow-sm`}>
+                      <Icon size={22} className="text-white" />
+                    </div>
+                    <span className={`text-4xl font-black ${c.badge} opacity-20 leading-none select-none`}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <p className={`text-xs font-bold uppercase tracking-widest ${c.text} mb-1`}>{t.subtitle}</p>
+                    <h3 className="font-serif font-bold text-neutral-900 text-xl leading-snug">{t.title}</h3>
+                  </div>
+
+                  <p className="text-neutral-600 text-sm leading-relaxed">{t.desc}</p>
+
+                  <div className="grid grid-cols-1 gap-2">
+                    {t.items.map((item, j) => (
+                      <div key={j} className="flex items-start gap-2.5">
+                        <CheckCircle size={14} className={`${c.text} shrink-0 mt-0.5`} />
+                        <span className="text-neutral-700 text-sm">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <a href={`https://wa.me/${CLINIC_INFO.whatsapp}?text=Gostaria de saber mais sobre ${t.title}`}
+                    target="_blank" rel="noopener noreferrer"
+                    className={`group mt-auto inline-flex items-center gap-2 ${c.text} font-semibold text-sm hover:opacity-80 transition-opacity`}>
+                    Agendar avaliação <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </motion.div>
+              )
+            })}
+          </motion.div>
         </div>
       </section>
 
@@ -112,37 +123,7 @@ export default function Tratamentos() {
         </div>
       </section>
 
-      {/* Technologies */}
-      <section className="py-20" style={{ background:'linear-gradient(155deg,#0f172a 0%,#1e3a8a 55%,#1d4ed8 100%)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div ref={tr} initial={{ opacity:0, y:24 }} animate={tv?{ opacity:1, y:0 }:{}} transition={{ duration:0.65 }} className="text-center mb-12">
-            <span className="section-label-white">Infraestrutura</span>
-            <h2 className="font-serif font-bold text-white mt-4 tracking-[-0.025em]"
-              style={{ fontSize:'clamp(1.875rem,3vw+0.5rem,2.75rem)' }}>
-              Equipamentos & <span className="text-gradient">tecnologias</span>
-            </h2>
-          </motion.div>
-          <motion.div variants={staggerContainer} initial="hidden" animate={tv?'visible':'hidden'}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {TECHS.map((t, i) => (
-              <motion.div key={i} variants={fadeUp} className="glass rounded-2xl overflow-hidden hover:bg-white/15 transition-colors">
-                {t.image && (
-                  <div className="w-full h-36 overflow-hidden">
-                    <img src={t.image} alt={t.title} className="w-full h-full object-cover opacity-50 hover:opacity-60 transition-opacity duration-300" loading="lazy" />
-                  </div>
-                )}
-                <div className="p-6">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-4">
-                    <t.icon size={18} className="text-blue-200" />
-                  </div>
-                  <h4 className="font-serif font-semibold text-white mb-2">{t.title}</h4>
-                  <p className="text-blue-200/70 text-sm leading-relaxed">{t.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+
 
       <BottomCTA
         title="Agende sua avaliação inicial"

@@ -35,7 +35,7 @@ export default function Footer() {
         style={{ background: 'radial-gradient(ellipse, #2563eb, transparent 70%)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-10 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 md:gap-10 mb-12">
 
           {/* Brand */}
           <div className="col-span-2">
@@ -106,9 +106,6 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-neutral-800 pt-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-neutral-500">
           <p>© 2026 Espinhal D.O.R. Todos os direitos reservados.</p>
-          <p className="flex items-center gap-1.5">
-            Feito com <Heart size={11} className="text-red-400 fill-red-400" /> para quem merece viver sem dor
-          </p>
           <p>CRM 36782-RS</p>
         </div>
       </div>

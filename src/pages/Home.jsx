@@ -224,7 +224,7 @@ function TreatmentsPreview() {
           {/* Feature card — tall, left column */}
           <div
             data-reveal
-            className="md:row-span-2 group relative rounded-3xl overflow-hidden cursor-pointer min-h-[380px] md:min-h-0"
+            className="md:row-span-2 group relative rounded-3xl overflow-hidden cursor-pointer min-h-[300px] sm:min-h-[340px] md:min-h-0"
             style={{ background: 'linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%)' }}
           >
             {/* Decorative rings */}
