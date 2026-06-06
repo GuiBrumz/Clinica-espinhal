@@ -143,7 +143,6 @@ function SpineModel({ selected, hovered, onSelect, onHover }) {
   )
 }
 
-useGLTF.preload('/assets/spine.glb')
 
 // ─── Error boundary ───────────────────────────────────────────────────────────
 class SpineErrorBoundary extends Component {
