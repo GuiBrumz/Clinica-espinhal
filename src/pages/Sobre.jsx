@@ -179,7 +179,7 @@ export default function Sobre() {
             </span>
             <h2 className="font-heading font-bold text-white tracking-[-0.03em] leading-tight"
               style={{ fontSize: 'clamp(1.75rem, 3vw + 0.5rem, 2.5rem)' }}>
-              O especialista por trás{' '}
+              O profissional por trás{' '}
               <span className="text-brand-400">dos resultados</span>
             </h2>
           </motion.div>

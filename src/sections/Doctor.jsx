@@ -31,7 +31,7 @@ export default function Doctor() {
           >
             <span className="section-label">Responsável Técnico</span>
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-neutral-900 mt-4 mb-4">
-              O especialista por trás de{' '}
+              O profissional por trás de{' '}
               <span className="text-gradient-blue">cada resultado</span>
             </h2>
           </motion.div>
