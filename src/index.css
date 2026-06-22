@@ -394,6 +394,15 @@ html.lenis { height: auto; }
   to   { transform: scaleX(1); }
 }
 
+/* Spine annotation pins fade/pop in when a region is zoomed */
+.spine-anno-in {
+  animation: spineAnnoIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes spineAnnoIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
 /* ─── PERFORMANCE UTILITIES ────────────────────────────────────────────────── */
 .gpu {
   transform: translateZ(0);

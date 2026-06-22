@@ -15,7 +15,19 @@
       "WebFetch(domain:doctor.buscaly.com)",
       "WebFetch(domain:www.lopes.com.br)",
       "WebFetch(domain:loft.com.br)",
-      "WebFetch(domain:www.attria.com.br)"
+      "WebFetch(domain:www.attria.com.br)",
+      "PowerShell(try { $r = Invoke-RestMethod \"https://api.github.com/repos/Z-Anatomy/Models-of-human-anatomy/contents/\" -Headers @{ \"User-Agent\"=\"claude\" }; $r | Where-Object { $_.name -match \"\\\\.\\(zip|7z|blend\\)$\" } | Select-Object name, size, download_url | Format-List } catch { \"API error: $_\" })",
+      "PowerShell($work = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\"; New-Item -ItemType Directory -Force $work | Out-Null; $zip = \"$work\\\\Z-Anatomy.zip\"; if \\(-not \\(Test-Path $zip\\)\\) { Invoke-WebRequest \"https://raw.githubusercontent.com/Z-Anatomy/Models-of-human-anatomy/master/Z-Anatomy.zip\" -OutFile $zip }; \"downloaded: \" + \\(\\(Get-Item $zip\\).Length/1MB\\).ToString\\(\"0.0\"\\) + \" MB\")",
+      "PowerShell($work = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\"; Expand-Archive \"$work\\\\Z-Anatomy.zip\" -DestinationPath \"$work\\\\extracted\" -Force; Get-ChildItem \"$work\\\\extracted\" -Recurse | Select-Object @{n=\"Rel\";e={$_.FullName.Replace\\(\"$work\\\\extracted\\\\\",\"\"\\)}}, @{n=\"MB\";e={ if\\(-not $_.PSIsContainer\\){\\($_.Length/1MB\\).ToString\\(\"0.00\"\\)} }} | Format-Table -AutoSize)",
+      "PowerShell($blender = \"C:\\\\Program Files\\\\Blender Foundation\\\\Blender 5.1\\\\blender.exe\"; $work = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\"; & $blender --background \"$work\\\\Z-Anatomy\\\\Startup.blend\" --python \"$work\\\\inspect.py\" 2>&1 | Select-String -Pattern \"WROTE|TOTAL_OBJECTS|Error|Traceback|Warning: Cannot\" | Select-Object -First 20)",
+      "PowerShell($f = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\\\\Z-Anatomy\\\\Startup.blend\"; \"Test-Path: \" + \\(Test-Path $f\\); if \\(Test-Path $f\\) { \"Size MB: \" + \\(\\(Get-Item $f\\).Length/1MB\\).ToString\\(\"0.0\"\\) }; Get-ChildItem \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\\\\Z-Anatomy\\\\\" | Select-Object Name,Length)",
+      "PowerShell($blender = \"C:\\\\Program Files\\\\Blender Foundation\\\\Blender 5.1\\\\blender.exe\"; $work = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\"; & $blender --background \"$work\\\\extracted\\\\Z-Anatomy\\\\Startup.blend\" --python \"$work\\\\inspect.py\" 2>&1 | Select-String -Pattern \"WROTE|TOTAL_OBJECTS|Error:|Traceback\" | Select-Object -First 20)",
+      "PowerShell($blender = \"C:\\\\Program Files\\\\Blender Foundation\\\\Blender 5.1\\\\blender.exe\"; $work = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\"; & $blender --background \"$work\\\\extracted\\\\Z-Anatomy\\\\Startup.blend\" --python \"$work\\\\inspect2.py\" 2>&1 | Select-String -Pattern \"WROTE|Error:|Traceback\" | Select-Object -First 10)",
+      "PowerShell($blender = \"C:\\\\Program Files\\\\Blender Foundation\\\\Blender 5.1\\\\blender.exe\"; $work = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\"; & $blender --background \"$work\\\\extracted\\\\Z-Anatomy\\\\Startup.blend\" --python \"$work\\\\export.py\" 2>&1 | Select-String -Pattern \"TARGETS:|EXPORT_OK|RETRY|Error:|Traceback|Finished glTF\" | Select-Object -First 15; \"---\"; if \\(Test-Path \"$work\\\\spine_zanatomy.glb\"\\) { \"GLB size MB: \" + \\(\\(Get-Item \"$work\\\\spine_zanatomy.glb\"\\).Length/1MB\\).ToString\\(\"0.00\"\\) } else { \"NO GLB\" })",
+      "PowerShell($f=\"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\\\\spine_zanatomy.glb\"; if\\(Test-Path $f\\){ \"Bytes: \" + \\(Get-Item $f\\).Length } else {\"missing\"})"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Dev RK\\zanatomy_work"
     ]
   }
 }

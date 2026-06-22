@@ -1,12 +1,14 @@
-import { useState, useMemo, useEffect, useRef, Suspense, Component, useCallback } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { useGLTF, OrbitControls, Center } from '@react-three/drei'
+import { useState, useMemo, useEffect, useRef, Suspense, Component } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useGLTF, OrbitControls, Center, Environment, Lightformer, Html } from '@react-three/drei'
 import * as THREE from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronRight, MousePointer2, RotateCcw, Zap } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useInView } from 'react-intersection-observer'
 
-// ─── Region data ──────────────────────────────────────────────────────────────
+
 const REGIONS = [
   {
     id: 'cervical',
@@ -62,87 +64,252 @@ const REGIONS = [
   },
 ]
 
-const REGION_COLORS = {
-  cervical: new THREE.Color('#2563eb'),
-  thoracic: new THREE.Color('#7c3aed'),
-  lumbar:   new THREE.Color('#059669'),
-  sacral:   new THREE.Color('#b45309'),
+
+const TISSUE_COLORS = {
+  bone:     '#e4d4b4', // vértebras → osso (marfim quente)
+  disc:     '#7e8cc4', // discos intervertebrais → azul-acinzentado
+  nucleus:  '#b6a6e0', // núcleo pulposo → roxo claro
+  ligament: '#dcc4a8', // ligamentos → tendão pálido
+  nerve:    '#e9c24c', // nervos espinhais → amarelo
+  vessel:   '#c2473a', // artéria vertebral → vermelho
+  cord:     '#ece0c8', // medula → creme
 }
-const BASE_COLOR = new THREE.Color('#c8d4e0')
-const BLACK      = new THREE.Color(0, 0, 0)
+
+
+function tissueOf(name) {
+  const s = name.toLowerCase()
+  if (s.includes('nucleus pulposus')) return 'nucleus'
+  if (s.includes('disc')) return 'disc'
+  if (/arter|vein|vascular/.test(s)) return 'vessel'
+  if (/nerve|root|ramus|ganglion|plexus|cauda|filum|trunk|funiculus|rootlet/.test(s)) return 'nerve'
+  if (/spinal cord|medulla|central canal/.test(s)) return 'cord'
+  if (/ligament|flava|symphysis|membrane/.test(s)) return 'ligament'
+  return 'bone'
+}
+
+
+function regionOf(name, relY) {
+  if (/atlas|axis/i.test(name)) return 'cervical'
+  if (/sacrum|coccyx|sacro/i.test(name)) return 'sacral'
+  const m = name.match(/\b([CTL])\s?(\d{1,2})/i)
+  if (m) {
+    const L = m[1].toUpperCase()
+    if (L === 'C') return 'cervical'
+    if (L === 'T') return 'thoracic'
+    if (L === 'L') return 'lumbar'
+  }
+  if (relY >= 0.74) return 'cervical'
+  if (relY >= 0.42) return 'thoracic'
+  if (relY >= 0.16) return 'lumbar'
+  return 'sacral'
+}
+
+const REGIONS_ORDER = ['cervical', 'thoracic', 'lumbar', 'sacral']
+
+// `re` matches against the mesh name (robust to GLTFLoader renaming spaces/() → _)
+const ANNOTATIONS = {
+  cervical: [
+    { re: /atlas/i,    label: 'Atlas (C1)' },
+    { re: /axis/i,     label: 'Áxis (C2)' },
+    { re: /c7\b/i,     label: 'Vértebra C7' },
+    { kind: 'nerve',   label: 'Nervos espinhais' },
+  ],
+  thoracic: [
+    { re: /\bt1\b/i,   label: 'Vértebra T1' },
+    { re: /t12\b/i,    label: 'Vértebra T12' },
+    { kind: 'disc',    label: 'Disco' },
+    { kind: 'nerve',   label: 'Nervos espinhais' },
+  ],
+  lumbar: [
+    { re: /l1\b/i,     label: 'Vértebra L1' },
+    { re: /l5\b/i,     label: 'Vértebra L5' },
+    { kind: 'nucleus', label: 'Núcleo pulposo' },
+    { kind: 'nerve',   label: 'Nervos espinhais' },
+  ],
+  sacral: [
+    { re: /sacrum|sacro/i,  label: 'Sacro' },
+    { re: /coccyx|cocc/i,   label: 'Cóccix' },
+    { kind: 'nerve',        label: 'Raízes sacrais' },
+  ],
+}
+
+const FAR_DIST  = 4.2  // distância da câmera na vista completa
+const ZOOM_DIST = 2.9  // distância da câmera ao focar uma região (margem p/ os rótulos)
+const TWEEN_DUR = 0.9  // duração da animação de zoom (segundos)
+const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 
 // ─── 3D Spine Model ───────────────────────────────────────────────────────────
 function SpineModel({ selected, hovered, onSelect, onHover, onLoaded }) {
   const { scene } = useGLTF('/assets/spine.glb')
 
-  const clonedScene = useMemo(() => {
+  // Build a cloned scene with fresh anatomical materials and per-mesh region tags
+  const { root, meshes, focusMap, anchors } = useMemo(() => {
     const clone = scene.clone(true)
     clone.updateMatrixWorld(true)
+
+    // Normalize size: scale so the tallest axis ≈ 3 units
     const rawBox  = new THREE.Box3().setFromObject(clone)
     const rawSize = rawBox.getSize(new THREE.Vector3())
     const maxDim  = Math.max(rawSize.x, rawSize.y, rawSize.z)
     if (maxDim > 0) clone.scale.setScalar(3.0 / maxDim)
-
     clone.updateMatrixWorld(true)
-    const box  = new THREE.Box3().setFromObject(clone)
-    const h    = box.max.y - box.min.y
-    const minY = box.min.y
 
-    clone.traverse(child => {
-      if (!child.isMesh) return
-      if (Array.isArray(child.material)) {
-        child.material = child.material.map(m => m.clone())
-      } else {
-        child.material = child.material.clone()
-      }
-      const mb   = new THREE.Box3().setFromObject(child)
-      const cy   = (mb.min.y + mb.max.y) / 2
-      const relY = (cy - minY) / h
+    const box       = new THREE.Box3().setFromObject(clone)
+    const minY      = box.min.y
+    const h         = box.max.y - box.min.y || 1
+    const centerY   = (box.max.y + box.min.y) / 2
+    const boxCenter = box.getCenter(new THREE.Vector3())  // <Center> shifts content by -boxCenter
+    const anchors   = {}  // mesh name → { pos (centered space), region, type }
 
-      if      (relY >= 0.78) child.userData.region = 'cervical'
-      else if (relY >= 0.45) child.userData.region = 'thoracic'
-      else if (relY >= 0.18) child.userData.region = 'lumbar'
-      else                   child.userData.region = 'sacral'
+    // Per-mesh material (needed so each region can be dimmed independently)
+    const makeMat = (type) => new THREE.MeshStandardMaterial({
+      color: new THREE.Color(TISSUE_COLORS[type]),
+      roughness: type === 'bone' ? 0.72 : 0.5,
+      metalness: 0.0,
+      envMapIntensity: 0.6,
+      transparent: false,  // opaque by default; only dimmed meshes go transparent
+      opacity: 1,
     })
-    return clone
+
+    // Collect geometry per (region × tissue) so the whole model renders in ~12–16
+    // draw calls instead of ~160 — the main cause of the rotation stutter.
+    const groups = {}   // "region|type" → [baked geometry, …]
+    const sums = {}     // region -> {y, n} for focus centroid
+    clone.traverse(o => {
+      if (!o.isMesh) return
+      const type = tissueOf(o.name)
+      o.updateWorldMatrix(true, false)
+      const mb   = new THREE.Box3().setFromObject(o)
+      const mc   = mb.getCenter(new THREE.Vector3())
+      const cy   = mc.y
+      const relY = (cy - minY) / h
+      const region = regionOf(o.name, relY)
+
+      // anchor in centered space (matches where <Center> places the mesh)
+      anchors[o.name] = {
+        pos: [mc.x - boxCenter.x, mc.y - boxCenter.y, mc.z - boxCenter.z],
+        region, type,
+      }
+
+      sums[region] = sums[region] || { y: 0, n: 0 }
+      sums[region].y += (cy - centerY)   // centered-space Y
+      sums[region].n += 1
+
+      // bake world transform; keep only position+normal so geometries can merge
+      const g = o.geometry.clone()
+      g.applyMatrix4(o.matrixWorld)
+      for (const attr of Object.keys(g.attributes)) {
+        if (attr !== 'position' && attr !== 'normal') g.deleteAttribute(attr)
+      }
+      if (!g.attributes.normal) g.computeVertexNormals()
+      const key = `${region}|${type}`
+      ;(groups[key] = groups[key] || []).push(g)
+    })
+
+    // Merge each group into a single mesh
+    const root = new THREE.Group()
+    const meshes = []
+    for (const key of Object.keys(groups)) {
+      const [region, type] = key.split('|')
+      let gs = groups[key]
+      if (!gs.every(g => g.index)) gs = gs.map(g => (g.index ? g.toNonIndexed() : g))
+      const merged = mergeGeometries(gs, false)
+      if (!merged) continue
+      const m = new THREE.Mesh(merged, makeMat(type))
+      m.userData.region = region
+      m.userData.type   = type
+      m.castShadow = m.receiveShadow = false
+      root.add(m)
+      meshes.push(m)
+    }
+
+    // focus Y per region (centered space, where <Center> places the model)
+    const focusMap = {}
+    REGIONS_ORDER.forEach(r => {
+      focusMap[r] = sums[r] ? sums[r].y / sums[r].n : 0
+    })
+
+    return { root, meshes, focusMap, anchors }
   }, [scene])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { onLoaded?.({ focusMap, anchors }) }, [])
+
+  // Dim / highlight meshes by region selection & hover
   useEffect(() => {
-    clonedScene.traverse(child => {
-      if (!child.isMesh) return
-      const r        = child.userData.region
-      const isActive = selected === r || hovered === r
-      const isDimmed = (selected || hovered) && !isActive
-      const mats     = Array.isArray(child.material) ? child.material : [child.material]
-      mats.forEach(mat => {
-        mat.color.copy(isActive ? REGION_COLORS[r] : BASE_COLOR)
-        mat.emissive.copy(isActive ? REGION_COLORS[r] : BLACK)
-        mat.emissiveIntensity = isActive ? 0.12 : 0
-        mat.transparent       = isDimmed
-        mat.opacity           = isDimmed ? 0.2 : 1
-        mat.needsUpdate       = true
-      })
+    meshes.forEach(o => {
+      const r       = o.userData.region
+      const focused = !!selected
+      const inFocus = !focused || r === selected
+      const isHover = hovered && r === hovered && !focused
+      const mat = o.material
+      // toggle transparency only when needed — opaque rendering is much cheaper
+      const wantTransparent = !inFocus
+      if (mat.transparent !== wantTransparent) {
+        mat.transparent = wantTransparent
+        mat.needsUpdate = true
+      }
+      mat.opacity     = inFocus ? 1 : 0.05
+      mat.depthWrite  = inFocus
+      mat.emissive.setHex(isHover ? 0x2a3550 : 0x000000)
+      mat.emissiveIntensity = isHover ? 0.5 : 0
     })
-  }, [selected, hovered, clonedScene])
+  }, [selected, hovered, meshes])
 
-  useEffect(() => { onLoaded?.() }, [])
-
-  const getRegion = (e) => e.object?.userData?.region ?? null
+  const regionFromObject = (e) => e.object?.userData?.region ?? null
 
   return (
-    <Center>
+    <Center key="spine">
       <primitive
-        object={clonedScene}
-        onClick={e => { e.stopPropagation(); const r = getRegion(e); if (r) onSelect(r) }}
+        object={root}
+        onClick={e => { e.stopPropagation(); const r = regionFromObject(e); if (r) onSelect(r) }}
         onPointerMove={e => {
           e.stopPropagation()
           document.body.style.cursor = 'pointer'
-          const r = getRegion(e); if (r) onHover(r)
+          const r = regionFromObject(e); if (r) onHover(r)
         }}
         onPointerLeave={() => { document.body.style.cursor = 'auto'; onHover(null) }}
       />
     </Center>
   )
+}
+
+// ─── Camera rig: smooth zoom to the selected region ─────────────────────────────
+function CameraRig({ focusY, zoomed, controlsRef }) {
+  const tween  = useRef(null)
+  const tmpDir = useRef(new THREE.Vector3())
+
+  useEffect(() => {
+    const c = controlsRef.current
+    if (!c) return
+    tween.current = {
+      t: 0,
+      fromTarget: c.target.clone(),
+      toTarget:   new THREE.Vector3(0, zoomed ? focusY : 0, 0),
+      fromDist:   c.object.position.distanceTo(c.target),
+      toDist:     zoomed ? ZOOM_DIST : FAR_DIST,
+    }
+  }, [focusY, zoomed, controlsRef])
+
+  useFrame((_, dt) => {
+    const c  = controlsRef.current
+    const tw = tween.current
+    if (!c || !tw) return
+    const cam = c.object
+    tw.t = Math.min(1, tw.t + dt / TWEEN_DUR)
+    const e = easeInOutCubic(tw.t)
+
+    c.target.lerpVectors(tw.fromTarget, tw.toTarget, e)
+    const dist = THREE.MathUtils.lerp(tw.fromDist, tw.toDist, e)
+    tmpDir.current.subVectors(cam.position, c.target)
+    const len = tmpDir.current.length() || 1e-4
+    cam.position.copy(c.target).addScaledVector(tmpDir.current, dist / len)
+    c.update()
+
+    if (tw.t >= 1) tween.current = null
+  })
+
+  return null
 }
 
 
@@ -163,47 +330,149 @@ class SpineErrorBoundary extends Component {
   }
 }
 
+// ─── Annotation pin (HTML anchored to a 3D point) ───────────────────────────────
+function AnnoMarker({ pos, label, color, side, index }) {
+  const left = side === 'left'
+  const { size } = useThree()
+  // px per model unit at the zoom distance → place every label in a lateral gutter
+  // so it sits BESIDE the column, never on top of it. Leader length adapts per pin.
+  const visibleH = 2 * ZOOM_DIST * Math.tan((38 * Math.PI / 180) / 2)
+  const K = size.height / visibleH
+  const GUTTER = 0.36                       // model units from centre where labels align
+  const gap = Math.max(16, K * (GUTTER - Math.abs(pos[0])))
+  return (
+    <Html position={pos} center zIndexRange={[30, 0]} style={{ pointerEvents: 'none' }}>
+      <div
+        className="spine-anno-in"
+        style={{ position: 'relative', animationDelay: `${index * 0.07}s` }}
+      >
+        {/* dot on the structure */}
+        <span style={{
+          position: 'absolute', left: -5, top: -5, width: 10, height: 10, borderRadius: '50%',
+          background: '#fff', border: `2px solid ${color}`, boxShadow: `0 0 0 3px ${color}33`,
+        }} />
+        {/* leader line reaching out to the gutter */}
+        <span style={{
+          position: 'absolute', top: -1, [left ? 'right' : 'left']: 6, width: gap, height: 2,
+          background: `linear-gradient(${left ? 'to left' : 'to right'}, ${color}, ${color}55)`,
+        }} />
+        {/* label in the gutter */}
+        <span style={{
+          position: 'absolute', top: -11, [left ? 'right' : 'left']: gap + 8, whiteSpace: 'nowrap',
+          fontSize: 11, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em',
+          background: 'rgba(12,16,24,0.82)', backdropFilter: 'blur(4px)',
+          padding: '3px 9px', borderRadius: 8, border: `1px solid ${color}55`,
+        }}>{label}</span>
+      </div>
+    </Html>
+  )
+}
+
+// Resolve an annotation config into placed pins for the selected region
+function resolveAnnotations(selected, anchors) {
+  if (!selected || !anchors) return []
+  const cfg = ANNOTATIONS[selected] || []
+  const pool = Object.entries(anchors).map(([name, a]) => ({ name, ...a }))
+  const out = []
+  cfg.forEach((item, i) => {
+    let a
+    if (item.re) {
+      a = pool.find(x => x.region === selected && item.re.test(x.name))
+        || pool.find(x => item.re.test(x.name))
+    } else if (item.kind) {
+      const cands = pool.filter(x => x.region === selected && x.type === item.kind)
+      if (cands.length) {
+        // pick a representative near the vertical middle of the region (avoids edge clipping)
+        const midY = cands.reduce((s, x) => s + x.pos[1], 0) / cands.length
+        a = cands.reduce((m, x) => Math.abs(x.pos[1] - midY) < Math.abs(m.pos[1] - midY) ? x : m)
+      }
+    }
+    if (!a) return
+    const x = a.pos[0]
+    // place the label OUTWARD (same side as the structure) so it lands beside the
+    // column, not on top of it; near-centre items alternate sides to avoid stacking
+    const side = Math.abs(x) > 0.03 ? (x < 0 ? 'left' : 'right') : (i % 2 ? 'left' : 'right')
+    out.push({ pos: a.pos, label: item.label, side })
+  })
+  return out
+}
+
 // ─── 3D Canvas ────────────────────────────────────────────────────────────────
 function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
   const [loaded, setLoaded] = useState(false)
+  const [focusMap, setFocusMap] = useState({})
+  const [anchors, setAnchors] = useState(null)
+  const controlsRef = useRef(null)
+
+  const zoomed = !!selected
+  const focusY = selected ? (focusMap[selected] ?? 0) : 0
+  const regionColor = REGIONS.find(r => r.id === selected)?.color ?? '#2563eb'
+  const pins = useMemo(() => resolveAnnotations(selected, anchors), [selected, anchors])
+  // pause the render loop while the section is off-screen
+  const { ref: viewRef, inView } = useInView({ rootMargin: '200px' })
 
   return (
     <SpineErrorBoundary>
       <div
+        ref={viewRef}
+        data-lenis-prevent-wheel
         className="relative w-full h-full transition-opacity duration-700"
         style={{ opacity: loaded ? 1 : 0 }}
       >
         <Canvas
+          frameloop={inView ? 'always' : 'never'}
           camera={{ position: [0, 0, 4.5], fov: 38 }}
           style={{ background: 'transparent' }}
-          gl={{ alpha: true, antialias: true }}
+          gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
+          dpr={[1, 1.6]}
         >
-          <ambientLight intensity={0.85} />
-          <directionalLight position={[2, 5, 4]}  intensity={1.0} />
-          <directionalLight position={[-3, 2, -2]} intensity={0.3} />
-          <pointLight       position={[0, -3, 2]}  intensity={0.2} color="#dde4f0" />
+          <ambientLight intensity={0.35} />
+          <hemisphereLight args={['#e4ecfb', '#1b150f', 0.55]} />
+          {/* Warm key light */}
+          <directionalLight position={[4, 7, 5]}  intensity={2.1} color="#fff4e2" />
+          {/* Cool fill */}
+          <directionalLight position={[-5, 2, -3]} intensity={0.6} color="#aebfdd" />
+          {/* Rim / backlight for edge definition */}
+          <directionalLight position={[0, 3, -6]}  intensity={0.9} color="#ffffff" />
+
+          {/* Studio environment built in-scene (no external HDR fetch); render once */}
+          <Environment resolution={128} frames={1}>
+            <Lightformer intensity={1.6} position={[0, 5, -8]}  scale={[12, 12, 1]} color="#ffffff" />
+            <Lightformer intensity={0.8} position={[-6, 0, 2]}  rotation-y={Math.PI / 2}  scale={[8, 8, 1]} color="#cfe0ff" />
+            <Lightformer intensity={1.0} position={[6, 1, 2]}   rotation-y={-Math.PI / 2} scale={[8, 8, 1]} color="#fff0d8" />
+          </Environment>
 
           <Suspense fallback={null}>
             <SpineModel
               selected={selected} hovered={hovered}
               onSelect={onSelect}  onHover={onHover}
-              onLoaded={() => setLoaded(true)}
+              onLoaded={({ focusMap, anchors }) => { setFocusMap(focusMap); setAnchors(anchors); setLoaded(true) }}
             />
           </Suspense>
 
+          {zoomed && pins.map((p, i) => (
+            <AnnoMarker key={`${selected}-${i}`} {...p} color={regionColor} index={i} />
+          ))}
+
+          <CameraRig focusY={focusY} zoomed={zoomed} controlsRef={controlsRef} />
+
           <OrbitControls
+            ref={controlsRef}
             enablePan={false}
-            enableZoom={false}
+            enableZoom
+            zoomSpeed={0.8}
+            minDistance={1.0}
+            maxDistance={6.0}
             minPolarAngle={Math.PI * 0.12}
             maxPolarAngle={Math.PI * 0.88}
-            autoRotate={!selected && !hovered}
+            autoRotate={!zoomed && !hovered}
             autoRotateSpeed={1.4}
           />
         </Canvas>
 
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-neutral-200/60 text-[11px] text-neutral-400 pointer-events-none select-none">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-[11px] text-white/55 pointer-events-none select-none">
           <MousePointer2 size={11} />
-          Arraste · Clique para explorar
+          Arraste · Role para dar zoom · Clique para explorar
         </div>
       </div>
     </SpineErrorBoundary>
@@ -406,10 +675,24 @@ function HintPanel() {
   )
 }
 
+// Mount only one 3D canvas (desktop OR mobile) — never both at once
+function useIsDesktop() {
+  const q = '(min-width: 1024px)'  // tailwind lg
+  const [is, setIs] = useState(() => typeof window !== 'undefined' && window.matchMedia(q).matches)
+  useEffect(() => {
+    const m = window.matchMedia(q)
+    const fn = (e) => setIs(e.matches)
+    m.addEventListener('change', fn)
+    return () => m.removeEventListener('change', fn)
+  }, [])
+  return is
+}
+
 // ─── Section ──────────────────────────────────────────────────────────────────
 export default function SpineInteractive() {
   const [selected, setSelected] = useState(null)
   const [hovered,  setHovered]  = useState(null)
+  const isDesktop = useIsDesktop()
 
   const activeRegion = REGIONS.find(r => r.id === selected)
   const handleSelect = (id) => setSelected(prev => prev === id ? null : id)
@@ -481,20 +764,28 @@ export default function SpineInteractive() {
             )}
           </div>
 
-          {/* Center: canvas — no box, with color glow */}
-          <div className="relative" style={{ height: 560 }}>
+          {/* Center: dark scan-viewer panel with color glow */}
+          <div
+            className="relative rounded-[2rem] overflow-hidden ring-1 ring-white/5 shadow-2xl"
+            style={{
+              height: 560,
+              background: 'radial-gradient(120% 95% at 50% 28%, #1c2433 0%, #0c1018 68%, #080b11 100%)',
+            }}
+          >
             {/* Animated glow behind model */}
             <motion.div
-              className="absolute inset-0 pointer-events-none rounded-3xl"
+              className="absolute inset-0 pointer-events-none rounded-[2rem]"
               animate={{
                 background: `radial-gradient(ellipse 55% 65% at 50% 48%, ${glowColor}18, transparent 68%)`,
               }}
               transition={{ duration: 0.6, ease: 'easeInOut' }}
             />
-            <Spine3DViewer
-              selected={selected} hovered={hovered}
-              onSelect={handleSelect} onHover={setHovered}
-            />
+            {isDesktop && (
+              <Spine3DViewer
+                selected={selected} hovered={hovered}
+                onSelect={handleSelect} onHover={setHovered}
+              />
+            )}
           </div>
 
           {/* Right: info card or hint */}
@@ -536,8 +827,14 @@ export default function SpineInteractive() {
             })}
           </div>
 
-          {/* Canvas — no box */}
-          <div className="w-full relative" style={{ height: 360 }}>
+          {/* Dark scan-viewer panel */}
+          <div
+            className="w-full relative rounded-3xl overflow-hidden ring-1 ring-white/5 shadow-xl"
+            style={{
+              height: 360,
+              background: 'radial-gradient(120% 95% at 50% 28%, #1c2433 0%, #0c1018 68%, #080b11 100%)',
+            }}
+          >
             <motion.div
               className="absolute inset-0 pointer-events-none"
               animate={{
@@ -545,10 +842,12 @@ export default function SpineInteractive() {
               }}
               transition={{ duration: 0.6 }}
             />
-            <Spine3DViewer
-              selected={selected} hovered={hovered}
-              onSelect={handleSelect} onHover={setHovered}
-            />
+            {!isDesktop && (
+              <Spine3DViewer
+                selected={selected} hovered={hovered}
+                onSelect={handleSelect} onHover={setHovered}
+              />
+            )}
           </div>
 
           {/* Info card */}
