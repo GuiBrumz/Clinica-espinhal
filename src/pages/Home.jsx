@@ -366,8 +366,9 @@ function TestimonialsPreview() {
 
   return (
     <section
+      id="depoimentos"
       data-header-theme="light"
-      className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-white via-neutral-50 to-white"
+      className="relative py-24 lg:py-32 overflow-hidden scroll-mt-24 bg-gradient-to-b from-white via-neutral-50 to-white"
     >
       {/* Decorative background blobs */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">

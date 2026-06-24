@@ -9,6 +9,7 @@ const FOOTER_NAV = {
     { label: 'Sobre a Clínica',      to: '/sobre'              },
     { label: 'Especialidades',       to: '/especialidades'     },
     { label: 'Tratamentos',          to: '/tratamentos'        },
+    { label: 'Depoimentos',          to: '/#depoimentos'       },
     { label: 'Localização',          to: '/estrutura'          },
     { label: 'Contato',              to: '/contato'            },
   ],

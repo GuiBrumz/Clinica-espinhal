@@ -465,6 +465,40 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
     setRecenterSignal(s => s + 1)        // ensure snap fires even with nothing selected
   }
 
+  // Patch three.js OrbitControls so pinch-to-zoom on touch screens uses
+  // zoomToCursor at the midpoint of the two fingers — same UX as the mouse
+  // wheel. Stock implementation feeds pageX/pageY into _updateZoomParameters,
+  // which expects viewport-relative coords (it calls getBoundingClientRect),
+  // so on a scrolled page the cursor target drifts and the zoom falls back to
+  // the model centre. We convert page → client before delegating.
+  useEffect(() => {
+    let cancelled = false
+    let raf = 0
+    const tryPatch = () => {
+      const c = controlsRef.current
+      if (!c) { if (!cancelled) raf = requestAnimationFrame(tryPatch); return }
+      if (c.__spinePinchPatched) return
+      c.__spinePinchPatched = true
+      c._handleTouchMoveDolly = function (event) {
+        const position = c._getSecondPointerPosition(event)
+        const dx = event.pageX - position.x
+        const dy = event.pageY - position.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        c._dollyEnd.set(0, distance)
+        c._dollyDelta.set(0, Math.pow(c._dollyEnd.y / c._dollyStart.y, c.zoomSpeed))
+        c._dollyOut(c._dollyDelta.y)
+        c._dollyStart.copy(c._dollyEnd)
+        const sx = window.scrollX || window.pageXOffset || 0
+        const sy = window.scrollY || window.pageYOffset || 0
+        const centerX = ((event.pageX - sx) + (position.x - sx)) * 0.5
+        const centerY = ((event.pageY - sy) + (position.y - sy)) * 0.5
+        c._updateZoomParameters(centerX, centerY)
+      }
+    }
+    tryPatch()
+    return () => { cancelled = true; if (raf) cancelAnimationFrame(raf) }
+  }, [])
+
   return (
     <SpineErrorBoundary>
       <div

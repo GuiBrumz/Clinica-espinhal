@@ -25,7 +25,8 @@
       "PowerShell($blender = \"C:\\\\Program Files\\\\Blender Foundation\\\\Blender 5.1\\\\blender.exe\"; $work = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\"; & $blender --background \"$work\\\\extracted\\\\Z-Anatomy\\\\Startup.blend\" --python \"$work\\\\inspect2.py\" 2>&1 | Select-String -Pattern \"WROTE|Error:|Traceback\" | Select-Object -First 10)",
       "PowerShell($blender = \"C:\\\\Program Files\\\\Blender Foundation\\\\Blender 5.1\\\\blender.exe\"; $work = \"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\"; & $blender --background \"$work\\\\extracted\\\\Z-Anatomy\\\\Startup.blend\" --python \"$work\\\\export.py\" 2>&1 | Select-String -Pattern \"TARGETS:|EXPORT_OK|RETRY|Error:|Traceback|Finished glTF\" | Select-Object -First 15; \"---\"; if \\(Test-Path \"$work\\\\spine_zanatomy.glb\"\\) { \"GLB size MB: \" + \\(\\(Get-Item \"$work\\\\spine_zanatomy.glb\"\\).Length/1MB\\).ToString\\(\"0.00\"\\) } else { \"NO GLB\" })",
       "PowerShell($f=\"C:\\\\Users\\\\Dev RK\\\\zanatomy_work\\\\spine_zanatomy.glb\"; if\\(Test-Path $f\\){ \"Bytes: \" + \\(Get-Item $f\\).Length } else {\"missing\"})",
-      "Bash(npm --version)"
+      "Bash(npm --version)",
+      "Bash(node -e \"console.log\\(require\\('three/package.json'\\).version\\)\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dev RK\\zanatomy_work"
