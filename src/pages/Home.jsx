@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Star, Shield, Award, Microscope, Heart, Activity, Crosshair, Bone, Quote, Cpu, ScanLine } from 'lucide-react'
+import { ArrowRight, Star, Shield, Award, Microscope, Heart, Activity, Crosshair, Bone, Quote, Cpu, ScanLine, ChevronLeft, ChevronRight } from 'lucide-react'
 import CountUp from 'react-countup'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, Pagination } from 'swiper/modules'
+import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import 'swiper/css'
@@ -345,70 +345,127 @@ function WhySection() {
 }
 
 // ─── Depoimentos ─────────────────────────────────────────────────────────────
+function InitialsAvatar({ name }) {
+  const initials = name
+    .split(' ')
+    .filter(Boolean)
+    .map(p => p[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+  return (
+    <div className="w-11 h-11 shrink-0 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 text-white text-sm font-bold flex items-center justify-center ring-2 ring-white shadow-[0_6px_18px_-6px_rgba(37,99,235,0.5)]">
+      {initials}
+    </div>
+  )
+}
+
 function TestimonialsPreview() {
   const headRef   = useReveal({ y: 20, duration: 0.65, start: 'top 88%' })
   const swiperRef = useReveal({ y: 24, duration: 0.7, delay: 0.1, start: 'top 88%' })
 
   return (
-    <section data-header-theme="light" className="py-24 lg:py-32 bg-neutral-50 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+    <section
+      data-header-theme="light"
+      className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-white via-neutral-50 to-white"
+    >
+      {/* Decorative background blobs */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-10 left-[12%] w-[520px] h-[520px] rounded-full bg-brand-100/40 blur-3xl" />
+        <div className="absolute bottom-0 right-[8%]  w-[460px] h-[460px] rounded-full bg-brand-50/60  blur-3xl" />
+        <div
+          className="absolute inset-0 opacity-[0.025]"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 1px 1px, #0f172a 1px, transparent 0)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+      </div>
 
-        <div ref={headRef} className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-14 opacity-0">
-          <div>
-            <span className="section-label mb-4 inline-flex">Depoimentos</span>
-            <h2
-              className="font-heading font-bold text-neutral-950 tracking-[-0.03em] leading-[1.08] text-balance"
-              style={{ fontSize: 'clamp(1.875rem, 3.5vw + 0.25rem, 2.875rem)' }}
-            >
-              Pacientes que recuperaram{' '}
-              <span className="text-gradient-blue">suas vidas</span>
-            </h2>
-          </div>
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+
+        <div ref={headRef} className="text-center max-w-2xl mx-auto mb-16 opacity-0">
+          <span className="section-label mb-4 inline-flex items-center gap-1.5">
+            <Quote size={11} />
+            Depoimentos
+          </span>
+          <h2
+            className="font-heading font-bold text-neutral-950 tracking-[-0.03em] leading-[1.08] text-balance"
+            style={{ fontSize: 'clamp(1.875rem, 3.5vw + 0.25rem, 2.875rem)' }}
+          >
+            Pacientes que recuperaram sua{' '}
+            <span className="text-gradient-blue">qualidade de vidas</span>
+          </h2>
+          <p className="text-neutral-500 text-base mt-5">
+            Histórias reais de quem voltou a viver sem dor — diretamente das pacientes da Espinhal D.O.R.
+          </p>
         </div>
 
         <div ref={swiperRef} className="opacity-0">
           <Swiper
-            modules={[Autoplay, Pagination]}
-            spaceBetween={20}
+            modules={[Autoplay, Pagination, Navigation]}
+            spaceBetween={24}
             slidesPerView={1}
-            autoplay={{ delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+            autoplay={{ delay: 6500, disableOnInteraction: false, pauseOnMouseEnter: true }}
             pagination={{ clickable: true, el: '.home-test-pag' }}
+            navigation={{ prevEl: '.home-test-prev', nextEl: '.home-test-next' }}
             breakpoints={{ 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
-            className="!pb-12"
+            className="!pb-14 [&_.swiper-slide]:!h-auto"
           >
-            {TESTIMONIALS.slice(0, 4).map(t => (
-              <SwiperSlide key={t.id}>
-                <div className="bg-white rounded-3xl p-7 h-full flex flex-col border border-neutral-100 hover:border-brand-100 hover:shadow-card-hover transition-all duration-300">
-                  <Quote size={20} className="text-brand-200 mb-4 shrink-0" />
-                  <p className="text-neutral-600 text-sm leading-relaxed flex-1 mb-6">
-                    &ldquo;{t.text.slice(0, 140)}&hellip;&rdquo;
+            {TESTIMONIALS.map(t => (
+              <SwiperSlide key={t.id} className="!h-auto">
+                <article className="group relative h-full flex flex-col overflow-hidden rounded-[1.75rem] bg-white p-8 ring-1 ring-neutral-200/70 shadow-[0_4px_24px_-8px_rgba(15,23,42,0.08)] hover:shadow-[0_16px_48px_-16px_rgba(37,99,235,0.25)] hover:-translate-y-1 transition-all duration-500">
+                  {/* Top accent — reveals on hover */}
+                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-brand-400 via-brand-500 to-brand-700 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+
+                  {/* Decorative watermark quote */}
+                  <Quote
+                    size={120}
+                    strokeWidth={1}
+                    className="absolute -top-4 -right-4 text-brand-50 pointer-events-none select-none"
+                    aria-hidden="true"
+                  />
+
+                  {/* Foreground quote glyph */}
+                  <Quote size={28} strokeWidth={1.75} className="text-brand-500 mb-5 shrink-0 relative" />
+
+                  {/* Body */}
+                  <p className="text-neutral-700 text-[0.92rem] leading-[1.7] flex-1 mb-7 relative">
+                    {t.text}
                   </p>
-                  <div className="flex items-center gap-3 pt-5 border-t border-neutral-100">
-                    <img
-                      src={t.image}
-                      alt={t.name}
-                      className="w-10 h-10 rounded-full object-cover ring-2 ring-brand-100"
-                      loading="lazy"
-                      decoding="async"
-                      onError={e => {
-                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=dbeafe&color=1d4ed8&size=80`
-                      }}
-                    />
-                    <div>
-                      <p className="font-semibold text-neutral-900 text-sm">{t.name}</p>
-                      <p className="text-neutral-400 text-xs">{t.role}</p>
-                    </div>
-                    <div className="ml-auto flex items-center gap-0.5">
+
+                  {/* Footer */}
+                  <div className="flex items-center gap-3 pt-5 border-t border-neutral-100 relative">
+                    <InitialsAvatar name={t.name} />
+                    <p className="font-semibold text-neutral-900 text-[0.92rem] truncate min-w-0">{t.name}</p>
+                    <div className="ml-auto flex items-center gap-0.5 shrink-0">
                       {[0, 1, 2, 3, 4].map(i => (
-                        <Star key={i} size={11} className="text-amber-400 fill-amber-400" />
+                        <Star key={i} size={12} className="text-amber-400 fill-amber-400" />
                       ))}
                     </div>
                   </div>
-                </div>
+                </article>
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="home-test-pag flex justify-center gap-2 mt-2" />
+          <div className="flex items-center justify-center gap-4 mt-2">
+            <button
+              type="button"
+              aria-label="Depoimento anterior"
+              className="home-test-prev lg:hidden w-9 h-9 rounded-full bg-white border border-neutral-200 text-neutral-600 hover:text-brand-600 hover:border-brand-300 hover:shadow-sm transition-all duration-200 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <div className="home-test-pag flex items-center gap-2" />
+            <button
+              type="button"
+              aria-label="Próximo depoimento"
+              className="home-test-next lg:hidden w-9 h-9 rounded-full bg-white border border-neutral-200 text-neutral-600 hover:text-brand-600 hover:border-brand-300 hover:shadow-sm transition-all duration-200 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
 
       </div>
@@ -495,7 +552,8 @@ export default function Home() {
       <SpineInteractive />
       <TreatmentsPreview />
       <WhySection />
-<DoctorPreview />
+      <DoctorPreview />
+      <TestimonialsPreview />
       <BottomCTA />
     </PageTransition>
   )

@@ -4,7 +4,7 @@ import { useGLTF, OrbitControls, Center, Environment, Lightformer, Html } from '
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronRight, MousePointer2, RotateCcw, Zap } from 'lucide-react'
+import { X, ChevronRight, MousePointer2, RotateCcw, Zap, Crosshair } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useInView } from 'react-intersection-observer'
 
@@ -89,13 +89,17 @@ function tissueOf(name) {
 
 
 function regionOf(name, relY) {
-  if (/atlas|axis/i.test(name)) return 'cervical'
-  if (/sacrum|coccyx|sacro/i.test(name)) return 'sacral'
-  const m = name.match(/\b([CTL])\s?(\d{1,2})/i)
+  if (/atlas|axis|cervic/i.test(name)) return 'cervical'
+  if (/sacrum|coccyx|sacro|sacral/i.test(name)) return 'sacral'
+  if (/thorac|dorsal/i.test(name)) return 'thoracic'
+  if (/lumbar|lomb/i.test(name)) return 'lumbar'
+  // Match C#/T#/Th#/L# anywhere in the name. Allow space, underscore or hyphen
+  // separators, and a leading zero (T01) — common in anatomy GLBs.
+  const m = name.match(/(?:^|[^A-Za-z])(C|Th|T|L)[\s_-]?0?(\d{1,2})(?![A-Za-z])/i)
   if (m) {
     const L = m[1].toUpperCase()
     if (L === 'C') return 'cervical'
-    if (L === 'T') return 'thoracic'
+    if (L === 'T' || L === 'TH') return 'thoracic'
     if (L === 'L') return 'lumbar'
   }
   if (relY >= 0.74) return 'cervical'
@@ -133,7 +137,7 @@ const ANNOTATIONS = {
   ],
 }
 
-const FAR_DIST  = 4.2  // distância da câmera na vista completa
+const FAR_DIST  = 4.9  // distância da câmera na vista completa (folga p/ a coluna inteira)
 const ZOOM_DIST = 2.9  // distância da câmera ao focar uma região (margem p/ os rótulos)
 const TWEEN_DUR = 0.9  // duração da animação de zoom (segundos)
 const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
@@ -143,7 +147,7 @@ function SpineModel({ selected, hovered, onSelect, onHover, onLoaded }) {
   const { scene } = useGLTF('/assets/spine.glb')
 
   // Build a cloned scene with fresh anatomical materials and per-mesh region tags
-  const { root, meshes, focusMap, anchors } = useMemo(() => {
+  const { root, meshes, focusMap, zoomMap, anchors } = useMemo(() => {
     const clone = scene.clone(true)
     clone.updateMatrixWorld(true)
 
@@ -174,7 +178,9 @@ function SpineModel({ selected, hovered, onSelect, onHover, onLoaded }) {
     // Collect geometry per (region × tissue) so the whole model renders in ~12–16
     // draw calls instead of ~160 — the main cause of the rotation stutter.
     const groups = {}   // "region|type" → [baked geometry, …]
-    const sums = {}     // region -> {y, n} for focus centroid
+    // Per-region bounds in CENTERED space, computed from BONES only — nerves and
+    // vessels extend far past the vertebrae and would skew the focus / zoom.
+    const bones = {}    // region -> { minY, maxY }
     clone.traverse(o => {
       if (!o.isMesh) return
       const type = tissueOf(o.name)
@@ -191,9 +197,11 @@ function SpineModel({ selected, hovered, onSelect, onHover, onLoaded }) {
         region, type,
       }
 
-      sums[region] = sums[region] || { y: 0, n: 0 }
-      sums[region].y += (cy - centerY)   // centered-space Y
-      sums[region].n += 1
+      if (type === 'bone') {
+        const b = bones[region] || (bones[region] = { minY: Infinity, maxY: -Infinity })
+        b.minY = Math.min(b.minY, mb.min.y - centerY)
+        b.maxY = Math.max(b.maxY, mb.max.y - centerY)
+      }
 
       // bake world transform; keep only position+normal so geometries can merge
       const g = o.geometry.clone()
@@ -223,17 +231,26 @@ function SpineModel({ selected, hovered, onSelect, onHover, onLoaded }) {
       meshes.push(m)
     }
 
-    // focus Y per region (centered space, where <Center> places the model)
+    // focus Y per region = midpoint of the bone bbox (centered space).
+    // zoom distance per region = the distance that vertically frames the bones
+    // with padding so the labels & some breathing room fit on screen.
+    const FOV_RAD = (38 * Math.PI) / 180
+    const PAD     = 1.55  // 55% extra room above + below the bones
     const focusMap = {}
+    const zoomMap  = {}
     REGIONS_ORDER.forEach(r => {
-      focusMap[r] = sums[r] ? sums[r].y / sums[r].n : 0
+      const b = bones[r]
+      if (!b) { focusMap[r] = 0; zoomMap[r] = ZOOM_DIST; return }
+      focusMap[r] = (b.minY + b.maxY) / 2
+      const fitH  = (b.maxY - b.minY) * PAD
+      zoomMap[r]  = Math.max(1.6, fitH / (2 * Math.tan(FOV_RAD / 2)))
     })
 
-    return { root, meshes, focusMap, anchors }
+    return { root, meshes, focusMap, zoomMap, anchors }
   }, [scene])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { onLoaded?.({ focusMap, anchors }) }, [])
+  useEffect(() => { onLoaded?.({ focusMap, zoomMap, anchors }) }, [])
 
   // Dim / highlight meshes by region selection & hover
   useEffect(() => {
@@ -275,21 +292,53 @@ function SpineModel({ selected, hovered, onSelect, onHover, onLoaded }) {
 }
 
 // ─── Camera rig: smooth zoom to the selected region ─────────────────────────────
-function CameraRig({ focusY, zoomed, controlsRef }) {
-  const tween  = useRef(null)
-  const tmpDir = useRef(new THREE.Vector3())
+function CameraRig({ focusY, zoomDist, zoomed, controlsRef, recenterSignal }) {
+  const tween = useRef(null)
+
+  // Shared helper: tween the camera to the canonical front-on, centered view.
+  const snapToCenter = (c) => {
+    const cam = c.object
+    const dir = new THREE.Vector3(0, 0, 1)
+    const target = new THREE.Vector3(0, 0, 0)
+    tween.current = {
+      t: 0,
+      fromTarget: c.target.clone(),
+      toTarget:   target,
+      fromPos:    cam.position.clone(),
+      toPos:      target.clone().addScaledVector(dir, FAR_DIST),
+    }
+  }
 
   useEffect(() => {
     const c = controlsRef.current
     if (!c) return
+    const cam = c.object
+    const newTarget = new THREE.Vector3(0, zoomed ? focusY : 0, 0)
+    const newDist   = zoomed ? zoomDist : FAR_DIST
+    // Zooming IN: keep the user's current viewing angle so the rotation they set
+    // is preserved. Zooming OUT (deseleção): force the canonical front view so
+    // the column ends up perfectly centered again.
+    const dir = zoomed
+      ? cam.position.clone().sub(c.target).normalize()
+      : new THREE.Vector3(0, 0, 1)
     tween.current = {
       t: 0,
       fromTarget: c.target.clone(),
-      toTarget:   new THREE.Vector3(0, zoomed ? focusY : 0, 0),
-      fromDist:   c.object.position.distanceTo(c.target),
-      toDist:     zoomed ? ZOOM_DIST : FAR_DIST,
+      toTarget:   newTarget,
+      fromPos:    cam.position.clone(),
+      toPos:      newTarget.clone().addScaledVector(dir, newDist),
     }
-  }, [focusY, zoomed, controlsRef])
+  }, [focusY, zoomDist, zoomed, controlsRef])
+
+  // External recenter trigger — bumped by the "recentrar" button in the UI.
+  // Tween the camera back to the canonical pose regardless of current state.
+  useEffect(() => {
+    if (!recenterSignal) return  // skip the initial render
+    const c = controlsRef.current
+    if (!c) return
+    snapToCenter(c)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recenterSignal])
 
   useFrame((_, dt) => {
     const c  = controlsRef.current
@@ -300,10 +349,7 @@ function CameraRig({ focusY, zoomed, controlsRef }) {
     const e = easeInOutCubic(tw.t)
 
     c.target.lerpVectors(tw.fromTarget, tw.toTarget, e)
-    const dist = THREE.MathUtils.lerp(tw.fromDist, tw.toDist, e)
-    tmpDir.current.subVectors(cam.position, c.target)
-    const len = tmpDir.current.length() || 1e-4
-    cam.position.copy(c.target).addScaledVector(tmpDir.current, dist / len)
+    cam.position.lerpVectors(tw.fromPos, tw.toPos, e)
     c.update()
 
     if (tw.t >= 1) tween.current = null
@@ -401,15 +447,23 @@ function resolveAnnotations(selected, anchors) {
 function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
   const [loaded, setLoaded] = useState(false)
   const [focusMap, setFocusMap] = useState({})
+  const [zoomMap, setZoomMap]   = useState({})
   const [anchors, setAnchors] = useState(null)
+  const [recenterSignal, setRecenterSignal] = useState(0)
   const controlsRef = useRef(null)
 
-  const zoomed = !!selected
-  const focusY = selected ? (focusMap[selected] ?? 0) : 0
+  const zoomed   = !!selected
+  const focusY   = selected ? (focusMap[selected] ?? 0) : 0
+  const zoomDist = selected ? (zoomMap[selected]  ?? ZOOM_DIST) : FAR_DIST
   const regionColor = REGIONS.find(r => r.id === selected)?.color ?? '#2563eb'
   const pins = useMemo(() => resolveAnnotations(selected, anchors), [selected, anchors])
   // pause the render loop while the section is off-screen
   const { ref: viewRef, inView } = useInView({ rootMargin: '200px' })
+
+  const handleRecenter = () => {
+    if (selected) onSelect(null)         // clear region (also triggers un-zoom snap)
+    setRecenterSignal(s => s + 1)        // ensure snap fires even with nothing selected
+  }
 
   return (
     <SpineErrorBoundary>
@@ -446,7 +500,9 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
             <SpineModel
               selected={selected} hovered={hovered}
               onSelect={onSelect}  onHover={onHover}
-              onLoaded={({ focusMap, anchors }) => { setFocusMap(focusMap); setAnchors(anchors); setLoaded(true) }}
+              onLoaded={({ focusMap, zoomMap, anchors }) => {
+                setFocusMap(focusMap); setZoomMap(zoomMap); setAnchors(anchors); setLoaded(true)
+              }}
             />
           </Suspense>
 
@@ -454,12 +510,13 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
             <AnnoMarker key={`${selected}-${i}`} {...p} color={regionColor} index={i} />
           ))}
 
-          <CameraRig focusY={focusY} zoomed={zoomed} controlsRef={controlsRef} />
+          <CameraRig focusY={focusY} zoomDist={zoomDist} zoomed={zoomed} controlsRef={controlsRef} recenterSignal={recenterSignal} />
 
           <OrbitControls
             ref={controlsRef}
             enablePan={false}
             enableZoom
+            zoomToCursor
             zoomSpeed={0.8}
             minDistance={1.0}
             maxDistance={6.0}
@@ -469,6 +526,16 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
             autoRotateSpeed={1.4}
           />
         </Canvas>
+
+        <button
+          type="button"
+          onClick={handleRecenter}
+          aria-label="Centralizar coluna"
+          className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 text-[12px] font-medium text-white/80 hover:text-white transition-colors"
+        >
+          <Crosshair size={13} />
+          Centralizar
+        </button>
 
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-[11px] text-white/55 pointer-events-none select-none">
           <MousePointer2 size={11} />
@@ -768,7 +835,7 @@ export default function SpineInteractive() {
           <div
             className="relative rounded-[2rem] overflow-hidden ring-1 ring-white/5 shadow-2xl"
             style={{
-              height: 560,
+              height: 720,
               background: 'radial-gradient(120% 95% at 50% 28%, #1c2433 0%, #0c1018 68%, #080b11 100%)',
             }}
           >
@@ -831,7 +898,7 @@ export default function SpineInteractive() {
           <div
             className="w-full relative rounded-3xl overflow-hidden ring-1 ring-white/5 shadow-xl"
             style={{
-              height: 360,
+              height: 460,
               background: 'radial-gradient(120% 95% at 50% 28%, #1c2433 0%, #0c1018 68%, #080b11 100%)',
             }}
           >
