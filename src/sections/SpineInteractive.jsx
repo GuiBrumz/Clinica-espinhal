@@ -443,6 +443,71 @@ function resolveAnnotations(selected, anchors) {
   return out
 }
 
+// ─── Pinch-to-zoom (mobile) ───────────────────────────────────────────────────
+// OrbitControls' own touch dolly zoom always falls back to the model centre on
+// our setup (the stock implementation mixes page/viewport coords inside
+// _updateZoomParameters, which is fragile when the page is scrolled). We turn
+// off OrbitControls' two-finger gesture and implement pinch zoom ourselves so
+// the focal point is the midpoint between the two fingers — same UX as the
+// mouse wheel's zoomToCursor.
+function PinchZoom({ controlsRef, minDistance = 1.0, maxDistance = 6.0 }) {
+  const { camera, gl } = useThree()
+  useEffect(() => {
+    const dom = gl.domElement
+    let start = null  // { dist, camPos, target, radius, dollyDir }
+    const distOf = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY)
+    const computeDollyDir = (clientX, clientY) => {
+      const rect = dom.getBoundingClientRect()
+      const ndcX = ((clientX - rect.left) / rect.width) * 2 - 1
+      const ndcY = -((clientY - rect.top) / rect.height) * 2 + 1
+      return new THREE.Vector3(ndcX, ndcY, 1)
+        .unproject(camera)
+        .sub(camera.position)
+        .normalize()
+    }
+    const onStart = (e) => {
+      if (e.touches.length !== 2) return
+      const c = controlsRef.current
+      if (!c) return
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2
+      start = {
+        dist:    distOf(e.touches[0], e.touches[1]),
+        camPos:  camera.position.clone(),
+        target:  c.target.clone(),
+        radius:  camera.position.distanceTo(c.target),
+        dollyDir: computeDollyDir(midX, midY),
+      }
+    }
+    const onMove = (e) => {
+      if (!start || e.touches.length !== 2) return
+      const c = controlsRef.current
+      if (!c) return
+      const newDist = distOf(e.touches[0], e.touches[1])
+      if (newDist <= 0) return
+      const scale = start.dist / newDist           // fingers apart → < 1 → smaller radius → zoom in
+      const newRadius = Math.max(minDistance, Math.min(maxDistance, start.radius * scale))
+      const delta = start.radius - newRadius
+      camera.position.copy(start.camPos).addScaledVector(start.dollyDir, delta)
+      camera.updateMatrixWorld()
+      c.update()
+      e.preventDefault()
+    }
+    const onEnd = (e) => { if (e.touches.length < 2) start = null }
+    dom.addEventListener('touchstart',  onStart, { passive: false })
+    dom.addEventListener('touchmove',   onMove,  { passive: false })
+    dom.addEventListener('touchend',    onEnd)
+    dom.addEventListener('touchcancel', onEnd)
+    return () => {
+      dom.removeEventListener('touchstart',  onStart)
+      dom.removeEventListener('touchmove',   onMove)
+      dom.removeEventListener('touchend',    onEnd)
+      dom.removeEventListener('touchcancel', onEnd)
+    }
+  }, [camera, gl, controlsRef, minDistance, maxDistance])
+  return null
+}
+
 // ─── 3D Canvas ────────────────────────────────────────────────────────────────
 function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
   const [loaded, setLoaded] = useState(false)
@@ -465,39 +530,6 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
     setRecenterSignal(s => s + 1)        // ensure snap fires even with nothing selected
   }
 
-  // Patch three.js OrbitControls so pinch-to-zoom on touch screens uses
-  // zoomToCursor at the midpoint of the two fingers — same UX as the mouse
-  // wheel. Stock implementation feeds pageX/pageY into _updateZoomParameters,
-  // which expects viewport-relative coords (it calls getBoundingClientRect),
-  // so on a scrolled page the cursor target drifts and the zoom falls back to
-  // the model centre. We convert page → client before delegating.
-  useEffect(() => {
-    let cancelled = false
-    let raf = 0
-    const tryPatch = () => {
-      const c = controlsRef.current
-      if (!c) { if (!cancelled) raf = requestAnimationFrame(tryPatch); return }
-      if (c.__spinePinchPatched) return
-      c.__spinePinchPatched = true
-      c._handleTouchMoveDolly = function (event) {
-        const position = c._getSecondPointerPosition(event)
-        const dx = event.pageX - position.x
-        const dy = event.pageY - position.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-        c._dollyEnd.set(0, distance)
-        c._dollyDelta.set(0, Math.pow(c._dollyEnd.y / c._dollyStart.y, c.zoomSpeed))
-        c._dollyOut(c._dollyDelta.y)
-        c._dollyStart.copy(c._dollyEnd)
-        const sx = window.scrollX || window.pageXOffset || 0
-        const sy = window.scrollY || window.pageYOffset || 0
-        const centerX = ((event.pageX - sx) + (position.x - sx)) * 0.5
-        const centerY = ((event.pageY - sy) + (position.y - sy)) * 0.5
-        c._updateZoomParameters(centerX, centerY)
-      }
-    }
-    tryPatch()
-    return () => { cancelled = true; if (raf) cancelAnimationFrame(raf) }
-  }, [])
 
   return (
     <SpineErrorBoundary>
@@ -545,6 +577,7 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
           ))}
 
           <CameraRig focusY={focusY} zoomDist={zoomDist} zoomed={zoomed} controlsRef={controlsRef} recenterSignal={recenterSignal} />
+          <PinchZoom controlsRef={controlsRef} minDistance={1.0} maxDistance={6.0} />
 
           <OrbitControls
             ref={controlsRef}
@@ -558,6 +591,7 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
             maxPolarAngle={Math.PI * 0.88}
             autoRotate={!zoomed && !hovered}
             autoRotateSpeed={1.4}
+            touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.PAN }}
           />
         </Canvas>
 
