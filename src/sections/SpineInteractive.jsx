@@ -4,7 +4,7 @@ import { useGLTF, OrbitControls, Center, Environment, Lightformer, Html } from '
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronRight, MousePointer2, RotateCcw, Zap, Crosshair } from 'lucide-react'
+import { X, ChevronRight, MousePointer2, RotateCcw, Zap, Crosshair, Eye, EyeOff } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useInView } from 'react-intersection-observer'
 
@@ -515,6 +515,7 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
   const [zoomMap, setZoomMap]   = useState({})
   const [anchors, setAnchors] = useState(null)
   const [recenterSignal, setRecenterSignal] = useState(0)
+  const [showAnno, setShowAnno] = useState(true)
   const controlsRef = useRef(null)
 
   const zoomed   = !!selected
@@ -572,7 +573,7 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
             />
           </Suspense>
 
-          {zoomed && pins.map((p, i) => (
+          {zoomed && showAnno && pins.map((p, i) => (
             <AnnoMarker key={`${selected}-${i}`} {...p} color={regionColor} index={i} />
           ))}
 
@@ -595,15 +596,29 @@ function Spine3DViewer({ selected, hovered, onSelect, onHover }) {
           />
         </Canvas>
 
-        <button
-          type="button"
-          onClick={handleRecenter}
-          aria-label="Centralizar coluna"
-          className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 text-[12px] font-medium text-white/80 hover:text-white transition-colors"
-        >
-          <Crosshair size={13} />
-          Centralizar
-        </button>
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
+          {zoomed && (
+            <button
+              type="button"
+              onClick={() => setShowAnno(v => !v)}
+              aria-label={showAnno ? 'Esconder indicações' : 'Mostrar indicações'}
+              aria-pressed={!showAnno}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 text-[12px] font-medium text-white/80 hover:text-white transition-colors"
+            >
+              {showAnno ? <EyeOff size={13} /> : <Eye size={13} />}
+              {showAnno ? 'Esconder indicações' : 'Mostrar indicações'}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={handleRecenter}
+            aria-label="Centralizar coluna"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 text-[12px] font-medium text-white/80 hover:text-white transition-colors"
+          >
+            <Crosshair size={13} />
+            Centralizar
+          </button>
+        </div>
 
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-[11px] text-white/55 pointer-events-none select-none">
           <MousePointer2 size={11} />
