@@ -19,7 +19,9 @@
       "Bash(ls -la public/favicon)",
       "Bash(ls -la favicon)",
       "Bash(ls -la src/favicon)",
-      "Bash(cd \"c:/Users/Dev RK/Desktop/Clinica-espinhal/public\" && mv favicon_io/* . && rmdir favicon_io && rm -f favicon.svg apple-touch-icon.png && echo \"---public agora---\" && ls -la)"
+      "Bash(cd \"c:/Users/Dev RK/Desktop/Clinica-espinhal/public\" && mv favicon_io/* . && rmdir favicon_io && rm -f favicon.svg apple-touch-icon.png && echo \"---public agora---\" && ls -la)",
+      "WebFetch(domain:www.clinicaespinhaldor.com.br)",
+      "WebSearch"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dev RK\\Desktop\\clinica-espinhal",
