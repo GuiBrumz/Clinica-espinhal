@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.clinicaespinhal.com.br/sitemap.xml
+Sitemap: https://www.clinicaespinhaldor.com.br/sitemap.xml
